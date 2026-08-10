@@ -94,6 +94,7 @@ export default function Page04FieldEvidence() {
           >
             <span
               aria-hidden="true"
+              className={isVisited ? undefined : "hotspot-pulse"}
               style={{
                 width: 28,
                 height: 28,
