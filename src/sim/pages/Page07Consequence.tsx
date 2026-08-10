@@ -186,12 +186,22 @@ export default function Page07Consequence() {
               fontSize: 18,
               lineHeight: "22px",
               color: "var(--cream)",
-              display: "block",
+              display: "flex",
+              alignItems: "center",
+              gap: 6,
               marginTop: 4,
             }}
           >
-            {text}
+            {text.endsWith("↑") ? (
+              <>
+                {text.replace(/\s*↑$/, "")}
+                <TrendUp size={16} weight="bold" aria-hidden />
+              </>
+            ) : (
+              text
+            )}
           </span>
+
         </div>
       ))}
 
