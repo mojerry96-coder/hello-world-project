@@ -1,0 +1,220 @@
+/* MPH8430 — Right Message, Right Channel
+   Global tokens + artboard scaffolding. Source: replication spec section 4.
+   (Inter font is loaded via <link> in src/routes/__root.tsx head.) */
+
+:root {
+  --ink: #181a18;
+  --ink-2: #24231f;
+  --paper: #eae1d7;
+  --paper-2: #f0e8dc;
+  --cream: #eee4d5;
+  --white: #fffaf4;
+  --text-dark: #1d1d1a;
+  --muted-dark: #514c44;
+  --accent: #b45d2b;
+  --accent-active: #c96834;
+  --accent-soft: rgba(180, 93, 43, 0.22);
+  --line-dark: rgba(238, 228, 213, 0.3);
+  --line-light: rgba(180, 93, 43, 0.68);
+  --overlay-20: rgba(12, 12, 10, 0.2);
+  --overlay-48: rgba(12, 12, 10, 0.48);
+  --overlay-76: rgba(12, 12, 10, 0.76);
+  --overlay-90: rgba(12, 12, 10, 0.9);
+  --success: #b9c7a6;
+  --warning: #d6a06b;
+  --error: #d67a6f;
+  --focus: #f3b27b;
+
+  /* Set by useArtboardScale. */
+  --scene-scale: 1;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  overflow: hidden;
+  background: var(--ink);
+  font-family: Inter, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+button,
+input,
+textarea {
+  font: inherit;
+}
+
+button {
+  border-radius: 0;
+}
+
+/* ---- Artboard scaffolding (spec 4.2) ---- */
+
+.viewport {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  background: #11120f;
+}
+
+.artboard {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 1672px;
+  height: 941px;
+  overflow: hidden;
+  transform: translate(-50%, -50%) scale(var(--scene-scale));
+  transform-origin: center;
+  isolation: isolate;
+}
+
+.media {
+  position: absolute;
+  object-fit: cover;
+}
+
+.focusable:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 4px;
+}
+
+/* ---- Interaction states (spec 4.4) ---- */
+
+.option {
+  color: var(--cream);
+  background: rgba(18, 18, 15, 0.62);
+  border: 1px solid var(--line-dark);
+  border-radius: 0;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    background 160ms ease,
+    border-color 160ms ease,
+    opacity 160ms ease;
+}
+
+.option:hover,
+.option:focus-visible {
+  background: rgba(35, 31, 26, 0.82);
+  border-color: var(--focus);
+}
+
+.option[data-selected="true"] {
+  background: rgba(180, 93, 43, 0.19);
+  border-color: var(--accent-active);
+}
+
+.option[data-correct="true"] {
+  border-color: var(--success);
+}
+
+.option[data-error="true"] {
+  border-color: var(--error);
+}
+
+.primary-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-width: 248px;
+  min-height: 64px;
+  padding: 0 24px;
+  color: var(--white);
+  background: var(--accent);
+  border: 1px solid var(--accent-active);
+  cursor: pointer;
+  transition:
+    background 160ms ease,
+    border-color 160ms ease;
+}
+
+.primary-cta:hover:not(:disabled) {
+  background: var(--accent-active);
+}
+
+.primary-cta:disabled {
+  color: rgba(238, 228, 213, 0.4);
+  background: rgba(24, 26, 24, 0.56);
+  border: 1px solid rgba(238, 228, 213, 0.16);
+  cursor: not-allowed;
+}
+
+/* ---- Page transition (spec 4.2: PAGE_FADE_MS) ---- */
+
+.page-enter {
+  animation: page-fade 450ms ease both;
+}
+
+@keyframes page-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    transition-duration: 1ms !important;
+  }
+}
+
+/* ---- Budget sliders (spec: 4px track, square 20px thumb) ---- */
+
+.budget-range {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 20px;
+  background: transparent;
+  cursor: pointer;
+}
+
+.budget-range::-webkit-slider-runnable-track {
+  height: 4px;
+  background: var(--line-dark);
+}
+
+.budget-range::-moz-range-track {
+  height: 4px;
+  background: var(--line-dark);
+}
+
+.budget-range::-moz-range-progress {
+  height: 4px;
+  background: var(--accent);
+}
+
+.budget-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  margin-top: -8px;
+  background: var(--accent);
+  border: 1px solid var(--cream);
+  border-radius: 0;
+}
+
+.budget-range::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  background: var(--accent);
+  border: 1px solid var(--cream);
+  border-radius: 0;
+}
