@@ -12,6 +12,8 @@ import { historyLabels, defences } from "../content/history";
 import { reportCompletion, resetCompletionReporting } from "../state/lms";
 import { useSimulation } from "../state/store";
 import type { Ending } from "../state/types";
+import { ArrowRight } from "@phosphor-icons/react";
+
 
 const ENDINGS: Record<
   Ending,
