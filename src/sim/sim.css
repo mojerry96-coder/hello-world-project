@@ -218,3 +218,44 @@ button {
   border: 1px solid var(--cream);
   border-radius: 0;
 }
+
+/* ---- Hotspot pulse (Page 04 field-evidence) ---- */
+
+.hotspot-pulse {
+  position: relative;
+}
+
+.hotspot-pulse::before {
+  content: "";
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  border: 1px solid rgba(238, 228, 213, 0.55);
+  opacity: 0;
+  animation: hotspot-ping 1.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+.hotspot-pulse::after {
+  content: "";
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  border: 1px solid var(--accent-active);
+  opacity: 0;
+  animation: hotspot-ping 1.8s cubic-bezier(0.4, 0, 0.2, 1) infinite 0.9s;
+}
+
+@keyframes hotspot-ping {
+  0% {
+    transform: scale(0.6);
+    opacity: 0.7;
+  }
+  70% {
+    transform: scale(1.8);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1.8);
+    opacity: 0;
+  }
+}
