@@ -35,3 +35,6 @@ dist-ssr
 app copy/
 app copy.zip
 .claude/settings.local.json
+
+# npm lockfile — this project uses bun.lock
+package-lock.json

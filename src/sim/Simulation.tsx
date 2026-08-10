@@ -25,6 +25,7 @@ import Page12Adjustment from "./pages/Page12Adjustment";
 import Page13Briefing from "./pages/Page13Briefing";
 import Page14Defence from "./pages/Page14Defence";
 import Page15Outcome from "./pages/Page15Outcome";
+import PageIntro from "./pages/PageIntro";
 
 const PAGES = [
   Page01Opening,
@@ -47,16 +48,30 @@ const PAGES = [
 export function Simulation({ page }: { page: string }) {
   const { state } = useSimulation();
   const navigate = useNavigate();
+
+  // The orientation brief sits outside the fifteen scored pages: it carries no
+  // route guard, records no state and is replayable from Page 1.
+  const isIntro = page === "intro";
+
   const route = ROUTES.find((r) => r.path === "/" + page);
-  const blocked = !route || (route.requires ? !route.requires(state) : false);
+  const blocked = !isIntro && (!route || (route.requires ? !route.requires(state) : false));
 
   useEffect(() => {
+    if (isIntro) return;
     if (blocked && route) {
       navigate(furthestAllowed(state).path);
     } else if (!route) {
       navigate("/opening");
     }
-  }, [blocked, route, state, navigate]);
+  }, [isIntro, blocked, route, state, navigate]);
+
+  if (isIntro) {
+    return (
+      <Artboard>
+        <PageIntro />
+      </Artboard>
+    );
+  }
 
   if (!route || blocked) {
     // Render a neutral stage while the guard redirect resolves; never show

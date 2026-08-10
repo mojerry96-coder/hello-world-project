@@ -5,6 +5,7 @@
 import { useEffect, useState, type ReactNode } from "react";
 import { ARTBOARD } from "../design/layout";
 import { typeStyle } from "../design/type";
+import { ClickSpark, Grain, Vignette } from "../motion/Feedback";
 
 function useArtboardScale() {
   const [scale, setScale] = useState(1);
@@ -53,7 +54,9 @@ export function Artboard({ children }: { children: ReactNode }) {
         style={{ ["--scene-scale" as string]: scale }}
         data-artboard
       >
-        {children}
+        <ClickSpark>{children}</ClickSpark>
+        <Vignette />
+        <Grain />
       </div>
     </div>
   );

@@ -79,6 +79,13 @@ type VideoProps = Props & {
   muted?: boolean;
   autoPlay?: boolean;
   poster?: string;
+  /** Gives the caller the element, so a page can drive timing off playback. */
+  videoRef?: React.Ref<HTMLVideoElement>;
+  /** Rewind to 0 once metadata is ready — browsers otherwise resume a cached
+      media resource wherever it last stopped, which breaks a replay. */
+  restart?: boolean;
+  /** Fired when playback is blocked (e.g. unmuted autoplay policy). */
+  onBlocked?: () => void;
 };
 
 export function VideoSlot({
@@ -91,6 +98,9 @@ export function VideoSlot({
   autoPlay = true,
   poster,
   style,
+  videoRef,
+  restart = false,
+  onBlocked,
 }: VideoProps) {
   const [failed, setFailed] = useState(false);
   const [ended, setEnded] = useState(false);
@@ -108,11 +118,21 @@ export function VideoSlot({
   return (
     <div style={box(frame, { overflow: "hidden", ...style })}>
       <video
+        ref={videoRef}
         src={`${import.meta.env.BASE_URL}media/${src}`}
         poster={poster ? `${import.meta.env.BASE_URL}media/${poster}` : undefined}
         autoPlay={autoPlay}
         muted={muted}
         playsInline
+        onLoadedMetadata={(e) => {
+          const el = e.currentTarget;
+          if (restart && el.currentTime > 0) el.currentTime = 0;
+          if (autoPlay) {
+            // An unmuted autoplay can be refused; tell the page so it can offer
+            // a play control rather than sitting on a frozen poster.
+            void el.play().catch(() => onBlocked?.());
+          }
+        }}
         onEnded={() => {
           setEnded(true);
           onEnded?.();

@@ -11,6 +11,7 @@ import { typeStyle } from "../design/type";
 import { historyLabels, defences } from "../content/history";
 import { reportCompletion, resetCompletionReporting } from "../state/lms";
 import { useSimulation } from "../state/store";
+import { SplitText } from "../motion/SplitText";
 import type { Ending } from "../state/types";
 import { ArrowRight } from "@phosphor-icons/react";
 
@@ -177,16 +178,25 @@ export default function Page15Outcome() {
             frame={{ x: 63, y: 120, w: 585, h: 2, z: 20 }}
             background="var(--accent)"
           />
-          <h1
-            style={box(
-              { x: 63, y: 150, w: 590, h: 150, z: 20 },
-              typeStyle("displayXL", { fontSize: 56, lineHeight: 1.14 }),
-            )}
-          >
-            {e.titleLines[0]}
-            <br />
-            {e.titleLines[1]}
-          </h1>
+          <div style={box({ x: 63, y: 150, w: 590, h: 150, z: 20 })}>
+            <SplitText
+              as="h1"
+              text={e.titleLines[0]}
+              by="char"
+              stagger={0.02}
+              rise={26}
+              style={typeStyle("displayXL", { fontSize: 56, lineHeight: 1.14 })}
+            />
+            <SplitText
+              as="h2"
+              text={e.titleLines[1]}
+              by="char"
+              delay={0.22}
+              stagger={0.02}
+              rise={26}
+              style={typeStyle("displayXL", { fontSize: 56, lineHeight: 1.14 })}
+            />
+          </div>
 
           {e.metrics.map((m, i) => (
             <div
@@ -279,20 +289,25 @@ export default function Page15Outcome() {
           >
             CAMPAIGN OUTCOME
           </p>
-          <h1
-            style={box(
-              { x: 54, y: 104, w: 780, h: 106, z: 20 },
-              {
-                ...typeStyle("displayL", { fontSize: 48, lineHeight: 1.06 }),
-                opacity: revealed > 0 ? 1 : 0,
-                transition: "opacity 400ms ease",
-              },
-            )}
-          >
-            {e.titleLines[0]}
-            <br />
-            {e.titleLines[1]}
-          </h1>
+          <div style={box({ x: 54, y: 104, w: 780, h: 106, z: 20 })}>
+            <SplitText
+              as="h1"
+              text={e.titleLines[0]}
+              by="char"
+              stagger={0.018}
+              rise={22}
+              style={typeStyle("displayL", { fontSize: 48, lineHeight: 1.06 })}
+            />
+            <SplitText
+              as="h2"
+              text={e.titleLines[1]}
+              by="char"
+              delay={0.2}
+              stagger={0.018}
+              rise={22}
+              style={typeStyle("displayL", { fontSize: 48, lineHeight: 1.06 })}
+            />
+          </div>
           <p
             style={box(
               { x: 54, y: 220, w: 720, h: 58, z: 20 },

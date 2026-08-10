@@ -19,6 +19,7 @@ import {
 } from "../content/pages";
 import { countCorrect, diagnosisFromCorrect } from "../state/logic";
 import { useSimulation } from "../state/store";
+import { pulse, shake } from "../motion/useMotion";
 import { BARRIER_ANSWER_KEY, type Barrier } from "../state/types";
 
 export default function Page05Barriers() {
@@ -55,6 +56,13 @@ export default function Page05Barriers() {
 
   function place(barrier: Barrier) {
     const report = current;
+
+    // Immediate physical feedback on the zone the learner committed to, before
+    // any state settles — right answers land, wrong ones rebuff.
+    const zoneEl = document.querySelector(`[data-zone="${barrier}"]`);
+    if (barrier === reports[report].correct) pulse(zoneEl);
+    else shake(zoneEl);
+
     apply((s) => ({
       firstBarrierAttempts: s.firstBarrierAttempts[report]
         ? s.firstBarrierAttempts
@@ -197,6 +205,7 @@ export default function Page05Barriers() {
             type="button"
             className="option focusable"
             data-selected={isSelected}
+            data-zone={zone.id}
             aria-label={zone.full}
             onClick={() => (placedThis ? place(zone.id) : setSelected(zone.id))}
             onDragOver={(e) => {

@@ -8,6 +8,7 @@ import { Shade } from "../components/Chrome";
 import { box } from "../design/layout";
 import { typeStyle } from "../design/type";
 import { useSimulation } from "../state/store";
+import { SplitText } from "../motion/SplitText";
 
 const REVEALS = [
   { key: "kicker", at: 7150 },
@@ -92,19 +93,34 @@ export default function Page01Opening() {
         )}
       />
 
-      <h1
+      <div
         style={box(
           { x: 56, y: 686, w: 520, h: 106, z: 10 },
-          {
-            ...typeStyle("displayL", { fontSize: 52, lineHeight: 1.05 }),
-            ...visible("title"),
-          },
+          visible("title"),
         )}
       >
-        RIGHT MESSAGE,
-        <br />
-        RIGHT CHANNEL
-      </h1>
+        {shown.has("title") && (
+          <>
+            <SplitText
+              as="h1"
+              text="RIGHT MESSAGE,"
+              by="char"
+              stagger={0.024}
+              rise={24}
+              style={typeStyle("displayL", { fontSize: 52, lineHeight: 1.05 })}
+            />
+            <SplitText
+              as="h2"
+              text="RIGHT CHANNEL"
+              by="char"
+              delay={0.26}
+              stagger={0.024}
+              rise={24}
+              style={typeStyle("displayL", { fontSize: 52, lineHeight: 1.05 })}
+            />
+          </>
+        )}
+      </div>
       <div
         aria-hidden="true"
         style={box(
@@ -112,6 +128,30 @@ export default function Page01Opening() {
           { background: "var(--accent)", ...visible("titleRule") },
         )}
       />
+
+      {/* Lets a learner who skipped or forgot the brief watch it again. */}
+      <button
+        type="button"
+        className="focusable"
+        onClick={() => navigate("/intro")}
+        style={box(
+          { x: 56, y: 843, w: 190, h: 24, z: 10 },
+          {
+            ...typeStyle("bodySmall", {
+              fontSize: 13,
+              color: "rgba(238,228,213,.62)",
+            }),
+            background: "transparent",
+            border: "none",
+            textAlign: "left",
+            cursor: "pointer",
+            ...visible("cta"),
+            pointerEvents: shown.has("cta") ? "auto" : "none",
+          },
+        )}
+      >
+        Watch the 30-second brief
+      </button>
 
       <button
         type="button"

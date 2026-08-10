@@ -11,6 +11,7 @@ import { box } from "../design/layout";
 import { typeStyle } from "../design/type";
 import { calculateForecast } from "../state/logic";
 import { useSimulation } from "../state/store";
+import { CountUp } from "../motion/CountUp";
 import type { Forecast, SimulationState } from "../state/types";
 
 const BARS: { key: keyof Forecast; label: string; y: number }[] = [
@@ -127,7 +128,12 @@ export default function Page09Forecast() {
               >
                 {bar.label}
               </span>
-              <span
+              <CountUp
+                as="span"
+                to={value}
+                suffix="%"
+                duration={0.9}
+                delay={0.08 * BARS.indexOf(bar)}
                 style={{
                   fontFamily: "Inter, Arial, sans-serif",
                   fontWeight: 300,
@@ -135,9 +141,7 @@ export default function Page09Forecast() {
                   lineHeight: "30px",
                   color: "var(--cream)",
                 }}
-              >
-                {value}%
-              </span>
+              />
             </div>
             <div
               style={{
