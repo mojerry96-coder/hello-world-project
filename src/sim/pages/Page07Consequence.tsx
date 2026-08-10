@@ -10,6 +10,8 @@ import { box } from "../design/layout";
 import { typeStyle } from "../design/type";
 import { useSimulation } from "../state/store";
 import type { Strategy } from "../state/types";
+import { TrendUp } from "@phosphor-icons/react";
+
 
 const VARIANTS: Record<
   Strategy,
