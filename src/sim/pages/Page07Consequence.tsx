@@ -10,6 +10,8 @@ import { box } from "../design/layout";
 import { typeStyle } from "../design/type";
 import { useSimulation } from "../state/store";
 import type { Strategy } from "../state/types";
+import { TrendUp } from "@phosphor-icons/react";
+
 
 const VARIANTS: Record<
   Strategy,
@@ -186,12 +188,22 @@ export default function Page07Consequence() {
               fontSize: 18,
               lineHeight: "22px",
               color: "var(--cream)",
-              display: "block",
+              display: "flex",
+              alignItems: "center",
+              gap: 6,
               marginTop: 4,
             }}
           >
-            {text}
+            {text.endsWith("↑") ? (
+              <>
+                {text.replace(/\s*↑$/, "")}
+                <TrendUp size={16} weight="bold" aria-hidden />
+              </>
+            ) : (
+              text
+            )}
           </span>
+
         </div>
       ))}
 

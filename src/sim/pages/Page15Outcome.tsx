@@ -12,6 +12,8 @@ import { historyLabels, defences } from "../content/history";
 import { reportCompletion, resetCompletionReporting } from "../state/lms";
 import { useSimulation } from "../state/store";
 import type { Ending } from "../state/types";
+import { ArrowRight } from "@phosphor-icons/react";
+
 
 const ENDINGS: Record<
   Ending,
@@ -251,10 +253,15 @@ export default function Page15Outcome() {
                 textAlign: "left",
                 cursor: "pointer",
                 letterSpacing: "0.08em",
+                display: "flex",
+                alignItems: "center",
+                gap: 10,
               },
             )}
           >
-            VIEW DEBRIEF →
+            VIEW DEBRIEF
+            <ArrowRight size={18} weight="bold" aria-hidden />
+
           </button>
         </>
       ) : (
