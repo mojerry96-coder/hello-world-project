@@ -253,10 +253,15 @@ export default function Page15Outcome() {
                 textAlign: "left",
                 cursor: "pointer",
                 letterSpacing: "0.08em",
+                display: "flex",
+                alignItems: "center",
+                gap: 10,
               },
             )}
           >
-            VIEW DEBRIEF →
+            VIEW DEBRIEF
+            <ArrowRight size={18} weight="bold" aria-hidden />
+
           </button>
         </>
       ) : (
