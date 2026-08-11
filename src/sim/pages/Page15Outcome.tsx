@@ -91,7 +91,7 @@ function Metric({ label, value }: { label: string; value: string }) {
     <>
       <p
         style={{
-          fontFamily: "Inter, Arial, sans-serif",
+          fontFamily: "Manrope, system-ui, Helvetica, Arial, sans-serif",
           fontSize: 10,
           lineHeight: "13px",
           color: "var(--cream)",
@@ -102,7 +102,7 @@ function Metric({ label, value }: { label: string; value: string }) {
       </p>
       <p
         style={{
-          fontFamily: "Inter, Arial, sans-serif",
+          fontFamily: "Manrope, system-ui, Helvetica, Arial, sans-serif",
           fontWeight: 300,
           fontSize: 20,
           lineHeight: "24px",
@@ -217,7 +217,7 @@ export default function Page15Outcome() {
             >
               <span
                 style={{
-                  fontFamily: "Inter, Arial, sans-serif",
+                  fontFamily: "Manrope, system-ui, Helvetica, Arial, sans-serif",
                   fontWeight: 300,
                   fontSize: 20,
                   lineHeight: "24px",
@@ -228,7 +228,7 @@ export default function Page15Outcome() {
               </span>
               <span
                 style={{
-                  fontFamily: "Inter, Arial, sans-serif",
+                  fontFamily: "Manrope, system-ui, Helvetica, Arial, sans-serif",
                   fontWeight: 300,
                   fontSize: 20,
                   lineHeight: "24px",

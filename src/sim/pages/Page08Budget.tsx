@@ -133,17 +133,18 @@ export default function Page08Budget() {
           offer a defensible opening position the learner can take apart. */}
       <p
         style={box(
-          { x: 36, y: 618, w: 900, h: 30, z: 20 },
+          { x: 36, y: 596, w: 1010, h: 40, z: 20 },
           {
-            ...typeStyle("bodySmall", { fontSize: 15, color: "var(--cream)" }),
-            background: "rgba(10,10,8,.72)",
+            ...typeStyle("bodySmall", { fontSize: 17, color: "var(--cream)" }),
+            background:
+              "linear-gradient(90deg, rgba(10,10,8,.86) 0%, rgba(10,10,8,.6) 72%, transparent 100%)",
             borderLeft: "2px solid var(--accent)",
             padding: "5px 14px",
           },
         )}
       >
-        Split ₦180 million across four channels. Every naira must be assigned —
-        no channel may exceed ₦100M. There is no single right answer.
+        Split ₦180M across all four channels. Every naira must be assigned, and
+        no single channel may exceed ₦100M.
       </p>
 
       <button
@@ -151,9 +152,9 @@ export default function Page08Budget() {
         className="focusable"
         onClick={() => setBudget(SUGGESTED)}
         style={box(
-          { x: 36, y: 660, w: 300, h: 34, z: 20 },
+          { x: 36, y: 648, w: 330, h: 38, z: 20 },
           {
-            ...typeStyle("bodySmall", { fontSize: 13, color: "var(--cream)" }),
+            ...typeStyle("bodySmall", { fontSize: 15, color: "var(--cream)" }),
             background: "rgba(12,12,10,.6)",
             border: "1px solid var(--line-dark)",
             cursor: "pointer",
@@ -183,7 +184,7 @@ export default function Page08Budget() {
             <span
               style={{
                 width: 240,
-                fontFamily: "Inter, Arial, sans-serif",
+                fontFamily: "Manrope, system-ui, Helvetica, Arial, sans-serif",
                 fontSize: 13,
                 lineHeight: "16px",
                 fontWeight: 600,
@@ -250,7 +251,7 @@ export default function Page08Budget() {
                 height: 38,
                 marginLeft: 20,
                 textAlign: "right",
-                fontFamily: "Inter, Arial, sans-serif",
+                fontFamily: "Manrope, system-ui, Helvetica, Arial, sans-serif",
                 fontSize: 16,
                 lineHeight: "18px",
                 color: "var(--cream)",
@@ -262,7 +263,7 @@ export default function Page08Budget() {
             />
             <span
               style={{
-                fontFamily: "Inter, Arial, sans-serif",
+                fontFamily: "Manrope, system-ui, Helvetica, Arial, sans-serif",
                 fontSize: 12,
                 lineHeight: "14px",
                 color: "var(--accent-active)",

@@ -160,7 +160,7 @@ export default function Page12Adjustment() {
           >
             <span
               style={{
-                fontFamily: "Inter, Arial, sans-serif",
+                fontFamily: "Manrope, system-ui, Helvetica, Arial, sans-serif",
                 fontSize: 11,
                 lineHeight: "14px",
                 color: "var(--accent-active)",
@@ -171,7 +171,7 @@ export default function Page12Adjustment() {
             </span>
             <span
               style={{
-                fontFamily: "Inter, Arial, sans-serif",
+                fontFamily: "Manrope, system-ui, Helvetica, Arial, sans-serif",
                 fontWeight: 300,
                 fontSize: 17,
                 lineHeight: "21px",
@@ -184,7 +184,7 @@ export default function Page12Adjustment() {
             </span>
             <span
               style={{
-                fontFamily: "Inter, Arial, sans-serif",
+                fontFamily: "Manrope, system-ui, Helvetica, Arial, sans-serif",
                 fontSize: 11,
                 lineHeight: "15px",
                 color: "rgba(238,228,213,.72)",
@@ -249,7 +249,7 @@ export default function Page12Adjustment() {
             }`,
             borderRadius: 0,
             color: "var(--cream)",
-            fontFamily: "Inter, Arial, sans-serif",
+            fontFamily: "Manrope, system-ui, Helvetica, Arial, sans-serif",
             fontSize: 15,
             lineHeight: "22px",
             padding: 14,

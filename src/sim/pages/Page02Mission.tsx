@@ -48,7 +48,7 @@ function Fact({
       </div>
       <p
         style={{
-          fontFamily: "Inter, Arial, sans-serif",
+          fontFamily: "Manrope, system-ui, Helvetica, Arial, sans-serif",
           fontWeight: 300,
           fontSize: 26,
           lineHeight: "32px",
@@ -115,11 +115,12 @@ export default function Page02Mission() {
           Director's briefing above says why; this says what winning is. */}
       <div
         style={box(
-          { x: 64, y: 690, w: 900, h: 58, z: 10 },
+          { x: 64, y: 676, w: 960, h: 68, z: 10 },
           {
-            background: "rgba(10,10,8,.66)",
+            background:
+              "linear-gradient(90deg, rgba(10,10,8,.86) 0%, rgba(10,10,8,.58) 74%, transparent 100%)",
             borderLeft: "2px solid var(--accent)",
-            padding: "8px 16px",
+            padding: "10px 18px",
           },
         )}
       >

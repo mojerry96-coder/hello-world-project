@@ -71,12 +71,12 @@ function Cell({ label, value, bar, tone = "default", delta }: CellProps) {
         : "var(--cream)";
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 3, minWidth: 74 }}>
+    <div style={{ display: "flex", flexDirection: "column", gap: 4, minWidth: 96 }}>
       <span
         style={{
-          fontFamily: "Inter, Arial, sans-serif",
-          fontSize: 9,
-          lineHeight: "11px",
+          fontFamily: "Manrope, system-ui, Helvetica, Arial, sans-serif",
+          fontSize: 12,
+          lineHeight: "14px",
           letterSpacing: "0.14em",
           textTransform: "uppercase",
           color: "rgba(238,228,213,.48)",
@@ -88,10 +88,10 @@ function Cell({ label, value, bar, tone = "default", delta }: CellProps) {
         <span
           ref={valueRef}
           style={{
-            fontFamily: "Inter, Arial, sans-serif",
-            fontWeight: 300,
-            fontSize: 17,
-            lineHeight: "19px",
+            fontFamily: "Manrope, system-ui, Helvetica, Arial, sans-serif",
+            fontWeight: 500,
+            fontSize: 22,
+            lineHeight: "25px",
             color: colour,
             fontVariantNumeric: "tabular-nums",
           }}
@@ -101,9 +101,9 @@ function Cell({ label, value, bar, tone = "default", delta }: CellProps) {
         {delta !== undefined && delta !== 0 && (
           <span
             style={{
-              fontFamily: "Inter, Arial, sans-serif",
-              fontSize: 10,
-              lineHeight: "12px",
+              fontFamily: "Manrope, system-ui, Helvetica, Arial, sans-serif",
+              fontSize: 13,
+              lineHeight: "15px",
               color: delta > 0 ? "var(--success)" : "var(--error)",
               fontVariantNumeric: "tabular-nums",
             }}
@@ -117,8 +117,8 @@ function Cell({ label, value, bar, tone = "default", delta }: CellProps) {
           aria-hidden="true"
           style={{
             display: "block",
-            width: 74,
-            height: 2,
+            width: 96,
+            height: 3,
             background: "rgba(238,228,213,.16)",
           }}
         >
@@ -127,7 +127,7 @@ function Cell({ label, value, bar, tone = "default", delta }: CellProps) {
             style={{
               display: "block",
               width: 0,
-              height: 2,
+              height: 3,
               background: tone === "risk" ? "var(--warning)" : "var(--accent)",
             }}
           />
@@ -152,11 +152,13 @@ export function StatusRail({ page }: { page: number }) {
   return (
     <>
       {/* Several pages open on bright exteriors. The rail is chrome and has to
-          stay legible over any of them, so it carries its own scrim. */}
+          stay legible over any of them, so it carries its own scrim — sitting
+          at z19, above the page media and its shades but below the page's own
+          top-left label, which it would otherwise bury. */}
       <div
         aria-hidden="true"
         style={box(
-          { x: 0, y: 0, w: 1672, h: 104, z: 29 },
+          { x: 0, y: 0, w: 1672, h: 120, z: 19 },
           {
             background:
               "linear-gradient(180deg, rgba(10,10,8,.82) 0%, rgba(10,10,8,.55) 55%, transparent 100%)",
@@ -165,7 +167,7 @@ export function StatusRail({ page }: { page: number }) {
       />
       <div
         style={box(
-          { x: 372, y: 12, w: 1128, h: 42, z: 30 },
+          { x: 336, y: 10, w: 1170, h: 52, z: 30 },
         {
           display: "flex",
           alignItems: "flex-end",

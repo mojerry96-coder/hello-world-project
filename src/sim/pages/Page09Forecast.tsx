@@ -106,7 +106,7 @@ export default function Page09Forecast() {
           to={children}
           duration={1.4}
           style={{
-            fontFamily: "Inter, Arial, sans-serif",
+            fontFamily: "Manrope, system-ui, Helvetica, Arial, sans-serif",
             fontWeight: 300,
             fontSize: 44,
             lineHeight: "46px",
@@ -148,7 +148,7 @@ export default function Page09Forecast() {
             >
               <span
                 style={{
-                  fontFamily: "Inter, Arial, sans-serif",
+                  fontFamily: "Manrope, system-ui, Helvetica, Arial, sans-serif",
                   fontSize: 12,
                   lineHeight: "15px",
                   fontWeight: 500,
@@ -164,7 +164,7 @@ export default function Page09Forecast() {
                 duration={0.9}
                 delay={0.08 * BARS.indexOf(bar)}
                 style={{
-                  fontFamily: "Inter, Arial, sans-serif",
+                  fontFamily: "Manrope, system-ui, Helvetica, Arial, sans-serif",
                   fontWeight: 300,
                   fontSize: 28,
                   lineHeight: "30px",

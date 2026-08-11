@@ -1,6 +1,25 @@
 /* MPH8430 — Right Message, Right Channel
    Global tokens + artboard scaffolding. Source: replication spec section 4.
-   (Inter font is loaded via <link> in src/routes/__root.tsx head.) */
+
+   Typography is Afacad (display) + Manrope (text), per the master production
+   prompt. Both are self-hosted variable fonts so there is no CDN round-trip and
+   no silent fallback to a system face mid-render. */
+
+@font-face {
+  font-family: "Afacad";
+  src: url("/fonts/afacad-var.woff2") format("woff2-variations");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Manrope";
+  src: url("/fonts/manrope-var.woff2") format("woff2-variations");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
 
 :root {
   --ink: #181a18;
@@ -44,7 +63,7 @@ body,
 body {
   overflow: hidden;
   background: var(--ink);
-  font-family: Inter, Arial, sans-serif;
+  font-family: Manrope, system-ui, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
 }
 

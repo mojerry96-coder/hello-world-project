@@ -172,7 +172,7 @@ export default function Page07Consequence() {
         >
           <span
             style={{
-              fontFamily: "Inter, Arial, sans-serif",
+              fontFamily: "Manrope, system-ui, Helvetica, Arial, sans-serif",
               fontSize: 11,
               lineHeight: "14px",
               color: "var(--accent-active)",
@@ -183,7 +183,7 @@ export default function Page07Consequence() {
           </span>
           <span
             style={{
-              fontFamily: "Inter, Arial, sans-serif",
+              fontFamily: "Manrope, system-ui, Helvetica, Arial, sans-serif",
               fontWeight: 300,
               fontSize: 18,
               lineHeight: "22px",

@@ -163,8 +163,14 @@ export default function PageIntro() {
         <div
           key={active.line}
           style={box(
-            { x: 72, y: 300, w: 720, h: 260, z: 20 },
-            { animation: "page-fade 520ms ease both" },
+            { x: 64, y: 292, w: 820, h: 280, z: 20 },
+            {
+              animation: "page-fade 520ms ease both",
+              background:
+                "linear-gradient(90deg, rgba(10,10,8,.84) 0%, rgba(10,10,8,.55) 68%, transparent 100%)",
+              borderLeft: "2px solid var(--accent)",
+              padding: "22px 26px",
+            },
           )}
         >
           {active.kicker && (
@@ -176,7 +182,7 @@ export default function PageIntro() {
             by="word"
             stagger={0.05}
             rise={22}
-            style={typeStyle("displayM", { fontSize: 38, lineHeight: 1.14 })}
+            style={typeStyle("displayM", { fontSize: 46, lineHeight: 1.12 })}
           />
           {active.detail && (
             <SplitText
@@ -188,9 +194,9 @@ export default function PageIntro() {
               duration={0.5}
               rise={10}
               style={typeStyle("bodySmall", {
-                fontSize: 17,
-                marginTop: 16,
-                maxWidth: 620,
+                fontSize: 20,
+                marginTop: 18,
+                maxWidth: 700,
               })}
             />
           )}
@@ -201,8 +207,13 @@ export default function PageIntro() {
       {titleShown && (
         <div
           style={box(
-            { x: 72, y: 320, w: 800, h: 260, z: 22 },
-            { animation: "page-fade 600ms ease both" },
+            { x: 64, y: 312, w: 880, h: 280, z: 22 },
+            {
+              animation: "page-fade 600ms ease both",
+              background:
+                "linear-gradient(90deg, rgba(10,10,8,.86) 0%, rgba(10,10,8,.55) 70%, transparent 100%)",
+              padding: "22px 26px",
+            },
           )}
         >
           <p style={typeStyle("kicker", { marginBottom: 16 })}>

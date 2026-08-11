@@ -64,10 +64,11 @@ export default function Page04FieldEvidence() {
       <PageLabel>Field Evidence</PageLabel>
       <p
         style={box(
-          { x: 44, y: 96, w: 620, h: 30, z: 22 },
+          { x: 44, y: 128, w: 700, h: 42, z: 22 },
           {
-            ...typeStyle("bodySmall", { fontSize: 15, color: "var(--cream)" }),
-            background: "rgba(10,10,8,.72)",
+            ...typeStyle("bodySmall", { fontSize: 17, color: "var(--cream)" }),
+            background:
+              "linear-gradient(90deg, rgba(10,10,8,.86) 0%, rgba(10,10,8,.6) 72%, transparent 100%)",
             borderLeft: "2px solid var(--accent)",
             padding: "5px 14px",
           },

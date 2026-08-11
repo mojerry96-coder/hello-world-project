@@ -93,7 +93,7 @@ export default function Page06Strategy() {
           >
             <span
               style={{
-                fontFamily: "Inter, Arial, sans-serif",
+                fontFamily: "Manrope, system-ui, Helvetica, Arial, sans-serif",
                 fontSize: 11,
                 lineHeight: "14px",
                 color: "var(--accent-active)",
@@ -104,7 +104,7 @@ export default function Page06Strategy() {
             </span>
             <span
               style={{
-                fontFamily: "Inter, Arial, sans-serif",
+                fontFamily: "Manrope, system-ui, Helvetica, Arial, sans-serif",
                 fontWeight: 300,
                 fontSize: 18,
                 lineHeight: "22px",
@@ -117,7 +117,7 @@ export default function Page06Strategy() {
             </span>
             <span
               style={{
-                fontFamily: "Inter, Arial, sans-serif",
+                fontFamily: "Manrope, system-ui, Helvetica, Arial, sans-serif",
                 fontSize: 11,
                 lineHeight: "15px",
                 color: "rgba(238,228,213,.58)",

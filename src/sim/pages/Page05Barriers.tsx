@@ -164,15 +164,16 @@ export default function Page05Barriers() {
       {!allFirstAttemptsMade && !placedThis && (
         <p
           style={box(
-            { x: 70, y: 652, w: 860, h: 30, z: 20 },
+            { x: 70, y: 640, w: 900, h: 38, z: 20 },
             {
               ...typeStyle("bodySmall", {
-                fontSize: 15,
+                fontSize: 17,
                 color: "var(--cream)",
               }),
-              background: "rgba(10,10,8,.72)",
+              background:
+                "linear-gradient(90deg, rgba(10,10,8,.86) 0%, rgba(10,10,8,.6) 70%, transparent 100%)",
               borderLeft: "2px solid var(--accent)",
-              padding: "5px 14px",
+              padding: "8px 16px",
             },
           )}
         >
@@ -184,8 +185,9 @@ export default function Page05Barriers() {
 
       <p
         style={box(
-          { x: 70, y: 704, w: 920, h: 32, z: 20 },
+          { x: 70, y: 696, w: 940, h: 32, z: 20 },
           typeStyle("bodySmall", {
+            fontSize: 16,
             color:
               placedThis === undefined
                 ? "rgba(238,228,213,.78)"
@@ -205,10 +207,13 @@ export default function Page05Barriers() {
         draggable
         onDragStart={(e) => e.dataTransfer.setData("text/plain", current)}
         style={box(
-          { x: 70, y: 748, w: 930, h: 38, z: 20 },
+          { x: 70, y: 736, w: 990, h: 62, z: 20 },
           {
-            ...typeStyle("body", { fontSize: 19, lineHeight: 1.35 }),
+            ...typeStyle("body", { fontSize: 24, lineHeight: 1.3 }),
             cursor: "grab",
+            background:
+              "linear-gradient(90deg, rgba(10,10,8,.88) 0%, rgba(10,10,8,.62) 72%, transparent 100%)",
+            padding: "10px 18px",
           },
         )}
       >
