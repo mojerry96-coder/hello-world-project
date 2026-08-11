@@ -158,6 +158,30 @@ export default function Page05Barriers() {
         ))}
       </div>
 
+      {/* First report only: say plainly what the learner is being asked to do.
+          Page 5 previously opened straight into drag-and-drop with no
+          instruction at all — the hardest interaction, entirely unscaffolded. */}
+      {!allFirstAttemptsMade && !placedThis && (
+        <p
+          style={box(
+            { x: 70, y: 652, w: 860, h: 30, z: 20 },
+            {
+              ...typeStyle("bodySmall", {
+                fontSize: 15,
+                color: "var(--cream)",
+              }),
+              background: "rgba(10,10,8,.72)",
+              borderLeft: "2px solid var(--accent)",
+              padding: "5px 14px",
+            },
+          )}
+        >
+          {idx === 0
+            ? "Read the report below. Which of the five explanations underneath fits it best? Pick one, then Place Report."
+            : `Report ${idx + 1} of 4 — pick the explanation that fits, then Place Report.`}
+        </p>
+      )}
+
       <p
         style={box(
           { x: 70, y: 704, w: 920, h: 32, z: 20 },
@@ -219,11 +243,11 @@ export default function Page05Barriers() {
               place(zone.id);
             }}
             style={box(
-              { x: zone.x, y: 840, w: zone.w, h: 48, z: 20 },
+              { x: zone.x, y: 832, w: zone.w, h: 56, z: 20 },
               {
                 ...typeStyle("bodySmall", {
-                  fontSize: 14,
-                  lineHeight: "18px",
+                  fontSize: 12,
+                  lineHeight: "14px",
                   fontWeight: 400,
                   color: "var(--cream)",
                   textTransform: "uppercase",
@@ -238,7 +262,19 @@ export default function Page05Barriers() {
               },
             )}
           >
-            {zone.short}
+            <span style={{ display: "block" }}>{zone.short}</span>
+            <span
+              style={{
+                display: "block",
+                marginTop: 3,
+                fontSize: 9,
+                letterSpacing: "0.1em",
+                color: "rgba(238,228,213,.42)",
+                textTransform: "none",
+              }}
+            >
+              {zone.full}
+            </span>
           </button>
         );
       })}

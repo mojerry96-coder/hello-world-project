@@ -77,6 +77,8 @@ export interface SimulationState {
   audioMuted: boolean;
   captionsEnabled: boolean;
   reducedMotion: boolean;
+  /* Act breaks already shown this run, so a card never repeats on a revisit. */
+  actsSeen: number[];
 }
 
 export const STORAGE_KEY = "mph8430-right-message-right-channel-v1";
@@ -116,6 +118,7 @@ export function createInitialState(): SimulationState {
     ending: null,
     audioMuted: false,
     captionsEnabled: false,
+    actsSeen: [],
     reducedMotion:
       typeof window !== "undefined" &&
       window.matchMedia?.("(prefers-reduced-motion: reduce)").matches,

@@ -51,6 +51,16 @@ const CHANNELS: {
   },
 ];
 
+/* A defensible opening position: inside the spec's "balanced" band on every
+   channel and totalling exactly ₦180M. Offered, never applied automatically —
+   the allocation has to remain the learner's decision. */
+const SUGGESTED: BudgetAllocation = {
+  community: 55,
+  radio: 45,
+  digital: 45,
+  tvOutdoor: 35,
+};
+
 export default function Page08Budget() {
   const navigate = useNavigate();
   const { state, update } = useSimulation();
@@ -117,6 +127,43 @@ export default function Page08Budget() {
         Commissioner has requested a visible and effective response, but the
         campaign budget remains fixed at ₦180 million.
       </p>
+
+      {/* Page 8 previously offered four sliders, a hidden per-channel cap and a
+          hard total, with no guidance at all. Say what the constraint is, and
+          offer a defensible opening position the learner can take apart. */}
+      <p
+        style={box(
+          { x: 36, y: 618, w: 900, h: 30, z: 20 },
+          {
+            ...typeStyle("bodySmall", { fontSize: 15, color: "var(--cream)" }),
+            background: "rgba(10,10,8,.72)",
+            borderLeft: "2px solid var(--accent)",
+            padding: "5px 14px",
+          },
+        )}
+      >
+        Split ₦180 million across four channels. Every naira must be assigned —
+        no channel may exceed ₦100M. There is no single right answer.
+      </p>
+
+      <button
+        type="button"
+        className="focusable"
+        onClick={() => setBudget(SUGGESTED)}
+        style={box(
+          { x: 36, y: 660, w: 300, h: 34, z: 20 },
+          {
+            ...typeStyle("bodySmall", { fontSize: 13, color: "var(--cream)" }),
+            background: "rgba(12,12,10,.6)",
+            border: "1px solid var(--line-dark)",
+            cursor: "pointer",
+            textAlign: "left",
+            padding: "0 12px",
+          },
+        )}
+      >
+        Start from a balanced split, then adjust →
+      </button>
 
       <Shade
         frame={{ x: 0, y: 711, w: 1060, h: 230, z: 18 }}

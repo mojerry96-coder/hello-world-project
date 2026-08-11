@@ -39,9 +39,11 @@ export function CountUp({
     <Tag
       ref={ref}
       style={style}
-      aria-label={`${prefix}${to}${suffix}`}
+      aria-label={`${prefix}${to >= 1000 ? to.toLocaleString("en-NG") : to}${suffix}`}
       suppressHydrationWarning
-      dangerouslySetInnerHTML={{ __html: `${prefix}${to}${suffix}` }}
+      dangerouslySetInnerHTML={{
+        __html: `${prefix}${to >= 1000 ? to.toLocaleString("en-NG") : to}${suffix}`,
+      }}
     />
   );
 }

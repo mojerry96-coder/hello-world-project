@@ -80,7 +80,10 @@ export function useCountUp(
     playedFor.current = key;
 
     const write = (v: number) => {
-      el.textContent = `${prefix}${Math.round(v)}${suffix}`;
+      // Group thousands: a bare "14520" reads as a code, "14,520" reads as children.
+      const n = Math.round(v);
+      const shown = n >= 1000 ? n.toLocaleString("en-NG") : String(n);
+      el.textContent = `${prefix}${shown}${suffix}`;
     };
 
     if (prefersReducedMotion()) {

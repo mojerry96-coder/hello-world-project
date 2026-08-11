@@ -10,6 +10,7 @@ import { VoiceOver } from "../components/VoiceOver";
 import { box, type Box } from "../design/layout";
 import { typeStyle } from "../design/type";
 import { useSimulation } from "../state/store";
+import { GOAL_LINE } from "../content/story";
 
 const DIRECTOR_MESSAGE =
   "Before selecting communication channels, understand why communities are hesitant. The strategy must address the barriers affecting vaccine acceptance.";
@@ -109,6 +110,26 @@ export default function Page02Mission() {
       >
         {DIRECTOR_MESSAGE}
       </p>
+
+      {/* The objective, stated once in words a player can act on. The
+          Director's briefing above says why; this says what winning is. */}
+      <div
+        style={box(
+          { x: 64, y: 690, w: 900, h: 58, z: 10 },
+          {
+            background: "rgba(10,10,8,.66)",
+            borderLeft: "2px solid var(--accent)",
+            padding: "8px 16px",
+          },
+        )}
+      >
+        <p style={typeStyle("label", { color: "var(--cream)", marginBottom: 4 })}>
+          Your objective
+        </p>
+        <p style={typeStyle("body", { fontSize: 17, color: "var(--accent-active)" })}>
+          {GOAL_LINE}
+        </p>
+      </div>
 
       <Rule frame={{ x: 64, y: 839, w: 1300, h: 1, z: 10 }} />
 

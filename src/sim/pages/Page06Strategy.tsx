@@ -57,7 +57,7 @@ export default function Page06Strategy() {
         aria-live="polite"
       >
         {selected
-          ? strategies.find((s) => s.id === selected)?.name
+          ? strategies.find((s) => s.id === selected)?.plain
           : "NO STRATEGY SELECTED"}
       </p>
 
@@ -113,18 +113,19 @@ export default function Page06Strategy() {
                 marginTop: 2,
               }}
             >
-              {s.name}
+              {s.plain}
             </span>
             <span
               style={{
                 fontFamily: "Inter, Arial, sans-serif",
-                fontSize: 12,
-                lineHeight: "17px",
-                color: "rgba(238,228,213,.76)",
+                fontSize: 11,
+                lineHeight: "15px",
+                color: "rgba(238,228,213,.58)",
                 display: "block",
+                marginTop: 4,
               }}
             >
-              {s.channels}
+              {s.name} — {s.channels}
             </span>
           </button>
         ))}

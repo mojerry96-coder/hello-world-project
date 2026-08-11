@@ -67,7 +67,11 @@ export function SplitText({
     [text, runKey, by, delay, stagger, duration, rise],
   );
 
-  const fragments = by === "word" ? text.split(/(\s+)/) : Array.from(text);
+  // Characters are inline-block so they can be transformed individually, which
+  // makes every character its own wrap opportunity — "STRATEGY" breaks to
+  // "STRATEG / Y". Each word therefore gets a non-wrapping wrapper, and only
+  // the characters inside it animate.
+  const words = text.split(/(\s+)/);
 
   return (
     <Tag
@@ -76,22 +80,44 @@ export function SplitText({
       style={{ ...style, display: "block" }}
       aria-label={text}
     >
-      {fragments.map((frag, i) =>
-        /^\s+$/.test(frag) ? (
-          <span key={i} aria-hidden="true">
-            {frag}
-          </span>
-        ) : (
+      {words.map((word, w) => {
+        if (/^\s+$/.test(word)) {
+          return (
+            <span key={w} aria-hidden="true">
+              {word}
+            </span>
+          );
+        }
+        if (by === "word") {
+          return (
+            <span
+              key={w}
+              data-split-part
+              aria-hidden="true"
+              style={{ display: "inline-block", willChange: "transform, opacity" }}
+            >
+              {word}
+            </span>
+          );
+        }
+        return (
           <span
-            key={i}
-            data-split-part
+            key={w}
             aria-hidden="true"
-            style={{ display: "inline-block", willChange: "transform, opacity" }}
+            style={{ display: "inline-block", whiteSpace: "nowrap" }}
           >
-            {frag}
+            {Array.from(word).map((ch, i) => (
+              <span
+                key={i}
+                data-split-part
+                style={{ display: "inline-block", willChange: "transform, opacity" }}
+              >
+                {ch}
+              </span>
+            ))}
           </span>
-        ),
-      )}
+        );
+      })}
     </Tag>
   );
 }

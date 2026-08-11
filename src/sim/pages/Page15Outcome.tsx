@@ -9,6 +9,8 @@ import { Shade, Rule } from "../components/Chrome";
 import { box } from "../design/layout";
 import { typeStyle } from "../design/type";
 import { historyLabels, defences } from "../content/history";
+import { hauwaEnding } from "../content/story";
+import { CAMPAIGN_WEEKS, coverageAtWeek } from "../state/coverage";
 import { reportCompletion, resetCompletionReporting } from "../state/lms";
 import { useSimulation } from "../state/store";
 import { SplitText } from "../motion/SplitText";
@@ -138,6 +140,7 @@ export default function Page15Outcome() {
 
   if (!state.ending) return null;
   const e = ENDINGS[state.ending];
+  const finalCoverage = coverageAtWeek(state, CAMPAIGN_WEEKS);
   const isTrustLayout = state.ending === "strong-trust-limited-scale";
   const h = historyLabels(state);
 
@@ -237,10 +240,24 @@ export default function Page15Outcome() {
             </div>
           ))}
 
+          <div
+            style={box(
+              { x: 64, y: 648, w: 560, h: 86, z: 20 },
+              { borderLeft: "2px solid var(--accent)", paddingLeft: 16 },
+            )}
+          >
+            <p style={typeStyle("label", { color: "rgba(238,228,213,.55)", marginBottom: 5 })}>
+              In Ikara
+            </p>
+            <p style={typeStyle("bodySmall", { fontSize: 16, lineHeight: 1.45 })}>
+              {hauwaEnding(finalCoverage)}
+            </p>
+          </div>
+
           <p
             style={box(
-              { x: 64, y: 670, w: 520, h: 86, z: 20 },
-              typeStyle("body", { fontSize: 20, lineHeight: 1.55 }),
+              { x: 64, y: 762, w: 520, h: 70, z: 20 },
+              typeStyle("body", { fontSize: 18, lineHeight: 1.5 }),
             )}
           >
             {e.learning}
@@ -346,6 +363,27 @@ export default function Page15Outcome() {
               <Metric label={m.label} value={m.value} />
             </div>
           ))}
+
+          {/* Hauwa lands before any statistic: the campaign measured as one
+              household is what a student actually remembers. */}
+          <div
+            style={box(
+              { x: 54, y: 300, w: 680, h: 92, z: 20 },
+              {
+                borderLeft: "2px solid var(--accent)",
+                paddingLeft: 18,
+                opacity: revealed > 1 ? 1 : 0,
+                transition: "opacity 500ms ease",
+              },
+            )}
+          >
+            <p style={typeStyle("label", { color: "rgba(238,228,213,.55)", marginBottom: 6 })}>
+              In Ikara
+            </p>
+            <p style={typeStyle("body", { fontSize: 18, lineHeight: 1.45 })}>
+              {hauwaEnding(finalCoverage)}
+            </p>
+          </div>
 
           <p
             style={box(
