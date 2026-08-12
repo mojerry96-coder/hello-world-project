@@ -43,9 +43,12 @@ type Props = {
   /** Milliseconds after mount before the cue fires. */
   delay?: number;
   frame?: Box;
+  /** Renders in normal flow instead of absolute artboard coordinates —
+      used by the fluid decision pages, whose layout is not artboard-based. */
+  inline?: boolean;
 };
 
-export function VoiceOver({ cue, text, delay = 700, frame }: Props) {
+export function VoiceOver({ cue, text, delay = 700, frame, inline = false }: Props) {
   const { state, update } = useSimulation();
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [started, setStarted] = useState(false);
@@ -87,7 +90,13 @@ export function VoiceOver({ cue, text, delay = 700, frame }: Props) {
         onError={() => setAvailable(false)}
       />
 
-      <div style={box(controls, { display: "flex", gap: 10, alignItems: "center" })}>
+      <div
+        style={
+          inline
+            ? { display: "flex", gap: 10, alignItems: "center" }
+            : box(controls, { display: "flex", gap: 10, alignItems: "center" })
+        }
+      >
         <button
           type="button"
           className="focusable"
@@ -133,21 +142,24 @@ export function VoiceOver({ cue, text, delay = 700, frame }: Props) {
       {state.captionsEnabled && started && (
         <p
           role="status"
-          style={box(
-            { x: 336, y: 884, w: 900, h: 52, z: 24 },
-            {
+          style={inlineOrBox(inline, {
               ...typeStyle("bodySmall", { color: "var(--cream)" }),
               background: "rgba(10,10,8,.82)",
               border: "1px solid var(--line-dark)",
               padding: "8px 14px",
-            },
-          )}
+          })}
         >
           {line}
         </p>
       )}
     </>
   );
+}
+
+function inlineOrBox(inline: boolean, style: React.CSSProperties): React.CSSProperties {
+  return inline
+    ? { ...style, marginTop: 10, maxWidth: "100%" }
+    : box({ x: 336, y: 884, w: 900, h: 52, z: 24 }, style);
 }
 
 const iconButton: React.CSSProperties = {
