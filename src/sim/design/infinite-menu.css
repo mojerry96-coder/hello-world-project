@@ -29,7 +29,17 @@
   cursor: grabbing;
 }
 
+.infinite-menu::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 46%;
+  background: linear-gradient(to top, rgba(14, 13, 12, 0.9), rgba(14, 13, 12, 0));
+  pointer-events: none;
+}
+
 .infinite-menu-caption {
+  z-index: 2;
   position: absolute;
   left: clamp(16px, 3vw, 32px);
   bottom: clamp(16px, 3vw, 28px);

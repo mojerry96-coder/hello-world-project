@@ -236,7 +236,7 @@ export default function Page15Outcome() {
             ) : sphereAvailable ? (
               <InfiniteMenu
                 items={archiveItems}
-                scale={1.1}
+                scale={1.9}
                 ariaLabel="Campaign archive. Drag to rotate through the scenes of your run."
               />
             ) : (
