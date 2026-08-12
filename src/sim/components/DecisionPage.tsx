@@ -237,6 +237,10 @@ export function DecisionPage({
 
   const gridColumns = columns ?? options?.length ?? 5;
   const submitRef = useRef<HTMLButtonElement>(null);
+  // Per-page offset keeps the folder colours varied between screens while the
+  // +index step guarantees neighbouring cards never match.
+  const folderOffset = hashString(options?.[0]?.id ?? title);
+
 
   return (
     <div className="decision-page">
