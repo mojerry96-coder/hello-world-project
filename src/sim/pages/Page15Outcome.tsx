@@ -82,9 +82,17 @@ export default function Page15Outcome() {
   const navigate = useNavigate();
   const { state, reset } = useSimulation();
   const [debriefOpen, setDebriefOpen] = useState(false);
+  const [debriefTab, setDebriefTab] = useState<"decisions" | "archive">("decisions");
   const [confirmRestart, setConfirmRestart] = useState(false);
   const hud = useCampaignHud(15, "Campaign outcome", "Week 10 result");
   const animate = !state.reducedMotion;
+
+  // The archive falls back to cards when motion is reduced or WebGL2 is absent,
+  // so nothing in it is reachable only by dragging.
+  const archive = useMemo(() => buildArchive(state), [state]);
+  const archiveItems = useMemo(() => archiveMenuItems(state), [state]);
+  const sphereAvailable = !state.reducedMotion && isWebGL2Available();
+
 
   // Report completion only once the ending has actually rendered and the
   // debrief button is on screen — never from the Page 14 submission.
