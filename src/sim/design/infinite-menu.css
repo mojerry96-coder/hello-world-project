@@ -227,15 +227,16 @@
 }
 
 .infinite-menu--scene .infinite-menu-caption {
-  top: clamp(96px, 13vh, 150px);
+  top: clamp(104px, 15vh, 176px);
   bottom: auto;
-  left: clamp(34px, 4.05vw, 68px);
-  max-width: min(34ch, 38%);
+  left: auto;
+  right: clamp(28px, 3.2vw, 54px);
+  max-width: min(32ch, 34%);
 }
 
 .infinite-menu--scene .infinite-menu-hint {
   right: clamp(28px, 3.2vw, 54px);
-  top: clamp(96px, 13vh, 150px);
+  top: clamp(72px, 10.5vh, 128px);
 }
 
 @keyframes sceneArchiveEnter {
