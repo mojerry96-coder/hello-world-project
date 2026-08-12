@@ -1,7 +1,12 @@
-/* 30-second orientation intro.
+/* Orientation intro.
 
    Plays before Page 1 so the learner understands the scenario, their role and
    the shape of the decisions before anything is asked of them.
+
+   Stills, not video: motion behind the copy competed with reading it, and the
+   film forced a seven-second wait before the first word appeared. Each beat now
+   holds one frame and cross-fades to the next, so the pace is set by how long
+   the text takes to read.
 
    Text is drawn in code over the film, never baked into it — same rule as every
    other page, so the copy stays editable, translatable and screen-readable.
@@ -10,7 +15,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "../lib/navigate";
 import { ArrowRight, SpeakerSimpleHigh, SpeakerSimpleX } from "@phosphor-icons/react";
-import { VideoSlot } from "../components/MediaSlot";
+import { MediaSlot } from "../components/MediaSlot";
 import { Shade } from "../components/Chrome";
 import { box } from "../design/layout";
 import { typeStyle } from "../design/type";
@@ -25,43 +30,30 @@ import { SplitText } from "../motion/SplitText";
 
 export const INTRO_SEEN_KEY = "mph8430-intro-seen-v1";
 
+/* Every still in play order: one per beat, then the title card's frame. */
+const SEQUENCE = [
+  ...INTRO_BEATS.map((b) => ({ image: b.image, alt: b.alt })),
+  { image: INTRO_TITLE.image, alt: INTRO_TITLE.alt },
+];
+
+
 export default function PageIntro() {
   const navigate = useNavigate();
   const { state, update } = useSimulation();
   const [t, setT] = useState(0);
-  const [blocked, setBlocked] = useState(false);
   const raf = useRef<number | null>(null);
-  const video = useRef<HTMLVideoElement | null>(null);
 
   // Reduced motion: skip the film, present the same content as a static brief.
   const staticMode = state.reducedMotion;
 
-  // Always start the brief at zero. A cached media resource keeps its previous
-  // position and, being already loaded, never re-fires `loadedmetadata` — so
-  // handle the ready case directly and only wait for the event when it is not.
+  // With stills there is no media clock, so the sequence runs on its own timer.
+  // rAF rather than setInterval so a backgrounded tab pauses instead of racing
+  // ahead and dumping the learner into Page 1 unseen.
   useEffect(() => {
     if (staticMode) return;
-    const el = video.current;
-    if (!el) return;
-    // load() is the only reliable reset: setting currentTime alone races the
-    // browser restoring its own position for an already-cached resource.
-    el.load();
-    const rewind = () => {
-      el.currentTime = 0;
-      setT(0);
-      void el.play().catch(() => setBlocked(true));
-    };
-    el.addEventListener("loadedmetadata", rewind, { once: true });
-    return () => el.removeEventListener("loadedmetadata", rewind);
-  }, [staticMode]);
-
-  // Beats are driven by the film's own clock, not wall-clock, so a stall or a
-  // late start can never desync the words from the picture.
-  useEffect(() => {
-    if (staticMode) return;
+    const started = performance.now();
     const tick = () => {
-      const el = video.current;
-      if (el) setT(el.currentTime);
+      setT((performance.now() - started) / 1000);
       raf.current = requestAnimationFrame(tick);
     };
     raf.current = requestAnimationFrame(tick);
@@ -69,6 +61,13 @@ export default function PageIntro() {
       if (raf.current) cancelAnimationFrame(raf.current);
     };
   }, [staticMode]);
+
+  // End of the sequence hands over to Page 1.
+  useEffect(() => {
+    if (staticMode || t < INTRO_DURATION) return;
+    enter();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [t >= INTRO_DURATION, staticMode]);
 
   function enter() {
     try {
@@ -85,6 +84,15 @@ export default function PageIntro() {
 
   const active = INTRO_BEATS.find((b) => t >= b.at && t < b.until);
   const titleShown = t >= INTRO_TITLE.at;
+
+  // Which still is on screen. The last beat's frame holds through any gap
+  // before the title card, so the picture never cuts to black between beats.
+  const frameIndex = titleShown
+    ? SEQUENCE.length - 1
+    : Math.max(
+        0,
+        INTRO_BEATS.reduce((acc, b, i) => (t >= b.at ? i : acc), 0),
+      );
 
   if (staticMode) {
     return (
@@ -123,30 +131,21 @@ export default function PageIntro() {
 
   return (
     <div className="page-enter">
-      <VideoSlot
-        id="INTRO"
-        /* The #t= media fragment pins the start point. Without it the browser
-           resumes a cached resource wherever it stopped — which, at the end of
-           the film, fires `ended` instantly and skips the brief entirely. */
-        src="intro-simulation.mp4#t=0.001"
-        alt={`Thirty-second introduction to the simulation. ${INTRO_TRANSCRIPT}`}
-        frame={{ x: 0, y: 0, w: 1672, h: 941, z: 0 }}
-        muted={state.audioMuted}
-        poster="intro-simulation-poster.webp"
-        videoRef={video}
-        restart
-        onBlocked={() => setBlocked(true)}
-        /* Guard against a stale resumed position firing `ended` on arrival. */
-        onEnded={() => {
-          const el = video.current;
-          if (el && el.currentTime < INTRO_DURATION - 1) {
-            el.currentTime = 0;
-            void el.play().catch(() => setBlocked(true));
-            return;
-          }
-          enter();
-        }}
-      />
+      {/* One still per beat, cross-fading. Both frames stay mounted so the
+          outgoing image fades under the incoming one rather than flashing. */}
+      {SEQUENCE.map((f, i) => (
+        <MediaSlot
+          key={f.image}
+          id={`INTRO-${i + 1}`}
+          src={f.image}
+          alt={i === 0 ? `Introduction to the simulation. ${INTRO_TRANSCRIPT}` : f.alt}
+          frame={{ x: 0, y: 0, w: 1672, h: 941, z: 0 }}
+          style={{
+            opacity: frameIndex === i ? 1 : 0,
+            transition: staticMode ? undefined : "opacity 900ms ease",
+          }}
+        />
+      ))}
 
       {/* Left column for the beats, floor for the controls. */}
       <Shade
@@ -251,49 +250,6 @@ export default function PageIntro() {
           }}
         />
       </div>
-
-      {/* Autoplay with sound is refused by default in most browsers. Rather than
-          stall on a frozen poster, offer the one gesture that unblocks it. */}
-      {blocked && (
-        <button
-          type="button"
-          className="primary-cta focusable"
-          onClick={() => {
-            setBlocked(false);
-            void video.current?.play();
-          }}
-          style={box(
-            { x: 636, y: 438, w: 400, h: 72, z: 30 },
-            { ...typeStyle("button"), justifyContent: "center" },
-          )}
-        >
-          <span>PLAY THE 30-SECOND BRIEF</span>
-        </button>
-      )}
-
-      <button
-        type="button"
-        className="focusable"
-        aria-label={state.audioMuted ? "Unmute" : "Mute"}
-        onClick={() => update({ audioMuted: !state.audioMuted })}
-        style={box(
-          { x: 72, y: 852, w: 40, h: 40, z: 24 },
-          {
-            display: "grid",
-            placeItems: "center",
-            background: "rgba(12,12,10,.5)",
-            border: "1px solid var(--line-dark)",
-            color: "var(--cream)",
-            cursor: "pointer",
-          },
-        )}
-      >
-        {state.audioMuted ? (
-          <SpeakerSimpleX size={18} weight="thin" />
-        ) : (
-          <SpeakerSimpleHigh size={18} weight="thin" />
-        )}
-      </button>
 
       <button
         type="button"

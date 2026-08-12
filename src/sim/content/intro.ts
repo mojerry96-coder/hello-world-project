@@ -17,6 +17,9 @@
 export type IntroBeat = {
   at: number;
   until: number;
+  /** Still shown behind this beat. The intro no longer plays video. */
+  image: string;
+  alt: string;
   kicker?: string;
   line: string;
   /** Second line, set smaller — the concrete detail under the claim. */
@@ -26,6 +29,8 @@ export type IntroBeat = {
 export const INTRO_BEATS: IntroBeat[] = [
   {
     at: 0.8,
+    image: "intro-beat-1.webp",
+    alt: "Rural Ikara clinic doorway: a worn vaccination table and a blue vaccine cold box, seen from just inside the entrance.",
     until: 5.6,
     kicker: "Kaduna State, Nigeria",
     line: "The vaccines are already here.",
@@ -33,6 +38,8 @@ export const INTRO_BEATS: IntroBeat[] = [
   },
   {
     at: 6.3,
+    image: "intro-beat-2.webp",
+    alt: "A Kaduna SPHCDA office: a campaign folder being handed across a table of printed immunisation reports.",
     until: 11.2,
     kicker: "Your role",
     line: "You are the Health Communication Officer.",
@@ -40,6 +47,8 @@ export const INTRO_BEATS: IntroBeat[] = [
   },
   {
     at: 11.9,
+    image: "intro-beat-3.webp",
+    alt: "A Hausa radio presenter leaning into a studio microphone, reading a public health script.",
     until: 16.2,
     kicker: "What you decide",
     line: "Diagnose the real barrier, then choose your channels.",
@@ -47,6 +56,8 @@ export const INTRO_BEATS: IntroBeat[] = [
   },
   {
     at: 16.9,
+    image: "intro-beat-4.webp",
+    alt: "A rural compound at dusk. Families still waiting outside as the light goes.",
     until: 21.7,
     kicker: "What it costs",
     line: "Every choice compounds, and the field answers back.",
@@ -54,6 +65,8 @@ export const INTRO_BEATS: IntroBeat[] = [
   },
   {
     at: 22.4,
+    image: "intro-beat-5.webp",
+    alt: "Stakeholders seated along a long table in the Kaduna State Ministry of Health briefing room.",
     until: 27.4,
     kicker: "The reckoning",
     line: "Then you defend it to the Commissioner.",
@@ -64,6 +77,8 @@ export const INTRO_BEATS: IntroBeat[] = [
 /** Shown over the held final frame. */
 export const INTRO_TITLE = {
   at: 27.8,
+  image: "intro-beat-6.webp",
+  alt: "The Health Communication Officer standing at the end of the briefing room table, facing the stakeholder panel.",
   kicker: "A social marketing simulation",
   line: "RIGHT MESSAGE,\nRIGHT CHANNEL",
 };

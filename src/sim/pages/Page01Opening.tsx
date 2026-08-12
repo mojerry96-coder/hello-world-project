@@ -1,9 +1,12 @@
 /* PAGE 01 — OPENING. No decision, no progress marker, no back nav.
-   Timeline per spec: video to 7.0s, then staged reveals to 8.65s, then hold. */
+
+   Still, not video. The film held the title card hostage for seven seconds
+   before a single word appeared, which read as a broken page rather than a
+   deliberate hold. The reveals now begin immediately and finish inside 1.5s. */
 
 import { useEffect, useState } from "react";
 import { useNavigate } from "../lib/navigate";
-import { VideoSlot } from "../components/MediaSlot";
+import { MediaSlot } from "../components/MediaSlot";
 import { Shade } from "../components/Chrome";
 import { box } from "../design/layout";
 import { typeStyle } from "../design/type";
@@ -11,17 +14,16 @@ import { useSimulation } from "../state/store";
 import { SplitText } from "../motion/SplitText";
 
 const REVEALS = [
-  { key: "kicker", at: 7150 },
-  { key: "title", at: 7350 },
-  { key: "titleRule", at: 7900 },
-  { key: "cta", at: 8250 },
+  { key: "kicker", at: 250 },
+  { key: "title", at: 500 },
+  { key: "titleRule", at: 1050 },
+  { key: "cta", at: 1350 },
 ] as const;
 
 export default function Page01Opening() {
   const navigate = useNavigate();
   const { state, update } = useSimulation();
   const [shown, setShown] = useState<Set<string>>(new Set());
-  const [videoDone, setVideoDone] = useState(false);
 
   useEffect(() => {
     // Reduced motion skips the staged choreography and shows everything at once.
@@ -50,14 +52,11 @@ export default function Page01Opening() {
 
   return (
     <div className="page-enter">
-      <VideoSlot
-        id="VID-01"
-        src="p01-clinic-cold-open.mp4"
+      <MediaSlot
+        id="IMG-01"
+        src="p01-clinic-cold-open-poster.webp"
         alt="Rural Ikara immunisation outreach room. A hesitant Hausa mother holding her toddler pauses inside the clinic while a community health worker waits beside the vaccination table."
         frame={{ x: 0, y: 0, w: 1672, h: 941, z: 0 }}
-        muted={state.audioMuted}
-        poster="p01-clinic-cold-open-poster.webp"
-        onEnded={() => setVideoDone(true)}
       />
 
       <Shade
@@ -150,7 +149,7 @@ export default function Page01Opening() {
           },
         )}
       >
-        Watch the 30-second brief
+        Watch the briefing again
       </button>
 
       <button
@@ -171,8 +170,6 @@ export default function Page01Opening() {
       >
         BEGIN
       </button>
-
-      <span hidden data-video-ended={videoDone} />
     </div>
   );
 }
