@@ -168,7 +168,7 @@ export default function Page15Outcome() {
           {sphereAvailable ? (
             <InfiniteMenu
               items={archiveItems}
-              scale={1.15}
+              scale={0.85}
               className={`infinite-menu--aside${animate ? "" : " is-static"}`}
               style={animate ? { animationDelay: "560ms" } : undefined}
               ariaLabel="Campaign archive. Drag to rotate through the scenes of your run."
