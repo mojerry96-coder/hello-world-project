@@ -53,6 +53,9 @@ export type NarrativePageProps = {
   overlaySlot?: ReactNode;
   /** Modal layer above everything. */
   overlay?: ReactNode;
+
+  /** Drops the glass panel behind the sheet; content keeps its position. */
+  sheetBare?: boolean;
 };
 
 export function NarrativePage({
@@ -71,6 +74,7 @@ export function NarrativePage({
   primary,
   overlaySlot,
   overlay,
+  sheetBare = false,
 }: NarrativePageProps) {
   const { state } = useSimulation();
   const animate = !state.reducedMotion;
@@ -116,7 +120,9 @@ export function NarrativePage({
       {overlaySlot}
 
       {(lede || aside || children || primary || meta || secondary) && (
-        <section className="narrative-sheet">
+        <section
+          className={`narrative-sheet${sheetBare ? " narrative-sheet--bare" : ""}`}
+        >
           {(lede || aside) && (
             <div className="narrative-body">
               {(lede || note) && (

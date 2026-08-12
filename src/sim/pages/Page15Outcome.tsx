@@ -164,6 +164,7 @@ export default function Page15Outcome() {
               treatment: "left" as const,
             },
           })}
+      sheetBare
       hud={{ icon: Flag, ...hud }}
       kicker="Campaign outcome"
       title={e.titleLines}
