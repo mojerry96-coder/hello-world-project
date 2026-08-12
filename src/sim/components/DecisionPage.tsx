@@ -98,6 +98,13 @@ function DecisionOption({
       className={`decision-option${selected ? " is-selected" : ""}`}
       style={style}
     >
+      <SpecularEdge
+        radius={14}
+        inactive={option.disabled}
+        intensity={0.8}
+        proximity={170}
+      />
+
       <span className="option-top">
         {IconGlyph ? (
           <IconGlyph size={26} weight="light" />

@@ -468,20 +468,20 @@
   opacity: 0;
   animation: optionEnter 520ms var(--ease-apple) forwards;
   transition:
-    transform var(--duration-normal) var(--ease-apple),
     border-color var(--duration-fast) ease,
+    filter var(--duration-fast) ease,
     background var(--duration-normal) var(--ease-apple);
 }
 
 .decision-option:hover {
-  transform: translateY(-2px);
   background: var(--surface-card-hover);
   border-color: rgba(255, 255, 255, 0.28);
 }
 
 .decision-option:active {
-  transform: scale(0.985);
+  filter: brightness(0.94);
 }
+
 
 .decision-option:focus-visible {
   border-color: var(--accent-soft);
@@ -573,19 +573,18 @@
   color: #23180f;
   background: linear-gradient(180deg, #f8d1a2, #f1b976);
   transition:
-    transform 220ms var(--ease-apple),
     opacity var(--duration-fast) ease,
     filter var(--duration-fast) ease;
 }
 
 .place-report:hover:not(:disabled) {
-  transform: translateY(-2px);
   filter: brightness(1.035);
 }
 
 .place-report:active:not(:disabled) {
-  transform: scale(0.98);
+  filter: brightness(0.95);
 }
+
 
 .place-report:disabled {
   opacity: 0.28;
