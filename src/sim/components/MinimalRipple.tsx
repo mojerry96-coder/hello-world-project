@@ -20,9 +20,12 @@ export function MinimalRipple({
   active?: boolean;
 }) {
   return (
-    <span className="minimal-ripple" style={{ width: size, height: size }}>
-      {active &&
-        Array.from({ length: rings }, (_, i) => (
+    <span
+      className="minimal-ripple"
+      data-quiet={active ? "false" : "true"}
+      style={{ width: size, height: size }}
+    >
+      {Array.from({ length: rings }, (_, i) => (
           <span
             key={i}
             aria-hidden="true"
