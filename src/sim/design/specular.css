@@ -19,7 +19,8 @@
 /* Hosts: keep the canvas positioned against the button and the label on top. */
 .place-report,
 .primary-cta,
-.decision-option {
+.decision-option,
+.option-folder {
   position: relative;
 }
 
