@@ -139,31 +139,30 @@ export default function Page04FieldEvidence() {
         );
       })}
 
-      {/* Reveal panel for the selected location. */}
-      {active && (
-        <div
-          style={box(
-            { x: 1198, y: 96, w: 430, h: 250, z: 22 },
-            {
-              background: "rgba(13,13,11,.86)",
-              border: "1px solid var(--line-dark)",
-              padding: 24,
-            },
-          )}
-          role="status"
-        >
-          <p style={typeStyle("label")}>{fieldEvidence[active].title}</p>
-          <p style={typeStyle("metric", { fontSize: 56, margin: "8px 0 16px" })}>
-            {fieldEvidence[active].coverage}
-          </p>
-          <p style={typeStyle("bodySmall", { marginBottom: 8 })}>
-            {fieldEvidence[active].concern}
-          </p>
-          <p style={typeStyle("bodySmall")}>
-            {fieldEvidence[active].channelEvidence}
-          </p>
-        </div>
-      )}
+      {/* Cinematic centred reveal for the selected location. */}
+      <RevealOverlay
+        open={active !== null}
+        onClose={() => setActive(null)}
+        label={active ? `${fieldEvidence[active].title} field report` : "Field report"}
+        width={640}
+      >
+        {active && (
+          <>
+            <p style={typeStyle("label")}>{fieldEvidence[active].title}</p>
+            <p
+              style={typeStyle("metric", { fontSize: 72, margin: "10px 0 20px" })}
+            >
+              {fieldEvidence[active].coverage}
+            </p>
+            <p style={typeStyle("bodySmall", { marginBottom: 12 })}>
+              {fieldEvidence[active].concern}
+            </p>
+            <p style={typeStyle("bodySmall")}>
+              {fieldEvidence[active].channelEvidence}
+            </p>
+          </>
+        )}
+      </RevealOverlay>
 
       <Shade
         frame={{ x: 0, y: 818, w: 1672, h: 123, z: 18 }}
