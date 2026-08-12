@@ -238,43 +238,33 @@ button {
   border-radius: 0;
 }
 
-/* ---- Hotspot pulse (Page 04 field-evidence) ---- */
+/* ---- Minimal ripple (Page 04 field-evidence hotspots) ---- */
 
-.hotspot-pulse {
+.minimal-ripple {
   position: relative;
+  display: grid;
+  place-items: center;
 }
 
-.hotspot-pulse::before {
-  content: "";
+.minimal-ripple__ring {
   position: absolute;
-  inset: -6px;
-  border-radius: 50%;
-  border: 1px solid rgba(238, 228, 213, 0.55);
-  opacity: 0;
-  animation: hotspot-ping 1.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-}
-
-.hotspot-pulse::after {
-  content: "";
-  position: absolute;
-  inset: -6px;
+  inset: 0;
   border-radius: 50%;
   border: 1px solid var(--accent-active);
   opacity: 0;
-  animation: hotspot-ping 1.8s cubic-bezier(0.4, 0, 0.2, 1) infinite 0.9s;
+  pointer-events: none;
+  animation-name: ripple-expand;
+  animation-timing-function: cubic-bezier(0.16, 0.84, 0.44, 1);
+  animation-iteration-count: infinite;
 }
 
-@keyframes hotspot-ping {
+@keyframes ripple-expand {
   0% {
-    transform: scale(0.6);
-    opacity: 0.7;
-  }
-  70% {
-    transform: scale(1.8);
-    opacity: 0;
+    transform: scale(1);
+    opacity: 0.42;
   }
   100% {
-    transform: scale(1.8);
+    transform: scale(2.6);
     opacity: 0;
   }
 }

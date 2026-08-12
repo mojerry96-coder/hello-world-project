@@ -7,6 +7,7 @@ import { useNavigate } from "../lib/navigate";
 import { Check } from "@phosphor-icons/react";
 import { MediaSlot } from "../components/MediaSlot";
 import { BackNav, PageLabel, Shade } from "../components/Chrome";
+import { MinimalRipple } from "../components/MinimalRipple";
 import { box, type Box } from "../design/layout";
 import { typeStyle } from "../design/type";
 import { fieldEvidence } from "../content/pages";
@@ -111,28 +112,29 @@ export default function Page04FieldEvidence() {
               padding: 0,
             })}
           >
-            <span
-              aria-hidden="true"
-              className={isVisited ? undefined : "hotspot-pulse"}
-              style={{
-                width: 28,
-                height: 28,
-                borderRadius: "50%",
-                display: "grid",
-                placeItems: "center",
-                border: `1px solid ${
-                  isVisited ? "var(--accent-active)" : "rgba(238,228,213,.55)"
-                }`,
-                background: isVisited
-                  ? "rgba(180,93,43,.28)"
-                  : "rgba(12,12,10,.32)",
-                transition: "border-color 180ms ease, background 180ms ease",
-              }}
-            >
-              {isVisited && (
-                <Check size={14} weight="thin" color="var(--accent-active)" />
-              )}
-            </span>
+            <MinimalRipple size={28} active={!isVisited}>
+              <span
+                aria-hidden="true"
+                style={{
+                  width: 28,
+                  height: 28,
+                  borderRadius: "50%",
+                  display: "grid",
+                  placeItems: "center",
+                  border: `1px solid ${
+                    isVisited ? "var(--accent-active)" : "rgba(238,228,213,.55)"
+                  }`,
+                  background: isVisited
+                    ? "rgba(180,93,43,.28)"
+                    : "rgba(12,12,10,.32)",
+                  transition: "border-color 180ms ease, background 180ms ease",
+                }}
+              >
+                {isVisited && (
+                  <Check size={14} weight="thin" color="var(--accent-active)" />
+                )}
+              </span>
+            </MinimalRipple>
           </button>
         );
       })}
