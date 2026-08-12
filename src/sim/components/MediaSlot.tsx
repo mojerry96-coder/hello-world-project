@@ -17,6 +17,8 @@ type Props = {
   frame: Box;
   /** focal point, e.g. "62% 48%" */
   objectPosition?: string;
+  /** pointer-parallax travel in px; 0 disables the drift */
+  depth?: number;
   style?: CSSProperties;
 };
 
