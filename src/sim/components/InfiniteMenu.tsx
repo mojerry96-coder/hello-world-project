@@ -756,7 +756,7 @@ class InfiniteGridMenu {
   private updateProjectionMatrix(gl: WebGL2RenderingContext) {
     const canvas = gl.canvas as HTMLCanvasElement;
     this.camera.aspect = canvas.clientWidth / Math.max(1, canvas.clientHeight);
-    const height = this.SPHERE_RADIUS * 0.35;
+    const height = this.SPHERE_RADIUS * 0.35 * this.scaleFactor;
     const distance = this.camera.position[2];
     this.camera.fov =
       this.camera.aspect > 1
