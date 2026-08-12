@@ -17,6 +17,8 @@ type Props = {
   frame: Box;
   /** focal point, e.g. "62% 48%" */
   objectPosition?: string;
+  /** pointer-parallax travel in px; 0 disables the drift */
+  depth?: number;
   style?: CSSProperties;
 };
 
@@ -49,7 +51,15 @@ function Placeholder({ id, alt }: { id: string; alt: string }) {
   );
 }
 
-export function MediaSlot({ id, src, alt, frame, objectPosition, style }: Props) {
+export function MediaSlot({
+  id,
+  src,
+  alt,
+  frame,
+  objectPosition,
+  depth = 14,
+  style,
+}: Props) {
   const [failed, setFailed] = useState(false);
 
   return (
@@ -61,12 +71,14 @@ export function MediaSlot({ id, src, alt, frame, objectPosition, style }: Props)
           src={`${import.meta.env.BASE_URL}media/${src}`}
           alt={alt}
           onError={() => setFailed(true)}
+          className={depth > 0 ? "parallax-media" : undefined}
           style={{
             width: "100%",
             height: "100%",
             objectFit: "cover",
             objectPosition: objectPosition ?? "center",
             display: "block",
+            ["--depth" as string]: `${depth}px`,
           }}
         />
       )}

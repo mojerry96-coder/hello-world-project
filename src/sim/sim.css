@@ -259,3 +259,30 @@ button {
     opacity: 0;
   }
 }
+
+/* ---- Pointer parallax on scene imagery ----
+   The artboard publishes --mx/--my (-1..1); each image drifts by its own
+   --depth so foreground media moves further than the backdrop. */
+
+.artboard {
+  --mx: 0;
+  --my: 0;
+}
+
+.parallax-media {
+  --depth: 14px;
+  transform: scale(1.06)
+    translate3d(
+      calc(var(--mx) * var(--depth) * -1),
+      calc(var(--my) * var(--depth) * -1),
+      0
+    );
+  transition: transform 260ms cubic-bezier(0.22, 0.61, 0.36, 1);
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .parallax-media {
+    transform: none;
+  }
+}
