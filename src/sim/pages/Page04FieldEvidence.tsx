@@ -8,6 +8,7 @@ import { Check } from "@phosphor-icons/react";
 import { MediaSlot } from "../components/MediaSlot";
 import { BackNav, PageLabel, Shade } from "../components/Chrome";
 import { MinimalRipple } from "../components/MinimalRipple";
+import { RevealOverlay } from "../components/RevealOverlay";
 import { box, type Box } from "../design/layout";
 import { typeStyle } from "../design/type";
 import { fieldEvidence } from "../content/pages";
