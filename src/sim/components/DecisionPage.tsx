@@ -21,10 +21,6 @@ import {
   type Icon,
 } from "@phosphor-icons/react";
 import { SpecularEdge } from "./SpecularEdge";
-import folder1 from "../../assets/folders/folder-1.png.asset.json";
-import folder2 from "../../assets/folders/folder-2.png.asset.json";
-import folder3 from "../../assets/folders/folder-3.png.asset.json";
-import folder4 from "../../assets/folders/folder-4.png.asset.json";
 import { PageHud, PageScene } from "./PageChrome";
 import { useSimulation } from "../state/store";
 import "../design/decision.css";
@@ -74,7 +70,12 @@ export type OptionSpec = {
 
 /* Folder art. Assignment is deterministic (stable across renders) and stepped
    by index so two neighbouring cards never share the same folder. */
-const FOLDERS = [folder1.url, folder2.url, folder3.url, folder4.url];
+const FOLDERS = [
+  "/folders/folder-1.png",
+  "/folders/folder-2.png",
+  "/folders/folder-3.png",
+  "/folders/folder-4.png",
+];
 /* 1 and 4 are the dark folders (green, terracotta); 2 and 3 are light. */
 const FOLDER_INK = ["dark", "light", "light", "dark"] as const;
 
@@ -121,32 +122,34 @@ function DecisionOption({
       data-ink={FOLDER_INK[folder]}
       style={style}
     >
-      <SpecularEdge
-        radius={14}
-        inactive={option.disabled}
-        intensity={0.8}
-        proximity={170}
-      />
-
-
-      <span className="option-top">
-        {IconGlyph ? (
-          <IconGlyph size={26} weight="light" />
-        ) : (
-          <span style={{ fontSize: 12, letterSpacing: "0.1em" }}>
-            {option.marker ?? String(index + 1).padStart(2, "0")}
+      <span className="option-folder">
+        <SpecularEdge
+          radius={14}
+          inactive={option.disabled}
+          intensity={0.8}
+          proximity={170}
+        />
+        <span className="option-label">
+          <span className="option-top">
+            {IconGlyph ? (
+              <IconGlyph size={22} weight="light" />
+            ) : (
+              <span className="option-marker">
+                {option.marker ?? String(index + 1).padStart(2, "0")}
+              </span>
+            )}
+            {selected && (
+              <span className="option-check" aria-hidden="true">
+                <Check size={12} weight="bold" />
+              </span>
+            )}
           </span>
-        )}
-        {selected && (
-          <span className="option-check" aria-hidden="true">
-            <Check size={13} weight="bold" />
-          </span>
-        )}
+          <span className="option-title">{option.title}</span>
+          {option.subtitle && (
+            <span className="option-subtitle">{option.subtitle}</span>
+          )}
+        </span>
       </span>
-      <span className="option-title">{option.title}</span>
-      {option.subtitle && (
-        <span className="option-subtitle">{option.subtitle}</span>
-      )}
     </button>
   );
 }
