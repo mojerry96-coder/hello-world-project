@@ -75,7 +75,14 @@ export const reports: Record<
   },
 };
 
-/** Short drop-zone labels, in the fixed left-to-right order of the spec layout. */
+
+/* Drop zones, in the fixed left-to-right order of the spec layout.
+
+   `short` is what the learner reads and reasons with — plain cause language,
+   because "Channel Access" and "Digital" are indistinguishable to anyone who
+   has not already read the course notes. `full` keeps the SDD's assessment
+   terminology, shown underneath in small caps and used for the accessible
+   label, so the marking vocabulary is still taught and still examinable. */
 export const barrierZones: {
   id: Barrier;
   short: string;
@@ -83,11 +90,41 @@ export const barrierZones: {
   x: number;
   w: number;
 }[] = [
-  { id: "digital-communication", short: "DIGITAL", full: "DIGITAL COMMUNICATION BARRIER", x: 70, w: 142 },
-  { id: "misinformation-trust", short: "MISINFORMATION / TRUST", full: "MISINFORMATION / TRUST BARRIER", x: 252, w: 286 },
-  { id: "channel-access", short: "CHANNEL ACCESS", full: "CHANNEL ACCESS BARRIER", x: 608, w: 210 },
-  { id: "trusted-messenger", short: "TRUSTED MESSENGER", full: "TRUSTED MESSENGER BARRIER", x: 897, w: 247 },
-  { id: "not-primary", short: "NOT PRIMARY", full: "NOT A PRIMARY COMMUNICATION BARRIER", x: 1210, w: 150 },
+  {
+    id: "digital-communication",
+    short: "WE'RE TOO SLOW ONLINE",
+    full: "Digital communication barrier",
+    x: 70,
+    w: 218,
+  },
+  {
+    id: "misinformation-trust",
+    short: "THEY BELIEVE IT WILL HARM THEM",
+    full: "Misinformation / trust barrier",
+    x: 300,
+    w: 288,
+  },
+  {
+    id: "channel-access",
+    short: "OUR MESSAGE NEVER REACHES THEM",
+    full: "Channel access barrier",
+    x: 600,
+    w: 288,
+  },
+  {
+    id: "trusted-messenger",
+    short: "THEY'LL LISTEN — BUT NOT TO US",
+    full: "Trusted messenger barrier",
+    x: 900,
+    w: 268,
+  },
+  {
+    id: "not-primary",
+    short: "NOT A COMMUNICATION PROBLEM",
+    full: "Not a primary communication barrier",
+    x: 1180,
+    w: 258,
+  },
 ];
 
 export const correctFeedback: Record<ReportId, string> = {
@@ -111,21 +148,36 @@ export const diagnosisOutcomeCopy = {
 
 /* ---------- Page 06 ---------- */
 
+/* `plain` leads — it is what the learner reasons with. `name` is the SDD's
+   strategy term, kept underneath so the assessment vocabulary is still taught. */
 export const strategies: {
   id: Strategy;
+  plain: string;
   name: string;
   channels: string;
 }[] = [
-  { id: "digital-first", name: "DIGITAL-FIRST", channels: "WHATSAPP · SMS · SOCIAL" },
+  {
+    id: "digital-first",
+    plain: "Answer them fast, online",
+    name: "Digital-first",
+    channels: "WhatsApp · SMS · social",
+  },
   {
     id: "community-trust",
-    name: "COMMUNITY TRUST",
-    channels: "CHWs · RELIGIOUS · TRADITIONAL LEADERS",
+    plain: "Send people they already trust",
+    name: "Community trust",
+    channels: "Health workers · religious and traditional leaders",
   },
-  { id: "high-visibility", name: "VISIBILITY", channels: "TV · OUTDOOR · PUBLIC AWARENESS" },
+  {
+    id: "high-visibility",
+    plain: "Make the campaign impossible to miss",
+    name: "High visibility",
+    channels: "TV · outdoor · public awareness",
+  },
   {
     id: "integrated-adaptive",
-    name: "INTEGRATED ADAPTIVE",
-    channels: "RURAL TRUST · URBAN DIGITAL · RADIO",
+    plain: "Different message for different places",
+    name: "Integrated adaptive",
+    channels: "Rural trust · urban digital · statewide radio",
   },
 ];

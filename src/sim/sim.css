@@ -1,6 +1,25 @@
 /* MPH8430 — Right Message, Right Channel
    Global tokens + artboard scaffolding. Source: replication spec section 4.
-   (Inter font is loaded via <link> in src/routes/__root.tsx head.) */
+
+   Typography is Afacad (display) + Manrope (text), per the master production
+   prompt. Both are self-hosted variable fonts so there is no CDN round-trip and
+   no silent fallback to a system face mid-render. */
+
+@font-face {
+  font-family: "Afacad";
+  src: url("/fonts/afacad-var.woff2") format("woff2-variations");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Manrope";
+  src: url("/fonts/manrope-var.woff2") format("woff2-variations");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
 
 :root {
   --ink: #181a18;
@@ -44,7 +63,7 @@ body,
 body {
   overflow: hidden;
   background: var(--ink);
-  font-family: Inter, Arial, sans-serif;
+  font-family: Manrope, system-ui, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -257,32 +276,5 @@ button {
   100% {
     transform: scale(1.8);
     opacity: 0;
-  }
-}
-
-/* ---- Pointer parallax on scene imagery ----
-   The artboard publishes --mx/--my (-1..1); each image drifts by its own
-   --depth so foreground media moves further than the backdrop. */
-
-.artboard {
-  --mx: 0;
-  --my: 0;
-}
-
-.parallax-media {
-  --depth: 14px;
-  transform: scale(1.06)
-    translate3d(
-      calc(var(--mx) * var(--depth) * -1),
-      calc(var(--my) * var(--depth) * -1),
-      0
-    );
-  transition: transform 260ms cubic-bezier(0.22, 0.61, 0.36, 1);
-  will-change: transform;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .parallax-media {
-    transform: none;
   }
 }

@@ -1,18 +1,23 @@
 /* PAGE 01 — OPENING. No decision, no progress marker, no back nav.
-   Static hero image with staged text reveals. */
+
+   Still, not video. The film held the title card hostage for seven seconds
+   before a single word appeared, which read as a broken page rather than a
+   deliberate hold. The reveals now begin immediately and finish inside 1.5s. */
 
 import { useEffect, useState } from "react";
 import { useNavigate } from "../lib/navigate";
+import { MediaSlot } from "../components/MediaSlot";
 import { Shade } from "../components/Chrome";
 import { box } from "../design/layout";
 import { typeStyle } from "../design/type";
 import { useSimulation } from "../state/store";
+import { SplitText } from "../motion/SplitText";
 
 const REVEALS = [
-  { key: "kicker", at: 650 },
-  { key: "title", at: 850 },
-  { key: "titleRule", at: 1400 },
-  { key: "cta", at: 1750 },
+  { key: "kicker", at: 250 },
+  { key: "title", at: 500 },
+  { key: "titleRule", at: 1050 },
+  { key: "cta", at: 1350 },
 ] as const;
 
 export default function Page01Opening() {
@@ -47,18 +52,11 @@ export default function Page01Opening() {
 
   return (
     <div className="page-enter">
-      <img
-        src="/media/p01-clinic-cold-open-poster.webp"
+      <MediaSlot
+        id="IMG-01"
+        src="p01-clinic-cold-open-poster.webp"
         alt="Rural Ikara immunisation outreach room. A hesitant Hausa mother holding her toddler pauses inside the clinic while a community health worker waits beside the vaccination table."
-        className="parallax-media"
-        style={box(
-          { x: 0, y: 0, w: 1672, h: 941, z: 0 },
-          {
-            objectFit: "cover",
-            display: "block",
-            ["--depth" as string]: "22px",
-          },
-        )}
+        frame={{ x: 0, y: 0, w: 1672, h: 941, z: 0 }}
       />
 
       <Shade
@@ -94,19 +92,34 @@ export default function Page01Opening() {
         )}
       />
 
-      <h1
+      <div
         style={box(
           { x: 56, y: 686, w: 520, h: 106, z: 10 },
-          {
-            ...typeStyle("displayL", { fontSize: 52, lineHeight: 1.05 }),
-            ...visible("title"),
-          },
+          visible("title"),
         )}
       >
-        RIGHT MESSAGE,
-        <br />
-        RIGHT CHANNEL
-      </h1>
+        {shown.has("title") && (
+          <>
+            <SplitText
+              as="h1"
+              text="RIGHT MESSAGE,"
+              by="char"
+              stagger={0.024}
+              rise={24}
+              style={typeStyle("displayL", { fontSize: 52, lineHeight: 1.05 })}
+            />
+            <SplitText
+              as="h2"
+              text="RIGHT CHANNEL"
+              by="char"
+              delay={0.26}
+              stagger={0.024}
+              rise={24}
+              style={typeStyle("displayL", { fontSize: 52, lineHeight: 1.05 })}
+            />
+          </>
+        )}
+      </div>
       <div
         aria-hidden="true"
         style={box(
@@ -114,6 +127,30 @@ export default function Page01Opening() {
           { background: "var(--accent)", ...visible("titleRule") },
         )}
       />
+
+      {/* Lets a learner who skipped or forgot the brief watch it again. */}
+      <button
+        type="button"
+        className="focusable"
+        onClick={() => navigate("/intro")}
+        style={box(
+          { x: 56, y: 843, w: 190, h: 24, z: 10 },
+          {
+            ...typeStyle("bodySmall", {
+              fontSize: 13,
+              color: "rgba(238,228,213,.62)",
+            }),
+            background: "transparent",
+            border: "none",
+            textAlign: "left",
+            cursor: "pointer",
+            ...visible("cta"),
+            pointerEvents: shown.has("cta") ? "auto" : "none",
+          },
+        )}
+      >
+        Watch the briefing again
+      </button>
 
       <button
         type="button"
@@ -136,4 +173,3 @@ export default function Page01Opening() {
     </div>
   );
 }
-

@@ -11,6 +11,8 @@ import { box } from "../design/layout";
 import { typeStyle } from "../design/type";
 import { calculateForecast } from "../state/logic";
 import { useSimulation } from "../state/store";
+import { CountUp } from "../motion/CountUp";
+import { projectedChildren } from "../state/coverage";
 import type { Forecast, SimulationState } from "../state/types";
 
 const BARS: { key: keyof Forecast; label: string; y: number }[] = [
@@ -47,6 +49,7 @@ export default function Page09Forecast() {
   const navigate = useNavigate();
   const { state, update } = useSimulation();
   const forecast = state.forecast ?? calculateForecast(state);
+  const children = projectedChildren(state);
   const [animated, setAnimated] = useState(state.reducedMotion);
 
   useEffect(() => {
@@ -88,16 +91,43 @@ export default function Page09Forecast() {
 
       <p
         style={box(
-          { x: 46, y: 246, w: 620, h: 32, z: 20 },
+          { x: 46, y: 240, w: 620, h: 24, z: 20 },
           typeStyle("bodySmall"),
         )}
       >
         Forecast based on your diagnosis, selected strategy and ₦180M allocation.
       </p>
 
+      {/* Lead with the outcome, not the indices. Nobody finishes a campaign
+          thinking "I moved Visibility to 66" — they think about children. */}
+      <div style={box({ x: 46, y: 276, w: 640, h: 54, z: 20 })}>
+        <CountUp
+          as="span"
+          to={children}
+          duration={1.4}
+          style={{
+            fontFamily: "Manrope, system-ui, Helvetica, Arial, sans-serif",
+            fontWeight: 300,
+            fontSize: 44,
+            lineHeight: "46px",
+            color: "var(--cream)",
+            fontVariantNumeric: "tabular-nums",
+          }}
+        />
+        <span
+          style={{
+            ...typeStyle("body", { fontSize: 17 }),
+            marginLeft: 12,
+            color: "var(--accent-active)",
+          }}
+        >
+          more children reached by week 10
+        </span>
+      </div>
+
       <p
         style={box(
-          { x: 46, y: 335, w: 760, h: 24, z: 20 },
+          { x: 46, y: 348, w: 760, h: 24, z: 20 },
           typeStyle("bodySmall", { color: "var(--cream)" }),
         )}
       >
@@ -118,7 +148,7 @@ export default function Page09Forecast() {
             >
               <span
                 style={{
-                  fontFamily: "Inter, Arial, sans-serif",
+                  fontFamily: "Manrope, system-ui, Helvetica, Arial, sans-serif",
                   fontSize: 12,
                   lineHeight: "15px",
                   fontWeight: 500,
@@ -127,17 +157,20 @@ export default function Page09Forecast() {
               >
                 {bar.label}
               </span>
-              <span
+              <CountUp
+                as="span"
+                to={value}
+                suffix="%"
+                duration={0.9}
+                delay={0.08 * BARS.indexOf(bar)}
                 style={{
-                  fontFamily: "Inter, Arial, sans-serif",
+                  fontFamily: "Manrope, system-ui, Helvetica, Arial, sans-serif",
                   fontWeight: 300,
                   fontSize: 28,
                   lineHeight: "30px",
                   color: "var(--cream)",
                 }}
-              >
-                {value}%
-              </span>
+              />
             </div>
             <div
               style={{

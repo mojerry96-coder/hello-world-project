@@ -10,6 +10,7 @@ import { VoiceOver } from "../components/VoiceOver";
 import { box, type Box } from "../design/layout";
 import { typeStyle } from "../design/type";
 import { useSimulation } from "../state/store";
+import { GOAL_LINE } from "../content/story";
 
 const DIRECTOR_MESSAGE =
   "Before selecting communication channels, understand why communities are hesitant. The strategy must address the barriers affecting vaccine acceptance.";
@@ -47,7 +48,7 @@ function Fact({
       </div>
       <p
         style={{
-          fontFamily: "Inter, Arial, sans-serif",
+          fontFamily: "Manrope, system-ui, Helvetica, Arial, sans-serif",
           fontWeight: 300,
           fontSize: 26,
           lineHeight: "32px",
@@ -109,6 +110,27 @@ export default function Page02Mission() {
       >
         {DIRECTOR_MESSAGE}
       </p>
+
+      {/* The objective, stated once in words a player can act on. The
+          Director's briefing above says why; this says what winning is. */}
+      <div
+        style={box(
+          { x: 64, y: 676, w: 960, h: 68, z: 10 },
+          {
+            background:
+              "linear-gradient(90deg, rgba(10,10,8,.86) 0%, rgba(10,10,8,.58) 74%, transparent 100%)",
+            borderLeft: "2px solid var(--accent)",
+            padding: "10px 18px",
+          },
+        )}
+      >
+        <p style={typeStyle("label", { color: "var(--cream)", marginBottom: 4 })}>
+          Your objective
+        </p>
+        <p style={typeStyle("body", { fontSize: 17, color: "var(--accent-active)" })}>
+          {GOAL_LINE}
+        </p>
+      </div>
 
       <Rule frame={{ x: 64, y: 839, w: 1300, h: 1, z: 10 }} />
 
