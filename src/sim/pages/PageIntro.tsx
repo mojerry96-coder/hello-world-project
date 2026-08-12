@@ -17,6 +17,7 @@ import { useNavigate } from "../lib/navigate";
 import { ArrowRight, SpeakerSimpleHigh, SpeakerSimpleX } from "@phosphor-icons/react";
 import { MediaSlot } from "../components/MediaSlot";
 import { Shade } from "../components/Chrome";
+import { SpecularEdge } from "../components/SpecularEdge";
 import { box } from "../design/layout";
 import { typeStyle } from "../design/type";
 import {
@@ -122,6 +123,7 @@ export default function PageIntro() {
           onClick={enter}
           style={box({ x: 1290, y: 820, w: 300, h: 64, z: 20 }, typeStyle("button"))}
         >
+          <SpecularEdge radius={0} />
           <span>BEGIN</span>
           <ArrowRight size={24} weight="thin" />
         </button>

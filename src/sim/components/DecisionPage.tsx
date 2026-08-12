@@ -22,6 +22,7 @@ import {
   type Icon,
 } from "@phosphor-icons/react";
 import { MediaSlot } from "./MediaSlot";
+import { SpecularEdge } from "./SpecularEdge";
 import { MetricLoop } from "./MetricLoop";
 import { useSimulation } from "../state/store";
 import "../design/decision.css";
@@ -381,7 +382,8 @@ export function DecisionPage({
             aria-disabled={submitDisabled}
             onClick={onSubmit}
           >
-            {submitLabel}
+            <SpecularEdge radius={13} inactive={submitDisabled} />
+            <span>{submitLabel}</span>
             <ArrowRight size={15} weight="bold" />
           </button>
         </div>

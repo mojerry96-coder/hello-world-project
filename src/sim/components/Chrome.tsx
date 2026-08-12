@@ -5,6 +5,7 @@ import type { CSSProperties, ReactNode } from "react";
 import { ArrowLeft, ArrowRight } from "@phosphor-icons/react";
 import { box, CHROME, type Box } from "../design/layout";
 import { typeStyle } from "../design/type";
+import { SpecularEdge } from "./SpecularEdge";
 
 export function Shade({
   frame,
@@ -104,6 +105,7 @@ export function PrimaryCTA({
         ...style,
       })}
     >
+      <SpecularEdge radius={0} inactive={disabled} />
       <span>{label}</span>
       {showArrow && <ArrowRight size={24} weight="thin" />}
     </button>
