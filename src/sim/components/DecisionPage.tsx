@@ -381,7 +381,8 @@ export function DecisionPage({
             aria-disabled={submitDisabled}
             onClick={onSubmit}
           >
-            {submitLabel}
+            <SpecularEdge inactive={submitDisabled} />
+            <span>{submitLabel}</span>
             <ArrowRight size={15} weight="bold" />
           </button>
         </div>
