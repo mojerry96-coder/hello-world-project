@@ -928,6 +928,15 @@
   animation: sheetEnter 760ms var(--ease-apple) 260ms both;
 }
 
+/* Panel-less variant: content stays put, the glass card is gone. */
+.narrative-sheet--bare {
+  border: 0;
+  border-radius: 0;
+  background: none;
+  backdrop-filter: none;
+  box-shadow: none;
+}
+
 .narrative-body {
   display: flex;
   align-items: flex-start;
