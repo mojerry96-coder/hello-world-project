@@ -21,6 +21,10 @@ import {
   type Icon,
 } from "@phosphor-icons/react";
 import { SpecularEdge } from "./SpecularEdge";
+import folder1 from "../../assets/folders/folder-1.png.asset.json";
+import folder2 from "../../assets/folders/folder-2.png.asset.json";
+import folder3 from "../../assets/folders/folder-3.png.asset.json";
+import folder4 from "../../assets/folders/folder-4.png.asset.json";
 import { PageHud, PageScene } from "./PageChrome";
 import { useSimulation } from "../state/store";
 import "../design/decision.css";
