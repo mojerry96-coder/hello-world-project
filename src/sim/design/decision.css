@@ -784,3 +784,735 @@
     gap: 18px;
   }
 }
+
+/* ==================================================
+   NARRATIVE PAGES
+   Same glass composition as the decision screens, tuned for reading: a
+   title block over the scene, one glass sheet holding the brief, and an
+   action row that always sits on the same baseline.
+================================================== */
+
+.scene-treatment-left {
+  background:
+    linear-gradient(
+      100deg,
+      rgba(10, 10, 8, 0.78) 0%,
+      rgba(10, 10, 8, 0.34) 46%,
+      rgba(10, 10, 8, 0.08) 72%
+    ),
+    linear-gradient(0deg, rgba(13, 11, 10, 0.82) 0%, transparent 52%);
+}
+
+.scene-treatment-hero {
+  background:
+    radial-gradient(
+      120% 90% at 18% 78%,
+      rgba(10, 10, 8, 0.82) 0%,
+      transparent 62%
+    ),
+    linear-gradient(0deg, rgba(13, 11, 10, 0.86) 0%, transparent 58%);
+}
+
+.narrative-hero {
+  position: absolute;
+  z-index: 12;
+  left: clamp(34px, 4.05vw, 68px);
+  right: clamp(34px, 3.5vw, 58px);
+  top: clamp(132px, 18vh, 210px);
+  max-width: min(880px, 58vw);
+  animation: sheetEnter 720ms var(--ease-apple) 180ms both;
+}
+
+.narrative-kicker {
+  margin-bottom: var(--space-3);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--accent-soft);
+}
+
+.narrative-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(38px, 4.1vw, 68px);
+  line-height: 1.03;
+  font-weight: 500;
+  letter-spacing: -0.025em;
+  color: var(--text-primary);
+  text-wrap: balance;
+}
+
+.narrative-rule {
+  width: clamp(120px, 16vw, 260px);
+  height: 2px;
+  margin-top: clamp(16px, 2vh, 26px);
+  background: linear-gradient(90deg, var(--accent), rgba(240, 173, 99, 0));
+}
+
+.narrative-sheet {
+  position: absolute;
+  z-index: 20;
+  left: clamp(34px, 4.05vw, 68px);
+  right: clamp(34px, 3.5vw, 58px);
+  bottom: clamp(28px, 4vh, 38px);
+  padding: clamp(20px, 2.4vh, 28px) clamp(22px, 2.2vw, 32px);
+  display: flex;
+  flex-direction: column;
+  gap: clamp(14px, 1.8vh, 22px);
+  border-radius: var(--radius-panel);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: linear-gradient(
+    108deg,
+    rgba(45, 41, 37, 0.78),
+    rgba(31, 29, 27, 0.7)
+  );
+  backdrop-filter: blur(26px) saturate(120%);
+  box-shadow:
+    0 24px 60px rgba(0, 0, 0, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  animation: sheetEnter 760ms var(--ease-apple) 260ms both;
+}
+
+.narrative-body {
+  display: flex;
+  align-items: flex-start;
+  gap: clamp(24px, 3vw, 56px);
+}
+
+.narrative-lede {
+  flex: 0 1 min(660px, 46vw);
+  min-width: 0;
+}
+
+.narrative-lede p {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(19px, 1.35vw, 25px);
+  line-height: 1.26;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+}
+
+.narrative-lede .narrative-note {
+  margin-top: var(--space-3);
+  font-family: var(--font-ui);
+  font-size: 13px;
+  line-height: 1.5;
+  letter-spacing: 0;
+  color: var(--text-secondary);
+}
+
+.narrative-aside {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.narrative-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-5);
+  padding-top: clamp(12px, 1.6vh, 18px);
+  border-top: 1px solid var(--border-soft);
+}
+
+.narrative-actions-left {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  min-width: 0;
+  font-size: 12.5px;
+  line-height: 1.45;
+  color: var(--text-secondary);
+}
+
+.narrative-actions-right {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  flex-shrink: 0;
+}
+
+/* Data rows and figure grids used inside the sheet. */
+
+.figure-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--figure-columns, 3), minmax(0, 1fr));
+  gap: clamp(12px, 1.4vw, 22px);
+}
+
+.figure-card {
+  position: relative;
+  padding: 14px 16px 13px;
+  border: 1px solid var(--border-medium);
+  border-radius: var(--radius-card);
+  background: rgba(29, 29, 27, 0.42);
+  opacity: 0;
+  animation: optionEnter 560ms var(--ease-apple) forwards;
+}
+
+.figure-label {
+  display: block;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+.figure-value {
+  display: block;
+  margin-top: 6px;
+  font-family: var(--font-display);
+  font-variant-numeric: tabular-nums;
+  font-size: clamp(26px, 2.1vw, 38px);
+  line-height: 1;
+  font-weight: 450;
+  letter-spacing: -0.03em;
+  color: var(--text-primary);
+}
+
+.figure-value.is-warning {
+  color: var(--accent);
+}
+
+.figure-note {
+  display: block;
+  margin-top: 8px;
+  font-size: 11.5px;
+  line-height: 1.35;
+  color: var(--text-tertiary);
+}
+
+.figure-track {
+  display: block;
+  width: 100%;
+  height: 2px;
+  margin-top: 10px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.16);
+}
+
+.figure-fill {
+  display: block;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.9);
+  transition: width var(--duration-slow) var(--ease-apple);
+}
+
+.figure-fill.is-warning {
+  background: var(--accent);
+}
+
+/* Quiet secondary action, used for "watch the brief again", debrief, mute. */
+
+.ghost-button {
+  min-height: 40px;
+  padding: 0 16px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  border-radius: var(--radius-button);
+  border: 1px solid var(--border-medium);
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--text-secondary);
+  font-family: var(--font-ui);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition:
+    color var(--duration-fast) ease,
+    border-color var(--duration-fast) ease,
+    background var(--duration-fast) ease;
+}
+
+.ghost-button:hover:not(:disabled) {
+  color: var(--text-primary);
+  border-color: rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.ghost-button:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.ghost-button.is-icon {
+  min-width: 40px;
+  padding: 0;
+  justify-content: center;
+}
+
+/* Quiet link-style control. */
+
+.text-button {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--text-secondary);
+  font-family: var(--font-ui);
+  font-size: 12.5px;
+  cursor: pointer;
+  text-decoration: underline;
+  text-decoration-color: rgba(255, 255, 255, 0.25);
+  text-underline-offset: 4px;
+  transition: color var(--duration-fast) ease;
+}
+
+.text-button:hover {
+  color: var(--text-primary);
+}
+
+.decision-page :focus-visible {
+  outline: 2px solid var(--accent-soft);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .narrative-hero,
+  .narrative-sheet,
+  .figure-card {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (max-width: 1450px) {
+  .narrative-hero {
+    top: 124px;
+    max-width: 64vw;
+  }
+
+  .narrative-sheet {
+    left: 34px;
+    right: 34px;
+    bottom: 24px;
+    padding: 20px 24px;
+  }
+}
+
+@media (max-width: 1180px) {
+  .narrative-body {
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .narrative-lede {
+    flex: 1 1 auto;
+  }
+
+  .figure-grid {
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  }
+}
+
+@media (max-width: 900px) {
+  .decision-hud {
+    height: auto;
+    min-height: 64px;
+    padding: 12px 16px;
+    gap: 12px;
+    flex-wrap: wrap;
+    border-radius: var(--radius-panel);
+  }
+
+  .hud-spacer {
+    display: none;
+  }
+
+  .metric-loop {
+    flex: 1 1 100%;
+    justify-content: flex-start;
+    order: 3;
+  }
+
+  .narrative-hero {
+    top: clamp(150px, 22vh, 240px);
+    max-width: none;
+  }
+
+  .narrative-sheet {
+    left: 16px;
+    right: 16px;
+    bottom: 16px;
+    padding: 18px;
+  }
+
+  .narrative-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .narrative-actions-right {
+    justify-content: flex-end;
+  }
+
+  .decision-sheet {
+    left: 16px;
+    right: 16px;
+    bottom: 16px;
+    padding: 18px 16px 14px;
+    min-height: 0;
+    max-height: calc(100vh - 120px);
+    overflow-y: auto;
+  }
+
+  .report-content {
+    width: 100%;
+  }
+
+  .report-row,
+  .decision-controls {
+    flex-direction: column;
+  }
+
+  .option-grid {
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  }
+
+  .cta-divider {
+    display: none;
+  }
+
+  .place-report {
+    align-self: stretch;
+  }
+}
+
+/* ==================================================
+   TRIPTYCH SCENE (campaign baseline)
+================================================== */
+
+.triptych {
+  position: absolute;
+  inset: 0;
+  display: flex;
+}
+
+.triptych-panel {
+  position: relative;
+  flex: 1 1 0;
+  min-width: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 0 clamp(18px, 2vw, 34px) clamp(232px, 34vh, 330px);
+}
+
+.triptych-panel + .triptych-panel {
+  border-left: 1px solid rgba(238, 228, 213, 0.4);
+}
+
+.triptych-panel img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.triptych-veil {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    0deg,
+    rgba(10, 10, 8, 0.86) 0%,
+    rgba(10, 10, 8, 0.34) 42%,
+    transparent 72%
+  );
+}
+
+.triptych-caption {
+  position: relative;
+  opacity: 0;
+  animation: optionEnter 620ms var(--ease-apple) forwards;
+}
+
+.triptych-name {
+  margin: 0 0 4px;
+  font-size: clamp(11px, 0.85vw, 13px);
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+.triptych-value {
+  display: block;
+  font-family: var(--font-display);
+  font-variant-numeric: tabular-nums;
+  font-size: clamp(48px, 6vw, 104px);
+  line-height: 0.92;
+  font-weight: 500;
+  letter-spacing: -0.035em;
+  color: var(--text-primary);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .triptych-caption {
+    animation: none;
+    opacity: 1;
+  }
+}
+
+@media (max-width: 900px) {
+  .triptych-panel {
+    padding-bottom: clamp(200px, 42vh, 340px);
+  }
+}
+
+/* ==================================================
+   MAP HOTSPOTS (field evidence)
+================================================== */
+
+.hotspot-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 14;
+  pointer-events: none;
+}
+
+.hotspot {
+  position: absolute;
+  width: 64px;
+  height: 64px;
+  transform: translate(-50%, -50%);
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  pointer-events: auto;
+}
+
+.hotspot-dot {
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  background: rgba(12, 12, 10, 0.34);
+  color: var(--accent-soft);
+  transition:
+    border-color var(--duration-fast) ease,
+    background var(--duration-fast) ease,
+    transform var(--duration-normal) var(--ease-apple);
+}
+
+.hotspot:hover .hotspot-dot {
+  transform: scale(1.12);
+}
+
+.hotspot[aria-pressed="true"] .hotspot-dot {
+  border-color: var(--accent);
+  background: rgba(240, 173, 99, 0.28);
+}
+
+.instruction-chip {
+  position: absolute;
+  z-index: 14;
+  top: clamp(120px, 15vh, 152px);
+  left: clamp(34px, 4.05vw, 68px);
+  max-width: min(560px, 52vw);
+  padding: 10px 16px;
+  border-radius: var(--radius-button);
+  border: 1px solid var(--border-medium);
+  background: rgba(20, 19, 18, 0.62);
+  backdrop-filter: blur(18px) saturate(120%);
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--text-secondary);
+  animation: sheetEnter 640ms var(--ease-apple) 240ms both;
+}
+
+.figure-card.is-dim {
+  opacity: 0.42;
+}
+
+.figure-card.is-active {
+  border-color: var(--accent);
+}
+
+/* ==================================================
+   FORECAST READOUT (page 09)
+================================================== */
+
+.forecast-headline {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.forecast-figure {
+  font-size: clamp(38px, 3.4vw, 54px);
+  font-weight: 300;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  color: var(--text-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+.forecast-figure-note {
+  font-size: 15px;
+  color: var(--accent);
+}
+
+.forecast-lede-note {
+  display: block;
+  margin-top: 12px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--text-secondary);
+}
+
+.forecast-warning {
+  display: block;
+  margin-top: 8px;
+  color: var(--warning, #d6a06b);
+}
+
+.forecast-bars {
+  display: grid;
+  gap: 14px;
+}
+
+.forecast-bar {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: 4px 12px;
+  animation: optionEnter 640ms var(--ease-apple) both;
+}
+
+.forecast-bar-label {
+  min-width: 0;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+.forecast-bar-value {
+  font-size: 20px;
+  font-weight: 300;
+  color: var(--text-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+.forecast-bar .figure-track {
+  grid-column: 1 / -1;
+}
+
+/* ==================================================
+   CLIP TIMELINE (page 10)
+================================================== */
+
+.clip-timeline {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.clip-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--border-medium);
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-secondary);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition:
+    background var(--duration-fast) ease,
+    border-color var(--duration-fast) ease,
+    color var(--duration-fast) ease;
+}
+
+.clip-chip:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text-primary);
+}
+
+.clip-chip.is-active {
+  border-color: var(--accent);
+  background: rgba(240, 173, 99, 0.16);
+  color: var(--text-primary);
+}
+
+.clip-chip:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.clip-week {
+  font-weight: 600;
+  color: var(--accent);
+}
+
+/* ==================================================
+   OUTCOME + DEBRIEF (page 15)
+================================================== */
+
+.outcome-hauwa {
+  display: block;
+  margin-top: 14px;
+  padding-left: 14px;
+  border-left: 2px solid var(--accent);
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--text-secondary);
+}
+
+.outcome-hauwa .figure-label {
+  display: block;
+  margin-bottom: 4px;
+}
+
+.debrief-panel {
+  width: min(1100px, 92vw);
+  max-height: 86vh;
+  overflow: auto;
+  padding: clamp(28px, 3vw, 48px);
+  border-radius: var(--radius-sheet, 22px);
+  border: 1px solid var(--border-medium);
+  background: rgba(18, 17, 16, 0.92);
+  backdrop-filter: blur(30px) saturate(130%);
+  color: var(--text-primary);
+  animation: sheetEnter 560ms var(--ease-apple) both;
+}
+
+.debrief-rows {
+  display: grid;
+  gap: 14px;
+  margin: 0;
+}
+
+.debrief-row {
+  border-top: 1px solid var(--border-subtle, rgba(255, 255, 255, 0.12));
+  padding-top: 12px;
+}
+
+.debrief-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 32px;
+}
+
+.ghost-button.is-danger {
+  border-color: rgba(214, 122, 111, 0.7);
+  color: #e2938a;
+}

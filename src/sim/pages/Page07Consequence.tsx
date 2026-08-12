@@ -4,14 +4,11 @@
 
 import { useEffect, useState } from "react";
 import { useNavigate } from "../lib/navigate";
-import { MediaSlot } from "../components/MediaSlot";
-import { BackNav, PageLabel, Shade } from "../components/Chrome";
-import { box } from "../design/layout";
-import { typeStyle } from "../design/type";
+import { GitBranch, TrendUp } from "@phosphor-icons/react";
+import { NarrativePage, FigureGrid } from "../components/NarrativePage";
 import { useSimulation } from "../state/store";
+import { useCampaignHud } from "../content/decisionPages";
 import type { Strategy } from "../state/types";
-import { TrendUp } from "@phosphor-icons/react";
-
 
 const VARIANTS: Record<
   Strategy,
@@ -83,16 +80,11 @@ const VARIANTS: Record<
   },
 };
 
-const CELL_FRAMES = [
-  { x: 61, w: 282 },
-  { x: 407, w: 305 },
-  { x: 767, w: 310 },
-];
-
 export default function Page07Consequence() {
   const navigate = useNavigate();
   const { state, update } = useSimulation();
   const [shown, setShown] = useState(state.reducedMotion);
+  const hud = useCampaignHud(7, "Strategy consequence", "What follows from it");
 
   useEffect(() => {
     if (state.reducedMotion) return;
@@ -105,135 +97,65 @@ export default function Page07Consequence() {
   const v = VARIANTS[state.strategy];
 
   return (
-    <div className="page-enter">
-      <MediaSlot
-        id={v.imgId}
-        src={v.src}
-        alt={v.alt}
-        frame={{ x: 0, y: 0, w: 1672, h: 941, z: 0 }}
-      />
-      <Shade
-        frame={{ x: 0, y: 0, w: 1672, h: 941, z: 2 }}
-        background="linear-gradient(180deg, rgba(10,10,8,.32), transparent 40%, rgba(10,10,8,.76) 84%)"
-      />
-
-      <PageLabel>Strategy Consequence</PageLabel>
-      <p
-        style={box(
-          { x: 40, y: 70, w: 420, h: 30, z: 20 },
-          typeStyle("body", { fontSize: 21, lineHeight: "24px" }),
-        )}
-      >
-        {v.label}
-      </p>
-      <p
-        style={box(
-          { x: 1515, y: 43, w: 118, h: 22, z: 20 },
-          typeStyle("bodySmall", {
-            fontSize: 16,
-            lineHeight: "20px",
-            textAlign: "right",
-          }),
-        )}
-      >
-        {v.option}
-      </p>
-
-      <p
-        style={box(
-          { x: 40, y: 700, w: 900, h: 90, z: 20 },
-          {
-            ...typeStyle("bodySmall", { fontSize: 16 }),
-            opacity: shown ? 1 : 0,
-            transition: "opacity 400ms ease",
-          },
-        )}
-      >
-        {v.rationale}
-      </p>
-
-      <Shade
-        frame={{ x: 0, y: 837, w: 1672, h: 104, z: 18 }}
-        background="rgba(13,13,11,.78)"
-      />
-
-      {v.consequences.map((text, i) => (
-        <div
-          key={text}
-          style={box(
-            { x: CELL_FRAMES[i].x, y: 855, w: CELL_FRAMES[i].w, h: 55, z: 20 },
-            {
-              borderLeft: i > 0 ? "1px solid var(--line-dark)" : undefined,
-              paddingLeft: i > 0 ? 20 : 0,
-              opacity: shown ? 1 : 0,
-              transition: `opacity 400ms ease ${i * 120}ms`,
-            },
-          )}
-        >
-          <span
-            style={{
-              fontFamily: "Manrope, system-ui, Helvetica, Arial, sans-serif",
-              fontSize: 11,
-              lineHeight: "14px",
-              color: "var(--accent-active)",
-              display: "block",
-            }}
-          >
-            CONSEQUENCE {i + 1}
-          </span>
-          <span
-            style={{
-              fontFamily: "Manrope, system-ui, Helvetica, Arial, sans-serif",
-              fontWeight: 300,
-              fontSize: 18,
-              lineHeight: "22px",
-              color: "var(--cream)",
-              display: "flex",
-              alignItems: "center",
-              gap: 6,
-              marginTop: 4,
-            }}
-          >
-            {text.endsWith("↑") ? (
-              <>
-                {text.replace(/\s*↑$/, "")}
-                <TrendUp size={16} weight="bold" aria-hidden />
-              </>
-            ) : (
-              text
-            )}
-          </span>
-
-        </div>
-      ))}
-
-      <BackNav
-        onClick={() => {
+    <NarrativePage
+      scene={{
+        image: v.src,
+        imageId: v.imgId,
+        imageAlt: v.alt,
+      }}
+      hud={{
+        icon: GitBranch,
+        ...hud,
+        title: v.label,
+        onBack: () => {
           update({ currentPage: 6 });
           navigate("/strategy");
-        }}
-        frame={{ x: 61, y: 795, w: 180, h: 28 }}
-      />
-
-      <button
-        type="button"
-        className="focusable"
-        onClick={() => {
+        },
+      }}
+      kicker={v.option}
+      title="THE TRADE-OFF"
+      lede={
+        <span
+          style={{
+            opacity: shown ? 1 : 0,
+            transition: state.reducedMotion ? "none" : "opacity 500ms ease",
+          }}
+        >
+          {v.rationale}
+        </span>
+      }
+      aside={
+        <FigureGrid
+          animate={!state.reducedMotion}
+          columns={3}
+          figures={v.consequences.map((text, i) => ({
+            label: `Consequence ${i + 1}`,
+            value: text.replace(/\s*↑$/, ""),
+            note: text.endsWith("↑") ? "Rising" : undefined,
+          }))}
+        />
+      }
+      meta={
+        <span
+          style={{
+            display: "inline-flex",
+            alignItems: "center",
+            gap: 8,
+            opacity: shown ? 1 : 0,
+            transition: state.reducedMotion ? "none" : "opacity 500ms ease",
+          }}
+        >
+          <TrendUp size={15} weight="bold" aria-hidden />
+          Projected direction of travel for this strategy
+        </span>
+      }
+      primary={{
+        label: "Continue to budget",
+        onClick: () => {
           update({ currentPage: 8 });
           navigate("/budget");
-        }}
-        style={box(
-          { x: 1338, y: 852, w: 270, h: 47, z: 20 },
-          {
-            ...typeStyle("button"),
-            background: "rgba(12,12,10,.34)",
-            border: "1px solid var(--cream)",
-            cursor: "pointer",
-          },
-        )}
-      >
-        CONTINUE TO BUDGET
-      </button>
-    </div>
+        },
+      }}
+    />
   );
 }

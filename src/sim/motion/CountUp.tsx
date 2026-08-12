@@ -17,6 +17,7 @@ type Props = {
   enabled?: boolean;
   as?: ElementType;
   style?: CSSProperties;
+  className?: string;
 };
 
 export function CountUp({
@@ -28,6 +29,7 @@ export function CountUp({
   enabled = true,
   as: Tag = "p",
   style,
+  className,
 }: Props) {
   const ref = useRef<HTMLElement>(null);
   useCountUp(ref, to, { duration, delay, suffix, prefix, enabled });
@@ -38,6 +40,7 @@ export function CountUp({
   return (
     <Tag
       ref={ref}
+      className={className}
       style={style}
       aria-label={`${prefix}${to >= 1000 ? to.toLocaleString("en-NG") : to}${suffix}`}
       suppressHydrationWarning

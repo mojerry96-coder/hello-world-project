@@ -14,12 +14,8 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "../lib/navigate";
-import { ArrowRight, SpeakerSimpleHigh, SpeakerSimpleX } from "@phosphor-icons/react";
 import { MediaSlot } from "../components/MediaSlot";
-import { Shade } from "../components/Chrome";
-import { SpecularEdge } from "../components/SpecularEdge";
-import { box } from "../design/layout";
-import { typeStyle } from "../design/type";
+import { NarrativePage } from "../components/NarrativePage";
 import {
   INTRO_BEATS,
   INTRO_DURATION,
@@ -27,7 +23,6 @@ import {
   INTRO_TRANSCRIPT,
 } from "../content/intro";
 import { useSimulation } from "../state/store";
-import { SplitText } from "../motion/SplitText";
 
 export const INTRO_SEEN_KEY = "mph8430-intro-seen-v1";
 
@@ -36,7 +31,6 @@ const SEQUENCE = [
   ...INTRO_BEATS.map((b) => ({ image: b.image, alt: b.alt })),
   { image: INTRO_TITLE.image, alt: INTRO_TITLE.alt },
 ];
-
 
 export default function PageIntro() {
   const navigate = useNavigate();
@@ -80,9 +74,6 @@ export default function PageIntro() {
     navigate("/opening");
   }
 
-  // The film's own `ended` event advances the page; no wall-clock fallback is
-  // needed and none should race it.
-
   const active = INTRO_BEATS.find((b) => t >= b.at && t < b.until);
   const titleShown = t >= INTRO_TITLE.at;
 
@@ -97,183 +88,85 @@ export default function PageIntro() {
 
   if (staticMode) {
     return (
-      <div className="page-enter">
-        <Shade
-          frame={{ x: 0, y: 0, w: 1672, h: 941, z: 0 }}
-          background="var(--ink)"
-        />
-        <div style={box({ x: 96, y: 96, w: 1100, h: 760, z: 10 })}>
-          <p style={typeStyle("kicker")}>A social marketing simulation</p>
-          <h1 style={typeStyle("displayL", { margin: "18px 0 40px" })}>
-            RIGHT MESSAGE, RIGHT CHANNEL
-          </h1>
-          {INTRO_BEATS.map((b) => (
-            <div key={b.line} style={{ marginBottom: 26 }}>
-              <p style={typeStyle("label", { color: "var(--cream)" })}>{b.kicker}</p>
-              <p style={typeStyle("body", { marginTop: 4 })}>{b.line}</p>
-              {b.detail && (
-                <p style={typeStyle("bodySmall", { marginTop: 2 })}>{b.detail}</p>
-              )}
-            </div>
-          ))}
-        </div>
-        <button
-          type="button"
-          className="primary-cta focusable"
-          onClick={enter}
-          style={box({ x: 1290, y: 820, w: 300, h: 64, z: 20 }, typeStyle("button"))}
-        >
-          <SpecularEdge radius={0} />
-          <span>BEGIN</span>
-          <ArrowRight size={24} weight="thin" />
-        </button>
-      </div>
+      <NarrativePage
+        scene={{
+          image: INTRO_TITLE.image,
+          imageId: "INTRO-STATIC",
+          imageAlt: INTRO_TITLE.alt,
+          treatment: "left",
+        }}
+        kicker="A social marketing simulation"
+        title="RIGHT MESSAGE, RIGHT CHANNEL"
+        lede="A ten-week immunisation campaign in Kaduna State. You choose what to say, where to say it and who to trust."
+        aside={
+          <div className="figure-grid" style={{ ["--figure-columns" as string]: 2 }}>
+            {INTRO_BEATS.map((b) => (
+              <div
+                key={b.line}
+                className="figure-card"
+                style={{ animation: "none", opacity: 1 }}
+              >
+                <span className="figure-label">{b.kicker}</span>
+                <span className="figure-value" style={{ fontSize: 17 }}>
+                  {b.line}
+                </span>
+                {b.detail && <span className="figure-note">{b.detail}</span>}
+              </div>
+            ))}
+          </div>
+        }
+        primary={{ label: "Begin", onClick: enter }}
+      />
     );
   }
 
   return (
-    <div className="page-enter">
-      {/* One still per beat, cross-fading. Both frames stay mounted so the
-          outgoing image fades under the incoming one rather than flashing. */}
-      {SEQUENCE.map((f, i) => (
-        <MediaSlot
-          key={f.image}
-          id={`INTRO-${i + 1}`}
-          src={f.image}
-          alt={i === 0 ? `Introduction to the simulation. ${INTRO_TRANSCRIPT}` : f.alt}
-          frame={{ x: 0, y: 0, w: 1672, h: 941, z: 0 }}
-          style={{
-            opacity: frameIndex === i ? 1 : 0,
-            transition: staticMode ? undefined : "opacity 900ms ease",
-          }}
-        />
-      ))}
-
-      {/* Left column for the beats, floor for the controls. */}
-      <Shade
-        frame={{ x: 0, y: 0, w: 900, h: 941, z: 2 }}
-        background="linear-gradient(90deg, rgba(10,10,8,.82), rgba(10,10,8,.30) 70%, transparent)"
-      />
-      <Shade
-        frame={{ x: 0, y: 700, w: 1672, h: 241, z: 2 }}
-        background="linear-gradient(0deg, rgba(10,10,8,.86), transparent)"
-      />
-
-      {/* Beat text. Keyed so each beat cross-fades in on its own. */}
-      {active && (
-        <div
-          key={active.line}
-          style={box(
-            { x: 64, y: 292, w: 820, h: 280, z: 20 },
-            {
-              animation: "page-fade 520ms ease both",
-              background:
-                "linear-gradient(90deg, rgba(10,10,8,.84) 0%, rgba(10,10,8,.55) 68%, transparent 100%)",
-              borderLeft: "2px solid var(--accent)",
-              padding: "22px 26px",
-            },
-          )}
-        >
-          {active.kicker && (
-            <p style={typeStyle("kicker", { marginBottom: 14 })}>{active.kicker}</p>
-          )}
-          <SplitText
-            text={active.line}
-            runKey={active.line}
-            by="word"
-            stagger={0.05}
-            rise={22}
-            style={typeStyle("displayM", { fontSize: 46, lineHeight: 1.12 })}
-          />
-          {active.detail && (
-            <SplitText
-              text={active.detail}
-              runKey={active.line}
-              by="word"
-              delay={0.28}
-              stagger={0.018}
-              duration={0.5}
-              rise={10}
-              style={typeStyle("bodySmall", {
-                fontSize: 20,
-                marginTop: 18,
-                maxWidth: 700,
-              })}
+    <NarrativePage
+      sceneNode={
+        <>
+          {SEQUENCE.map((f, i) => (
+            <MediaSlot
+              key={f.image}
+              id={`INTRO-${i + 1}`}
+              src={f.image}
+              alt={
+                i === 0
+                  ? `Introduction to the simulation. ${INTRO_TRANSCRIPT}`
+                  : f.alt
+              }
+              frame={{ x: 0, y: 0, w: 0, h: 0, z: 0 }}
+              style={{
+                position: "absolute",
+                inset: 0,
+                left: 0,
+                top: 0,
+                width: "100%",
+                height: "100%",
+                opacity: frameIndex === i ? 1 : 0,
+                transition: "opacity 900ms ease",
+              }}
             />
-          )}
-        </div>
-      )}
-
-      {/* Title card over the held final frame. */}
-      {titleShown && (
-        <div
-          style={box(
-            { x: 64, y: 312, w: 880, h: 280, z: 22 },
-            {
-              animation: "page-fade 600ms ease both",
-              background:
-                "linear-gradient(90deg, rgba(10,10,8,.86) 0%, rgba(10,10,8,.55) 70%, transparent 100%)",
-              padding: "22px 26px",
-            },
-          )}
-        >
-          <p style={typeStyle("kicker", { marginBottom: 16 })}>
-            {INTRO_TITLE.kicker}
-          </p>
-          <h1
-            style={typeStyle("displayL", {
-              fontSize: 56,
-              lineHeight: 1.06,
-              whiteSpace: "pre-line",
-            })}
-          >
-            {INTRO_TITLE.line}
-          </h1>
-          <div
-            aria-hidden="true"
-            style={{ width: 420, height: 2, background: "var(--accent)", marginTop: 22 }}
+          ))}
+          <div className="scene-treatment scene-treatment-left" />
+        </>
+      }
+      kicker={titleShown ? INTRO_TITLE.kicker : active?.kicker}
+      title={
+        titleShown
+          ? INTRO_TITLE.line.split("\n")
+          : active
+            ? active.line
+            : undefined
+      }
+      lede={!titleShown && active?.detail ? active.detail : undefined}
+      overlaySlot={
+        <div className="intro-progress" aria-hidden="true">
+          <span
+            style={{ width: `${Math.min(100, (t / INTRO_DURATION) * 100)}%` }}
           />
         </div>
-      )}
-
-      {/* Progress hairline — burnt orange, the one place it reads as progress. */}
-      <div
-        aria-hidden="true"
-        style={box(
-          { x: 0, y: 939, w: 1672, h: 2, z: 24 },
-          { background: "rgba(238,228,213,.14)" },
-        )}
-      >
-        <div
-          style={{
-            width: `${Math.min(100, (t / INTRO_DURATION) * 100)}%`,
-            height: 2,
-            background: "var(--accent)",
-          }}
-        />
-      </div>
-
-      <button
-        type="button"
-        className="focusable"
-        onClick={enter}
-        style={box(
-          { x: 1400, y: 846, w: 200, h: 52, z: 24 },
-          {
-            ...typeStyle("button"),
-            display: "inline-flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            padding: "0 20px",
-            background: "rgba(12,12,10,.44)",
-            border: `1px solid ${titleShown ? "var(--accent)" : "var(--cream)"}`,
-            cursor: "pointer",
-          },
-        )}
-      >
-        <span>{titleShown ? "BEGIN" : "SKIP"}</span>
-        <ArrowRight size={20} weight="thin" />
-      </button>
-    </div>
+      }
+      primary={{ label: titleShown ? "Begin" : "Skip", onClick: enter }}
+    />
   );
 }

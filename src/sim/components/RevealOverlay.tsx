@@ -14,12 +14,15 @@ export function RevealOverlay({
   onClose,
   label,
   width = 640,
+  fluid = false,
   children,
 }: {
   open: boolean;
   onClose: () => void;
   label: string;
   width?: number;
+  /** Fill the viewport instead of the fixed 1672x941 artboard. */
+  fluid?: boolean;
   children: ReactNode;
 }) {
   const closeRef = useRef<HTMLButtonElement>(null);
@@ -47,7 +50,11 @@ export function RevealOverlay({
   return (
     <div
       className="reveal-scrim"
-      style={{ width: ARTBOARD.width, height: ARTBOARD.height }}
+      style={
+        fluid
+          ? { position: "fixed", inset: 0, width: "100%", height: "100%", zIndex: 60 }
+          : { width: ARTBOARD.width, height: ARTBOARD.height }
+      }
       onClick={onClose}
     >
       <div
