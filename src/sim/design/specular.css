@@ -18,12 +18,15 @@
 
 /* Hosts: keep the canvas positioned against the button and the label on top. */
 .place-report,
-.primary-cta {
+.primary-cta,
+.decision-option {
   position: relative;
 }
 
 .place-report > *:not(.specular-edge),
-.primary-cta > *:not(.specular-edge) {
+.primary-cta > *:not(.specular-edge),
+.decision-option > *:not(.specular-edge) {
   position: relative;
   z-index: 2;
 }
+
