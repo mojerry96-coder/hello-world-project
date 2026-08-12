@@ -195,23 +195,68 @@ export default function Page15Outcome() {
             className="debrief-panel"
           >
             <p style={typeStyle("label")}>DECISION DEBRIEF</p>
-            <h2 style={typeStyle("displayM", { margin: "12px 0 28px" })}>
+            <h2 style={typeStyle("displayM", { margin: "12px 0 24px" })}>
               What your decisions produced
             </h2>
 
-            <dl className="debrief-rows">
-              {debriefRows.map((row) => (
-                <div key={row.t} className="debrief-row">
-                  <dt style={typeStyle("label", { color: "var(--cream)" })}>
-                    {row.t}
-                  </dt>
-                  <dd style={{ margin: "6px 0 0" }}>
-                    <p style={typeStyle("body", { fontSize: 17 })}>{row.v}</p>
-                    <p style={typeStyle("bodySmall", { marginTop: 4 })}>{row.e}</p>
-                  </dd>
-                </div>
+            <div className="debrief-tabs" role="tablist" aria-label="Debrief views">
+              {(
+                [
+                  ["decisions", "Decisions"],
+                  ["archive", "Campaign archive"],
+                ] as const
+              ).map(([id, label]) => (
+                <button
+                  key={id}
+                  type="button"
+                  role="tab"
+                  className="debrief-tab"
+                  aria-selected={debriefTab === id}
+                  onClick={() => setDebriefTab(id)}
+                >
+                  {label}
+                </button>
               ))}
-            </dl>
+            </div>
+
+            {debriefTab === "decisions" ? (
+              <dl className="debrief-rows">
+                {debriefRows.map((row) => (
+                  <div key={row.t} className="debrief-row">
+                    <dt style={typeStyle("label", { color: "var(--cream)" })}>
+                      {row.t}
+                    </dt>
+                    <dd style={{ margin: "6px 0 0" }}>
+                      <p style={typeStyle("body", { fontSize: 17 })}>{row.v}</p>
+                      <p style={typeStyle("bodySmall", { marginTop: 4 })}>{row.e}</p>
+                    </dd>
+                  </div>
+                ))}
+              </dl>
+            ) : sphereAvailable ? (
+              <InfiniteMenu
+                items={archiveItems}
+                scale={1.1}
+                ariaLabel="Campaign archive. Drag to rotate through the scenes of your run."
+              />
+            ) : (
+              <div
+                className="figure-grid"
+                style={{ ["--figure-columns" as string]: 3 }}
+              >
+                {archive.map((entry) => (
+                  <div
+                    key={entry.id}
+                    className="figure-card"
+                    style={{ animation: "none", opacity: 1 }}
+                  >
+                    <span className="figure-label">{entry.title}</span>
+                    <span className="figure-note">{entry.description}</span>
+                  </div>
+                ))}
+              </div>
+            )}
+
 
             <div className="debrief-actions">
               <button
