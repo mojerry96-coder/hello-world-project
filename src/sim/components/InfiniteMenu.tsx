@@ -6,6 +6,7 @@
    - the sample's link button becomes a caption plate; the archive has no links. */
 
 import { useEffect, useRef, useState } from "react";
+import type { CSSProperties } from "react";
 import { mat4, quat, vec2, vec3 } from "gl-matrix";
 import "../design/infinite-menu.css";
 
@@ -834,10 +835,16 @@ export default function InfiniteMenu({
   items,
   scale = 1.0,
   ariaLabel = "Orbiting scene archive. Drag to rotate.",
+  className,
+  style,
+  hint = "Drag to rotate the archive",
 }: {
   items: InfiniteMenuItem[];
   scale?: number;
   ariaLabel?: string;
+  className?: string;
+  style?: CSSProperties;
+  hint?: string;
 }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [activeItem, setActiveItem] = useState<InfiniteMenuItem | null>(items[0] ?? null);
@@ -872,7 +879,7 @@ export default function InfiniteMenu({
   }, [items, scale]);
 
   return (
-    <div className="infinite-menu">
+    <div className={`infinite-menu${className ? ` ${className}` : ""}`} style={style}>
       <canvas
         ref={canvasRef}
         className="infinite-menu-canvas"
@@ -885,7 +892,7 @@ export default function InfiniteMenu({
           <p className="infinite-menu-description">{activeItem.description}</p>
         </div>
       )}
-      <p className="infinite-menu-hint">Drag to rotate the archive</p>
+      {hint && <p className="infinite-menu-hint">{hint}</p>}
     </div>
   );
 }
