@@ -22,6 +22,7 @@ import {
   type Icon,
 } from "@phosphor-icons/react";
 import { MediaSlot } from "./MediaSlot";
+import { SpecularEdge } from "./SpecularEdge";
 import { MetricLoop } from "./MetricLoop";
 import { useSimulation } from "../state/store";
 import "../design/decision.css";
