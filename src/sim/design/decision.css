@@ -222,6 +222,11 @@
   );
 }
 
+.metric-loop.is-looping {
+  /* Outweigh .hud-spacer so the strip takes the leftover room, not half of it. */
+  flex: 100 1 0;
+}
+
 .metric-loop:not(.is-looping) {
   flex: 0 0 auto;
   mask-image: none;
