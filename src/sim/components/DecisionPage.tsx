@@ -72,9 +72,22 @@ export type OptionSpec = {
   disabled?: boolean;
 };
 
+/* Folder art. Assignment is deterministic (stable across renders) and stepped
+   by index so two neighbouring cards never share the same folder. */
+const FOLDERS = [folder1.url, folder2.url, folder3.url, folder4.url];
+/* 1 and 4 are the dark folders (green, terracotta); 2 and 3 are light. */
+const FOLDER_INK = ["dark", "light", "light", "dark"] as const;
+
+function hashString(s: string) {
+  let h = 0;
+  for (let i = 0; i < s.length; i += 1) h = (h * 31 + s.charCodeAt(i)) | 0;
+  return Math.abs(h);
+}
+
 function DecisionOption({
   option,
   index,
+  folder,
   selected,
   onSelect,
   role,
@@ -82,15 +95,19 @@ function DecisionOption({
 }: {
   option: OptionSpec;
   index: number;
+  folder: number;
   selected: boolean;
   onSelect: () => void;
   role: "radio" | "checkbox";
   animate: boolean;
 }) {
   const IconGlyph = option.icon;
-  const style: CSSProperties = animate
-    ? { animationDelay: `${420 + index * 90}ms` }
-    : { animation: "none", opacity: 1 };
+  const style: CSSProperties = {
+    ...(animate
+      ? { animationDelay: `${420 + index * 90}ms` }
+      : { animation: "none", opacity: 1 }),
+    ["--folder-image" as string]: `url("${FOLDERS[folder]}")`,
+  };
 
   return (
     <button
@@ -100,6 +117,8 @@ function DecisionOption({
       disabled={option.disabled}
       onClick={onSelect}
       className={`decision-option${selected ? " is-selected" : ""}`}
+      data-folder={folder + 1}
+      data-ink={FOLDER_INK[folder]}
       style={style}
     >
       <SpecularEdge
@@ -108,6 +127,7 @@ function DecisionOption({
         intensity={0.8}
         proximity={170}
       />
+
 
       <span className="option-top">
         {IconGlyph ? (
