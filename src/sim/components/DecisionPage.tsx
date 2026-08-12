@@ -313,11 +313,7 @@ export function DecisionPage({
         )}
         <span className="hud-spacer" />
         {metrics && metrics.length > 0 && (
-          <div className="metric-group">
-            {metrics.map((m) => (
-              <Metric key={m.label} {...m} />
-            ))}
-          </div>
+          <MetricLoop metrics={metrics} reducedMotion={state.reducedMotion} />
         )}
         {onBack && (
           <button
