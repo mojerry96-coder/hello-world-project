@@ -75,10 +75,10 @@ function HudBlock({
           <IconGlyph size={20} weight="light" />
         </span>
       )}
-      <span>
-        <span className="hud-label">{label}</span>
-        <span className="hud-primary">{primary}</span>
-      </span>
+      <div>
+        <div className="hud-label">{label}</div>
+        <div className="hud-primary">{primary}</div>
+      </div>
     </div>
   );
 }
@@ -295,10 +295,10 @@ export function DecisionPage({
         <HudBlock icon={Users} label={kicker} primary={title} />
         <span className="hud-divider" />
         <div className="hud-meta">
-          <span>
-            <span className="hud-label">{stage.label}</span>
-            <span className="hud-value">{stage.value}</span>
-          </span>
+          <div>
+            <div className="hud-label">{stage.label}</div>
+            <div className="hud-value">{stage.value}</div>
+          </div>
         </div>
         {budget && (
           <>
