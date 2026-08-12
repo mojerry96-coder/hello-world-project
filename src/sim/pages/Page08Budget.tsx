@@ -1,59 +1,62 @@
 /* PAGE 08 — ALLOCATE THE ₦180M BUDGET.
    Sliders and numeric inputs stay synchronised. Nothing auto-redistributes.
    Review Forecast unlocks only on an exact ₦180M total — over or under both stay
-   disabled, and overspend is shown in the error colour. */
+   disabled, and overspend is shown in the danger colour. */
 
 import { useState } from "react";
-import { useNavigate } from "../lib/navigate";
 import { Info } from "@phosphor-icons/react";
-import { MediaSlot } from "../components/MediaSlot";
-import { BackNav, DecisionLabel, Shade } from "../components/Chrome";
-import { box } from "../design/layout";
-import { typeStyle } from "../design/type";
-import { allocated, budgetProfile, calculateForecast, isBudgetValid } from "../state/logic";
+import { useNavigate } from "../lib/navigate";
+import { DecisionPage } from "../components/DecisionPage";
+import { useDecisionHud } from "../content/decisionPages";
+import {
+  allocated,
+  budgetProfile,
+  calculateForecast,
+  isBudgetValid,
+} from "../state/logic";
 import { useSimulation } from "../state/store";
-import { BUDGET_STEP, BUDGET_TOTAL, CHANNEL_MAX, type BudgetAllocation } from "../state/types";
+import {
+  BUDGET_STEP,
+  BUDGET_TOTAL,
+  CHANNEL_MAX,
+  type BudgetAllocation,
+} from "../state/types";
 
 const CHANNELS: {
   key: keyof BudgetAllocation;
   name: string;
   impact: string;
   risk: string;
-  y: number;
 }[] = [
   {
     key: "community",
-    name: "COMMUNITY MOBILISATION",
-    impact: "Strong trust-building through CHWs, leaders and household discussion",
+    name: "Community mobilisation",
+    impact:
+      "Strong trust-building through CHWs, leaders and household discussion",
     risk: "High workforce demand and fatigue",
-    y: 724,
   },
   {
     key: "radio",
-    name: "LOCAL RADIO",
+    name: "Local radio",
     impact: "Wide rural reach and local-language access",
     risk: "Limited personalisation",
-    y: 775,
   },
   {
     key: "digital",
-    name: "DIGITAL MEDIA",
+    name: "Digital media",
     impact: "Fast misinformation monitoring and response",
     risk: "Limited rural penetration",
-    y: 826,
   },
   {
     key: "tvOutdoor",
-    name: "TV & OUTDOOR ADVERTISING",
+    name: "TV & outdoor advertising",
     impact: "High visibility and awareness",
     risk: "Weak influence on entrenched hesitancy",
-    y: 877,
   },
 ];
 
 /* A defensible opening position: inside the spec's "balanced" band on every
-   channel and totalling exactly ₦180M. Offered, never applied automatically —
-   the allocation has to remain the learner's decision. */
+   channel and totalling exactly ₦180M. Offered, never applied automatically. */
 const SUGGESTED: BudgetAllocation = {
   community: 55,
   radio: 45,
@@ -64,6 +67,7 @@ const SUGGESTED: BudgetAllocation = {
 export default function Page08Budget() {
   const navigate = useNavigate();
   const { state, update } = useSimulation();
+  const hud = useDecisionHud(8);
   const [budget, setBudget] = useState<BudgetAllocation>(state.budget);
   const [openGuide, setOpenGuide] = useState<string | null>(null);
 
@@ -93,288 +97,189 @@ export default function Page08Budget() {
   }
 
   return (
-    <div className="page-enter">
-      <MediaSlot
-        id="IMG-08"
-        src="p08-budget-room.webp"
-        alt="Kaduna SPHCDA financial and communication strategy room, with printed budget papers, a state coverage map and campaign material across the table."
-        frame={{ x: 0, y: 0, w: 1672, h: 941, z: 0 }}
-      />
-      <Shade
-        frame={{ x: 0, y: 0, w: 1672, h: 941, z: 2 }}
-        background="linear-gradient(180deg, rgba(10,10,8,.48), transparent 40%, rgba(10,10,8,.50) 68%)"
-      />
-
-      <DecisionLabel decision="Decision 03 / 05" title="" />
-      <h1
-        style={box(
-          { x: 36, y: 74, w: 670, h: 54, z: 20 },
-          typeStyle("displayL", { fontSize: 42, lineHeight: 1.06 }),
-        )}
-      >
-        ALLOCATE THE ₦180M BUDGET
-      </h1>
-      <p
-        style={box(
-          { x: 36, y: 145, w: 520, h: 24, z: 20 },
-          typeStyle("bodySmall", { fontSize: 16, lineHeight: "20px" }),
-        )}
-      >
-        MEASLES CLUSTER REPORTED · BUDGET FIXED
-      </p>
-      <p className="sr-only" style={{ position: "absolute", left: -9999 }}>
-        A suspected measles cluster has been reported in a neighbouring LGA. The
-        Commissioner has requested a visible and effective response, but the
-        campaign budget remains fixed at ₦180 million.
-      </p>
-
-      {/* Page 8 previously offered four sliders, a hidden per-channel cap and a
-          hard total, with no guidance at all. Say what the constraint is, and
-          offer a defensible opening position the learner can take apart. */}
-      <p
-        style={box(
-          { x: 36, y: 596, w: 1010, h: 40, z: 20 },
-          {
-            ...typeStyle("bodySmall", { fontSize: 17, color: "var(--cream)" }),
-            background:
-              "linear-gradient(90deg, rgba(10,10,8,.86) 0%, rgba(10,10,8,.6) 72%, transparent 100%)",
-            borderLeft: "2px solid var(--accent)",
-            padding: "5px 14px",
-          },
-        )}
-      >
-        Split ₦180M across all four channels. Every naira must be assigned, and
-        no single channel may exceed ₦100M.
-      </p>
-
-      <button
-        type="button"
-        className="focusable"
-        onClick={() => setBudget(SUGGESTED)}
-        style={box(
-          { x: 36, y: 648, w: 330, h: 38, z: 20 },
-          {
-            ...typeStyle("bodySmall", { fontSize: 15, color: "var(--cream)" }),
-            background: "rgba(12,12,10,.6)",
-            border: "1px solid var(--line-dark)",
-            cursor: "pointer",
-            textAlign: "left",
-            padding: "0 12px",
-          },
-        )}
-      >
-        Start from a balanced split, then adjust →
-      </button>
-
-      <Shade
-        frame={{ x: 0, y: 711, w: 1060, h: 230, z: 18 }}
-        background="rgba(15,15,12,.88)"
-      />
-
-      {CHANNELS.map((c) => {
-        const value = budget[c.key];
-        return (
+    <DecisionPage
+      {...hud}
+      budget={{ label: "Budget fixed at", value: `₦${BUDGET_TOTAL}M` }}
+      statement="“A measles cluster has been reported next door. The Commissioner wants a visible response — the budget does not move.”"
+      question="Split ₦180M across all four channels. Every naira must be assigned, and no single channel may exceed ₦100M."
+      aside={
+        <div aria-live="polite">
           <div
-            key={c.key}
-            style={box({ x: 35, y: c.y, w: 990, h: 45, z: 20 }, {
+            style={{
               display: "flex",
-              alignItems: "center",
-            })}
+              justifyContent: "space-between",
+              alignItems: "baseline",
+            }}
           >
-            <span
-              style={{
-                width: 240,
-                fontFamily: "Manrope, system-ui, Helvetica, Arial, sans-serif",
-                fontSize: 13,
-                lineHeight: "16px",
-                fontWeight: 600,
-                color: "var(--cream)",
-                display: "flex",
-                alignItems: "center",
-                gap: 6,
-              }}
-            >
-              {c.name}
-              <button
-                type="button"
-                className="focusable"
-                aria-label={`${c.name} impact and risk`}
-                aria-expanded={openGuide === c.key}
-                onClick={() => setOpenGuide(openGuide === c.key ? null : c.key)}
-                style={{
-                  background: "transparent",
-                  border: "none",
-                  padding: 0,
-                  cursor: "pointer",
-                  color: "var(--accent-active)",
-                  display: "inline-flex",
-                }}
-              >
-                <Info size={18} weight="thin" />
-              </button>
+            <span className="metric-label">Allocated</span>
+            <span className="metric-value" style={{ fontSize: 26 }}>
+              ₦{total}M
             </span>
-
-            <input
-              type="range"
-              min={0}
-              max={CHANNEL_MAX}
-              step={BUDGET_STEP}
-              value={value}
-              onChange={(e) => set(c.key, Number(e.target.value))}
-              onKeyDown={(e) => {
-                // PageUp/PageDown move by ₦20M; arrows use the native ₦5M step.
-                if (e.key === "PageUp") {
-                  e.preventDefault();
-                  set(c.key, value + 20);
-                } else if (e.key === "PageDown") {
-                  e.preventDefault();
-                  set(c.key, value - 20);
-                }
-              }}
-              aria-label={`${c.name} allocation in naira millions`}
-              aria-valuetext={`₦${value} million`}
-              className="budget-range focusable"
-              style={{ width: 650, marginLeft: 10 }}
-            />
-
-            <input
-              type="number"
-              min={0}
-              max={CHANNEL_MAX}
-              step={BUDGET_STEP}
-              value={value}
-              onChange={(e) => set(c.key, Number(e.target.value))}
-              aria-label={`${c.name} allocation, naira millions`}
-              className="focusable"
-              style={{
-                width: 112,
-                height: 38,
-                marginLeft: 20,
-                textAlign: "right",
-                fontFamily: "Manrope, system-ui, Helvetica, Arial, sans-serif",
-                fontSize: 16,
-                lineHeight: "18px",
-                color: "var(--cream)",
-                background: "rgba(12,12,10,.5)",
-                border: "1px solid var(--line-dark)",
-                borderRadius: 0,
-                padding: "0 8px",
-              }}
-            />
-            <span
-              style={{
-                fontFamily: "Manrope, system-ui, Helvetica, Arial, sans-serif",
-                fontSize: 12,
-                lineHeight: "14px",
-                color: "var(--accent-active)",
-                marginLeft: 6,
-              }}
-            >
-              ₦M
-            </span>
-
-            {openGuide === c.key && (
-              <div
-                role="status"
-                style={{
-                  position: "absolute",
-                  left: 250,
-                  bottom: 46,
-                  width: 520,
-                  padding: 14,
-                  background: "rgba(13,13,11,.95)",
-                  border: "1px solid var(--line-dark)",
-                  zIndex: 30,
-                }}
-              >
-                <p style={typeStyle("bodySmall")}>
-                  <strong style={{ color: "var(--cream)" }}>Impact:</strong>{" "}
-                  {c.impact}
-                </p>
-                <p style={typeStyle("bodySmall", { marginTop: 6 })}>
-                  <strong style={{ color: "var(--warning)" }}>Risk:</strong>{" "}
-                  {c.risk}
-                </p>
-              </div>
-            )}
           </div>
-        );
-      })}
-
-      <div
-        style={box(
-          { x: 1060, y: 711, w: 612, h: 230, z: 18 },
-          {
-            background: "rgba(15,15,12,.91)",
-            border: "1px solid var(--line-dark)",
-          },
-        )}
-      />
-
-      <div style={box({ x: 1115, y: 745, w: 500, h: 80, z: 20 })}>
-        <div style={{ display: "flex", justifyContent: "space-between" }}>
-          <span style={typeStyle("label", { color: "var(--cream)" })}>
-            ALLOCATED
-          </span>
-          <span
-            style={typeStyle("displayM", { fontSize: 27, lineHeight: 1.1 })}
-            aria-live="polite"
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "baseline",
+              marginTop: 12,
+            }}
           >
-            ₦{total}M
-          </span>
-        </div>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            marginTop: 14,
-          }}
-        >
-          <span style={typeStyle("label", { color: "var(--cream)" })}>
-            {remaining < 0 ? "OVERSPEND" : "REMAINING"}
-          </span>
-          <span
-            style={typeStyle("displayM", {
-              fontSize: 27,
-              lineHeight: 1.1,
-              color: remaining < 0 ? "var(--error)" : "var(--cream)",
-            })}
-            aria-live="polite"
+            <span className="metric-label">
+              {remaining < 0 ? "Overspend" : "Remaining"}
+            </span>
+            <span
+              className="metric-value"
+              style={{
+                fontSize: 26,
+                color: remaining === 0 ? "var(--accent-soft)" : undefined,
+              }}
+            >
+              {remaining < 0 ? (
+                <span style={{ color: "var(--danger)" }}>
+                  ₦{Math.abs(remaining)}M
+                </span>
+              ) : (
+                `₦${remaining}M`
+              )}
+            </span>
+          </div>
+          <button
+            type="button"
+            className="decision-chip"
+            style={{ marginTop: 16, width: "100%", height: 34 }}
+            onClick={() => setBudget(SUGGESTED)}
           >
-            ₦{Math.abs(remaining)}M
-          </span>
+            Start from a balanced split
+          </button>
         </div>
-      </div>
+      }
+      controls={
+        <div style={{ display: "grid", gap: 8 }}>
+          {CHANNELS.map((c) => {
+            const value = budget[c.key];
+            return (
+              <div
+                key={c.key}
+                style={{ display: "flex", alignItems: "center", gap: 12 }}
+              >
+                <span
+                  style={{
+                    width: "clamp(150px, 15vw, 226px)",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 6,
+                    fontSize: 12,
+                    fontWeight: 600,
+                    letterSpacing: "0.02em",
+                    textTransform: "uppercase",
+                    color: "var(--text-primary)",
+                  }}
+                >
+                  {c.name}
+                  <button
+                    type="button"
+                    aria-label={`${c.name} impact and risk`}
+                    aria-expanded={openGuide === c.key}
+                    onClick={() =>
+                      setOpenGuide(openGuide === c.key ? null : c.key)
+                    }
+                    style={{
+                      background: "transparent",
+                      border: "none",
+                      padding: 0,
+                      cursor: "pointer",
+                      color: "var(--accent)",
+                      display: "inline-flex",
+                    }}
+                  >
+                    <Info size={16} weight="thin" />
+                  </button>
+                </span>
 
-      <BackNav
-        onClick={() => {
-          update({ currentPage: 7 });
-          navigate("/strategy-consequence");
-        }}
-        frame={{ x: 36, y: 660, w: 180, h: 28 }}
-      />
+                <input
+                  type="range"
+                  min={0}
+                  max={CHANNEL_MAX}
+                  step={BUDGET_STEP}
+                  value={value}
+                  onChange={(e) => set(c.key, Number(e.target.value))}
+                  onKeyDown={(e) => {
+                    // PageUp/PageDown move by ₦20M; arrows use the ₦5M step.
+                    if (e.key === "PageUp") {
+                      e.preventDefault();
+                      set(c.key, value + 20);
+                    } else if (e.key === "PageDown") {
+                      e.preventDefault();
+                      set(c.key, value - 20);
+                    }
+                  }}
+                  aria-label={`${c.name} allocation in naira millions`}
+                  aria-valuetext={`₦${value} million`}
+                  className="budget-range"
+                  style={{ flex: 1, minWidth: 0 }}
+                />
 
-      <button
-        type="button"
-        className="focusable"
-        disabled={!valid}
-        aria-disabled={!valid}
-        onClick={reviewForecast}
-        style={box(
-          { x: 1225, y: 840, w: 287, h: 52, z: 20 },
-          {
-            ...typeStyle("button"),
-            background: valid ? "rgba(12,12,10,.34)" : "rgba(24,26,24,.56)",
-            border: valid
-              ? "1px solid var(--cream)"
-              : "1px solid rgba(238,228,213,.16)",
-            color: valid ? "var(--white)" : "rgba(238,228,213,.40)",
-            cursor: valid ? "pointer" : "not-allowed",
-          },
-        )}
-      >
-        REVIEW FORECAST
-      </button>
-    </div>
+                <input
+                  type="number"
+                  min={0}
+                  max={CHANNEL_MAX}
+                  step={BUDGET_STEP}
+                  value={value}
+                  onChange={(e) => set(c.key, Number(e.target.value))}
+                  aria-label={`${c.name} allocation, naira millions`}
+                  className="decision-field"
+                  style={{
+                    width: 88,
+                    padding: "7px 10px",
+                    textAlign: "right",
+                    fontFamily: "var(--font-display)",
+                    fontSize: 15,
+                  }}
+                />
+                <span style={{ fontSize: 11, color: "var(--accent)" }}>₦M</span>
+
+                {openGuide === c.key && (
+                  <div
+                    role="status"
+                    style={{
+                      position: "absolute",
+                      left: 30,
+                      bottom: 96,
+                      width: "min(520px, 44vw)",
+                      padding: 14,
+                      borderRadius: "var(--radius-card)",
+                      background: "rgba(18,17,16,.96)",
+                      border: "1px solid var(--border-medium)",
+                      zIndex: 30,
+                      fontSize: 12.5,
+                      lineHeight: 1.45,
+                      color: "var(--text-secondary)",
+                    }}
+                  >
+                    <p style={{ margin: 0 }}>
+                      <strong style={{ color: "var(--white-soft)" }}>
+                        Impact:
+                      </strong>{" "}
+                      {c.impact}
+                    </p>
+                    <p style={{ margin: "6px 0 0" }}>
+                      <strong style={{ color: "var(--accent)" }}>Risk:</strong>{" "}
+                      {c.risk}
+                    </p>
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      }
+      submitLabel="Review forecast"
+      submitDisabled={!valid}
+      onSubmit={reviewForecast}
+      onBack={() => {
+        update({ currentPage: 7 });
+        navigate("/strategy-consequence");
+      }}
+    />
   );
 }
