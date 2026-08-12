@@ -1,8 +1,11 @@
 /* PAGE 15 — CAMPAIGN OUTCOME. One route, three deterministic endings.
    The debrief is an overlay inside this page — there is no Page 16. */
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "../lib/navigate";
+import InfiniteMenu, { isWebGL2Available } from "../components/InfiniteMenu";
+import { archiveMenuItems, buildArchive } from "../content/archive";
+
 import { Flag } from "@phosphor-icons/react";
 import { NarrativePage } from "../components/NarrativePage";
 import { typeStyle } from "../design/type";
@@ -79,9 +82,17 @@ export default function Page15Outcome() {
   const navigate = useNavigate();
   const { state, reset } = useSimulation();
   const [debriefOpen, setDebriefOpen] = useState(false);
+  const [debriefTab, setDebriefTab] = useState<"decisions" | "archive">("decisions");
   const [confirmRestart, setConfirmRestart] = useState(false);
   const hud = useCampaignHud(15, "Campaign outcome", "Week 10 result");
   const animate = !state.reducedMotion;
+
+  // The archive falls back to cards when motion is reduced or WebGL2 is absent,
+  // so nothing in it is reachable only by dragging.
+  const archive = useMemo(() => buildArchive(state), [state]);
+  const archiveItems = useMemo(() => archiveMenuItems(state), [state]);
+  const sphereAvailable = !state.reducedMotion && isWebGL2Available();
+
 
   // Report completion only once the ending has actually rendered and the
   // debrief button is on screen — never from the Page 14 submission.
@@ -184,23 +195,68 @@ export default function Page15Outcome() {
             className="debrief-panel"
           >
             <p style={typeStyle("label")}>DECISION DEBRIEF</p>
-            <h2 style={typeStyle("displayM", { margin: "12px 0 28px" })}>
+            <h2 style={typeStyle("displayM", { margin: "12px 0 24px" })}>
               What your decisions produced
             </h2>
 
-            <dl className="debrief-rows">
-              {debriefRows.map((row) => (
-                <div key={row.t} className="debrief-row">
-                  <dt style={typeStyle("label", { color: "var(--cream)" })}>
-                    {row.t}
-                  </dt>
-                  <dd style={{ margin: "6px 0 0" }}>
-                    <p style={typeStyle("body", { fontSize: 17 })}>{row.v}</p>
-                    <p style={typeStyle("bodySmall", { marginTop: 4 })}>{row.e}</p>
-                  </dd>
-                </div>
+            <div className="debrief-tabs" role="tablist" aria-label="Debrief views">
+              {(
+                [
+                  ["decisions", "Decisions"],
+                  ["archive", "Campaign archive"],
+                ] as const
+              ).map(([id, label]) => (
+                <button
+                  key={id}
+                  type="button"
+                  role="tab"
+                  className="debrief-tab"
+                  aria-selected={debriefTab === id}
+                  onClick={() => setDebriefTab(id)}
+                >
+                  {label}
+                </button>
               ))}
-            </dl>
+            </div>
+
+            {debriefTab === "decisions" ? (
+              <dl className="debrief-rows">
+                {debriefRows.map((row) => (
+                  <div key={row.t} className="debrief-row">
+                    <dt style={typeStyle("label", { color: "var(--cream)" })}>
+                      {row.t}
+                    </dt>
+                    <dd style={{ margin: "6px 0 0" }}>
+                      <p style={typeStyle("body", { fontSize: 17 })}>{row.v}</p>
+                      <p style={typeStyle("bodySmall", { marginTop: 4 })}>{row.e}</p>
+                    </dd>
+                  </div>
+                ))}
+              </dl>
+            ) : sphereAvailable ? (
+              <InfiniteMenu
+                items={archiveItems}
+                scale={1.5}
+                ariaLabel="Campaign archive. Drag to rotate through the scenes of your run."
+              />
+            ) : (
+              <div
+                className="figure-grid"
+                style={{ ["--figure-columns" as string]: 3 }}
+              >
+                {archive.map((entry) => (
+                  <div
+                    key={entry.id}
+                    className="figure-card"
+                    style={{ animation: "none", opacity: 1 }}
+                  >
+                    <span className="figure-label">{entry.title}</span>
+                    <span className="figure-note">{entry.description}</span>
+                  </div>
+                ))}
+              </div>
+            )}
+
 
             <div className="debrief-actions">
               <button
