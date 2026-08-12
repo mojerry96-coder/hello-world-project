@@ -181,3 +181,70 @@
     transform: none;
   }
 }
+
+/* ==================================================
+   SCENE VARIANT — the archive is the outcome page's
+   background: full-bleed, dimmed like the photo scene,
+   with its caption tucked into the top-left scene area
+   so the glass sheet never sits on top of it.
+================================================== */
+
+.infinite-menu--scene {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: auto;
+  --infinite-menu-height: 100%;
+  border: 0;
+  border-radius: 0;
+  background: radial-gradient(120% 100% at 62% 34%, #1d1b19 0%, #101010 68%);
+  touch-action: none;
+  user-select: none;
+  opacity: 0;
+  animation: sceneArchiveEnter 900ms var(--ease-apple, cubic-bezier(0.22, 1, 0.36, 1))
+    forwards;
+}
+
+.infinite-menu--scene.is-static {
+  opacity: 1;
+  animation: none;
+}
+
+/* Same reading treatment the photographic scenes get. */
+.infinite-menu--scene::after {
+  inset: 0;
+  height: auto;
+  background:
+    linear-gradient(
+      100deg,
+      rgba(10, 10, 8, 0.72) 0%,
+      rgba(10, 10, 8, 0.3) 46%,
+      rgba(10, 10, 8, 0.06) 72%
+    ),
+    linear-gradient(0deg, rgba(13, 11, 10, 0.8) 0%, transparent 52%),
+    radial-gradient(130% 110% at 50% 50%, transparent 46%, rgba(8, 8, 7, 0.62) 100%);
+}
+
+.infinite-menu--scene .infinite-menu-caption {
+  top: clamp(96px, 13vh, 150px);
+  bottom: auto;
+  left: clamp(34px, 4.05vw, 68px);
+  max-width: min(34ch, 38%);
+}
+
+.infinite-menu--scene .infinite-menu-hint {
+  right: clamp(28px, 3.2vw, 54px);
+  top: clamp(96px, 13vh, 150px);
+}
+
+@keyframes sceneArchiveEnter {
+  from {
+    opacity: 0;
+    transform: scale(1.03);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
