@@ -299,7 +299,8 @@ export function DecisionPage({
                   key={option.id}
                   option={option}
                   index={index}
-                  animate={animate}
+                  folder={(folderOffset + index) % FOLDERS.length}
+
                   role={selectionMode === "single" ? "radio" : "checkbox"}
                   selected={selectedIds.includes(option.id)}
                   onSelect={() => onSelect?.(option.id)}
