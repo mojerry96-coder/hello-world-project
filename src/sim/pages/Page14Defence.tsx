@@ -106,13 +106,14 @@ export default function Page14Defence() {
             {trimmed.length} / {JUSTIFICATION_MAX} · min {JUSTIFICATION_MIN}
           </p>
           {/* Opening question first, universal question after (spec timing). */}
+          <div style={{ marginTop: 12 }}>
           <VoiceOver
             cue="VO-14"
             text={`${opening} ${UNIVERSAL_QUESTION}`}
             delay={600}
-            frame={{ x: 0, y: 0, w: 0, h: 0, z: 24 }}
-            style={{ position: "static", marginTop: 10 }}
+            inline
           />
+          </div>
         </div>
       }
       footnote={
