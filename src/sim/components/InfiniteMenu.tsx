@@ -834,10 +834,16 @@ export default function InfiniteMenu({
   items,
   scale = 1.0,
   ariaLabel = "Orbiting scene archive. Drag to rotate.",
+  className,
+  style,
+  hint = "Drag to rotate the archive",
 }: {
   items: InfiniteMenuItem[];
   scale?: number;
   ariaLabel?: string;
+  className?: string;
+  style?: CSSProperties;
+  hint?: string;
 }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [activeItem, setActiveItem] = useState<InfiniteMenuItem | null>(items[0] ?? null);
