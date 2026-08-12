@@ -142,13 +142,28 @@ export default function Page15Outcome() {
 
   return (
     <NarrativePage
-      scene={{
-        image: e.src,
-        imageId: e.imgId,
-        imageAlt: e.alt,
-        imagePosition: "68% 46%",
-        treatment: "left",
-      }}
+      {...(sphereAvailable
+        ? {
+            /* The archive sphere IS the background of this page. */
+            sceneNode: (
+              <InfiniteMenu
+                items={archiveItems}
+                scale={1.35}
+                className={`infinite-menu--scene${animate ? "" : " is-static"}`}
+                ariaLabel="Campaign archive. Drag to rotate through the scenes of your run."
+                hint="Drag to rotate"
+              />
+            ),
+          }
+        : {
+            scene: {
+              image: e.src,
+              imageId: e.imgId,
+              imageAlt: e.alt,
+              imagePosition: "68% 46%",
+              treatment: "left" as const,
+            },
+          })}
       hud={{ icon: Flag, ...hud }}
       kicker="Campaign outcome"
       title={e.titleLines}
@@ -164,17 +179,7 @@ export default function Page15Outcome() {
       note={e.learning}
       aside={
         <div className="archive-aside">
-          {/* The archive is the aside's headline object; metrics sit beneath it. */}
-          {sphereAvailable ? (
-            <InfiniteMenu
-              items={archiveItems}
-              scale={0.85}
-              className={`infinite-menu--aside${animate ? "" : " is-static"}`}
-              style={animate ? { animationDelay: "560ms" } : undefined}
-              ariaLabel="Campaign archive. Drag to rotate through the scenes of your run."
-              hint="Drag to rotate"
-            />
-          ) : (
+          {!sphereAvailable && (
             <div
               className="figure-grid"
               style={{ ["--figure-columns" as string]: 2 }}
