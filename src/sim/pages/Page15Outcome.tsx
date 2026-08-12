@@ -163,23 +163,52 @@ export default function Page15Outcome() {
       }
       note={e.learning}
       aside={
-        <div className="figure-grid" style={{ ["--figure-columns" as string]: 2 }}>
-          {e.metrics.map((m, i) => (
+        <div className="archive-aside">
+          {/* The archive is the aside's headline object; metrics sit beneath it. */}
+          {sphereAvailable ? (
+            <InfiniteMenu
+              items={archiveItems}
+              scale={1.15}
+              className={`infinite-menu--aside${animate ? "" : " is-static"}`}
+              style={animate ? { animationDelay: "560ms" } : undefined}
+              ariaLabel="Campaign archive. Drag to rotate through the scenes of your run."
+              hint="Drag to rotate"
+            />
+          ) : (
             <div
-              key={m.label}
-              className="figure-card"
-              style={
-                animate
-                  ? { animationDelay: `${420 + i * 90}ms` }
-                  : { animation: "none", opacity: 1 }
-              }
+              className="figure-grid"
+              style={{ ["--figure-columns" as string]: 2 }}
             >
-              <span className="figure-label">{m.label}</span>
-              <span className="figure-value" style={{ fontSize: 19 }}>
-                {m.value}
-              </span>
+              {archive.map((entry) => (
+                <div
+                  key={entry.id}
+                  className="figure-card"
+                  style={{ animation: "none", opacity: 1 }}
+                >
+                  <span className="figure-label">{entry.title}</span>
+                  <span className="figure-note">{entry.description}</span>
+                </div>
+              ))}
             </div>
-          ))}
+          )}
+          <div className="figure-grid" style={{ ["--figure-columns" as string]: 2 }}>
+            {e.metrics.map((m, i) => (
+              <div
+                key={m.label}
+                className="figure-card"
+                style={
+                  animate
+                    ? { animationDelay: `${640 + i * 90}ms` }
+                    : { animation: "none", opacity: 1 }
+                }
+              >
+                <span className="figure-label">{m.label}</span>
+                <span className="figure-value" style={{ fontSize: 19 }}>
+                  {m.value}
+                </span>
+              </div>
+            ))}
+          </div>
         </div>
       }
       primary={{
