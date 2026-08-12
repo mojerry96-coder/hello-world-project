@@ -13,8 +13,8 @@ import { useNavigate } from "./lib/navigate";
 import { ROUTES, furthestAllowed } from "./routes";
 import { useSimulation } from "./state/store";
 
-/** Pages built on the fluid DecisionPage template. */
-const FLUID_PAGES = new Set([5, 6, 8, 12, 14]);
+/** Every page now renders through the fluid DecisionPage/NarrativePage shells. */
+const FLUID_PAGES = new Set([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]);
 
 import Page01Opening from "./pages/Page01Opening";
 import Page02Mission from "./pages/Page02Mission";
@@ -71,13 +71,7 @@ export function Simulation({ page }: { page: string }) {
     }
   }, [isIntro, blocked, route, state, navigate]);
 
-  if (isIntro) {
-    return (
-      <Artboard>
-        <PageIntro />
-      </Artboard>
-    );
-  }
+  if (isIntro) return <PageIntro />;
 
   if (!route || blocked) {
     // Render a neutral stage while the guard redirect resolves; never show

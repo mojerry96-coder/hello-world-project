@@ -1516,3 +1516,23 @@
   border-color: rgba(214, 122, 111, 0.7);
   color: #e2938a;
 }
+
+/* ==================================================
+   INTRO PROGRESS HAIRLINE
+================================================== */
+
+.intro-progress {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 30;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.intro-progress > span {
+  display: block;
+  height: 2px;
+  background: var(--accent);
+}
