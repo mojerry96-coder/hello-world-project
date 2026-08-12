@@ -50,9 +50,14 @@ export default function Page01Opening() {
       <img
         src="/media/p01-clinic-cold-open-poster.webp"
         alt="Rural Ikara immunisation outreach room. A hesitant Hausa mother holding her toddler pauses inside the clinic while a community health worker waits beside the vaccination table."
+        className="parallax-media"
         style={box(
           { x: 0, y: 0, w: 1672, h: 941, z: 0 },
-          { objectFit: "cover", display: "block" },
+          {
+            objectFit: "cover",
+            display: "block",
+            ["--depth" as string]: "22px",
+          },
         )}
       />
 
