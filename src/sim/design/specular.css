@@ -1,0 +1,29 @@
+/* SPECULAR EDGE — overlay layer for the primary CTAs.
+
+   The host button keeps its own background, padding and typography; this only
+   parks a bleeding canvas over it and lifts the label above. */
+
+.specular-edge {
+  position: absolute;
+  inset: -20px;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.specular-edge canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* Hosts: keep the canvas positioned against the button and the label on top. */
+.place-report,
+.primary-cta {
+  position: relative;
+}
+
+.place-report > *:not(.specular-edge),
+.primary-cta > *:not(.specular-edge) {
+  position: relative;
+  z-index: 2;
+}
