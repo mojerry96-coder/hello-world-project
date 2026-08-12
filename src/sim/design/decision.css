@@ -716,6 +716,10 @@
   .decision-option:active {
     transform: none;
   }
+
+  .metric-loop__track {
+    transform: translate3d(0, 0, 0) !important;
+  }
 }
 
 /* ==================================================
