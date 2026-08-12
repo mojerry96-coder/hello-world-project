@@ -6,7 +6,6 @@
 
 import { useEffect, useState } from "react";
 import { Artboard } from "./components/Artboard";
-import { StatusRail } from "./components/StatusRail";
 import { ActCard } from "./components/ActCard";
 import { actForPage } from "./content/story";
 import { useNavigate } from "./lib/navigate";
@@ -95,10 +94,6 @@ export function Simulation({ page }: { page: string }) {
   return (
     <Artboard>
       <Page />
-      {/* Campaign status sits above every page from the baseline onward. Pages 1
-          and 2 are the cold open and the assignment — there is no campaign to
-          report yet, and a rail there would undercut the title. */}
-      {route.page >= 3 && <StatusRail page={route.page} />}
       <ActBreak page={route.page} />
     </Artboard>
   );
