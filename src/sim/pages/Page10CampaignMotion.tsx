@@ -5,13 +5,19 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate } from "../lib/navigate";
-import { Check, Pause, Play, SpeakerSimpleX, SpeakerSimpleHigh } from "@phosphor-icons/react";
+import {
+  Check,
+  FilmSlate,
+  Pause,
+  Play,
+  SpeakerSimpleX,
+  SpeakerSimpleHigh,
+} from "@phosphor-icons/react";
 import { VideoSlot } from "../components/MediaSlot";
-import { Shade } from "../components/Chrome";
-import { box } from "../design/layout";
-import { typeStyle } from "../design/type";
+import { NarrativePage } from "../components/NarrativePage";
 import { useSimulation } from "../state/store";
 import { strategies } from "../content/pages";
+import { useCampaignHud } from "../content/decisionPages";
 import type { SimulationState } from "../state/types";
 
 type Channel = "launch" | "radio" | "community" | "digital" | "visibility";
@@ -117,6 +123,7 @@ function caption(
 export default function Page10CampaignMotion() {
   const navigate = useNavigate();
   const { state, update } = useSimulation();
+  const hud = useCampaignHud(10, "Campaign in motion", "Weeks 1–5");
 
   const [index, setIndex] = useState(0);
   const [viewed, setViewed] = useState<Set<number>>(new Set());
@@ -158,188 +165,104 @@ export default function Page10CampaignMotion() {
     strategies.find((s) => s.id === state.strategy)?.name ?? "STRATEGY";
 
   return (
-    <div className="page-enter">
-      <VideoSlot
-        key={clip.id}
-        id={clip.id}
-        src={clip.src}
-        alt={clip.alt}
-        frame={{ x: 0, y: 0, w: 1672, h: 941, z: 0 }}
-        muted={state.audioMuted}
-        autoPlay={playing}
-        poster={clip.src.replace(".mp4", "-poster.webp")}
-        onEnded={markViewedAndAdvance}
-      />
-
-      <Shade
-        frame={{ x: 0, y: 0, w: 1672, h: 180, z: 2 }}
-        background="linear-gradient(180deg, rgba(10,10,8,.76), transparent)"
-      />
-      <Shade
-        frame={{ x: 0, y: 706, w: 1672, h: 235, z: 2 }}
-        background="linear-gradient(0deg, rgba(10,10,8,.94), rgba(10,10,8,.44), transparent)"
-      />
-
-      <p style={box({ x: 56, y: 28, w: 320, h: 18, z: 20 }, typeStyle("kicker"))}>
-        WEEKS 1–5
-      </p>
-      <h1
-        style={box({ x: 56, y: 80, w: 740, h: 72, z: 20 }, typeStyle("displayL"))}
-      >
-        CAMPAIGN IN MOTION
-      </h1>
-      <p
-        style={box(
-          { x: 1228, y: 30, w: 388, h: 18, z: 20 },
-          typeStyle("label", { textAlign: "right" }),
-        )}
-      >
-        {strategyName} · ₦180M COMMITTED
-      </p>
-
-      <p
-        style={box(
-          { x: 56, y: 690, w: 840, h: 54, z: 20 },
-          typeStyle("body", { lineHeight: "25px" }),
-        )}
-        aria-live="polite"
-      >
-        CURRENT SCENE · {caption(state, clip.channel, emphasis)}
-      </p>
-
-      {/* Timeline: 228x64 segments, 20px gaps. Completed segments are replayable. */}
-      <div
-        style={box({ x: 56, y: 786, w: 1220, h: 90, z: 20 }, {
-          display: "flex",
-          gap: 20,
-        })}
-        role="tablist"
-        aria-label="Campaign weeks"
-      >
-        {CLIPS.map((c, i) => {
-          const isActive = i === index;
-          const isDone = viewed.has(i);
-          const reachable = isDone || i <= index;
-          return (
+    <NarrativePage
+      sceneNode={
+        <>
+          <VideoSlot
+            key={clip.id}
+            id={clip.id}
+            src={clip.src}
+            alt={clip.alt}
+            frame={{ x: 0, y: 0, w: 0, h: 0, z: 0 }}
+            muted={state.audioMuted}
+            autoPlay={playing}
+            poster={clip.src.replace(".mp4", "-poster.webp")}
+            onEnded={markViewedAndAdvance}
+            style={{
+              position: "absolute",
+              inset: 0,
+              left: 0,
+              top: 0,
+              width: "100%",
+              height: "100%",
+            }}
+          />
+          <div className="scene-treatment" />
+        </>
+      }
+      hud={{
+        icon: FilmSlate,
+        ...hud,
+        trailing: (
+          <>
             <button
-              key={c.id}
               type="button"
-              role="tab"
-              aria-selected={isActive}
-              disabled={!reachable}
-              onClick={() => {
-                setIndex(i);
-                setPlaying(true);
-              }}
-              className="focusable"
-              style={{
-                width: 228,
-                height: 64,
-                textAlign: "left",
-                padding: "10px 12px",
-                cursor: reachable ? "pointer" : "not-allowed",
-                background: isActive
-                  ? "rgba(180,93,43,.19)"
-                  : "rgba(18,18,15,.62)",
-                border: "1px solid var(--line-dark)",
-                borderTop: isActive
-                  ? "2px solid var(--accent-active)"
-                  : "1px solid var(--line-dark)",
-                opacity: reachable ? 1 : 0.4,
-                color: "var(--cream)",
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "space-between",
-              }}
+              className="decision-chip"
+              aria-label={playing ? "Pause" : "Play"}
+              onClick={() => setPlaying((p) => !p)}
+              style={{ display: "grid", placeItems: "center" }}
             >
-              <span
-                style={{
-                  fontFamily: "Manrope, system-ui, Helvetica, Arial, sans-serif",
-                  fontSize: 11,
-                  lineHeight: "14px",
-                  fontWeight: 600,
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 6,
-                }}
-              >
-                {c.week} {c.label}
-                {isDone && <Check size={16} weight="thin" />}
-              </span>
+              {playing ? (
+                <Pause size={14} weight="bold" />
+              ) : (
+                <Play size={14} weight="bold" />
+              )}
             </button>
-          );
-        })}
-      </div>
-
-      {/* Media controls: always keyboard reachable. */}
-      <div
-        style={box({ x: 56, y: 890, w: 200, h: 40, z: 22 }, {
-          display: "flex",
-          gap: 10,
-        })}
-      >
-        <button
-          type="button"
-          className="focusable"
-          aria-label={playing ? "Pause" : "Play"}
-          onClick={() => setPlaying((p) => !p)}
-          style={{
-            width: 40,
-            height: 40,
-            background: "rgba(12,12,10,.5)",
-            border: "1px solid var(--line-dark)",
-            color: "var(--cream)",
-            cursor: "pointer",
-          }}
-        >
-          {playing ? <Pause size={18} weight="thin" /> : <Play size={18} weight="thin" />}
-        </button>
-        <button
-          type="button"
-          className="focusable"
-          aria-label={state.audioMuted ? "Unmute" : "Mute"}
-          onClick={() => update({ audioMuted: !state.audioMuted })}
-          style={{
-            width: 40,
-            height: 40,
-            background: "rgba(12,12,10,.5)",
-            border: "1px solid var(--line-dark)",
-            color: "var(--cream)",
-            cursor: "pointer",
-          }}
-        >
-          {state.audioMuted ? (
-            <SpeakerSimpleX size={18} weight="thin" />
-          ) : (
-            <SpeakerSimpleHigh size={18} weight="thin" />
-          )}
-        </button>
-      </div>
-
-      <button
-        type="button"
-        className="focusable"
-        disabled={!allViewed}
-        aria-disabled={!allViewed}
-        onClick={() => {
+            <button
+              type="button"
+              className="decision-chip"
+              aria-label={state.audioMuted ? "Unmute" : "Mute"}
+              onClick={() => update({ audioMuted: !state.audioMuted })}
+              style={{ display: "grid", placeItems: "center" }}
+            >
+              {state.audioMuted ? (
+                <SpeakerSimpleX size={14} weight="bold" />
+              ) : (
+                <SpeakerSimpleHigh size={14} weight="bold" />
+              )}
+            </button>
+          </>
+        ),
+      }}
+      kicker="Weeks 1–5"
+      title="CAMPAIGN IN MOTION"
+      lede={<span aria-live="polite">{caption(state, clip.channel, emphasis)}</span>}
+      note={`${strategyName} · ₦180M committed`}
+      aside={
+        <div className="clip-timeline" role="tablist" aria-label="Campaign weeks">
+          {CLIPS.map((c, i) => {
+            const isActive = i === index;
+            const isDone = viewed.has(i);
+            const reachable = isDone || i <= index;
+            return (
+              <button
+                key={c.id}
+                type="button"
+                role="tab"
+                aria-selected={isActive}
+                disabled={!reachable}
+                onClick={() => {
+                  setIndex(i);
+                  setPlaying(true);
+                }}
+                className={`clip-chip${isActive ? " is-active" : ""}`}
+              >
+                <span className="clip-week">{c.week}</span>
+                <span className="clip-label">{c.label}</span>
+                {isDone && <Check size={13} weight="bold" aria-hidden />}
+              </button>
+            );
+          })}
+        </div>
+      }
+      primary={{
+        label: "Continue to week 6",
+        disabled: !allViewed,
+        onClick: () => {
           update({ currentPage: 11 });
           navigate("/week-six");
-        }}
-        style={box(
-          { x: 1328, y: 812, w: 288, h: 64, z: 20 },
-          {
-            ...typeStyle("button"),
-            background: allViewed ? "var(--accent)" : "rgba(24,26,24,.56)",
-            border: allViewed
-              ? "1px solid var(--accent-active)"
-              : "1px solid rgba(238,228,213,.16)",
-            color: allViewed ? "var(--white)" : "rgba(238,228,213,.40)",
-            cursor: allViewed ? "pointer" : "not-allowed",
-          },
-        )}
-      >
-        CONTINUE TO WEEK 6
-      </button>
-    </div>
+        },
+      }}
+    />
   );
 }

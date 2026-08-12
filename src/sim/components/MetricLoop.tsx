@@ -12,7 +12,7 @@ import {
   useRef,
   useState,
 } from "react";
-import { Metric, type MetricSpec } from "./DecisionPage";
+import { Metric, type MetricSpec } from "./Metric";
 
 const SMOOTH_TAU = 0.25;
 const COPY_HEADROOM = 2;

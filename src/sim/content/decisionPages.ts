@@ -130,3 +130,56 @@ export function useDecisionHud(page: number) {
     baseline: BASELINE,
   };
 }
+
+/** Stage, budget, live metrics and progress for ANY page — decision or
+    narrative. Identity (kicker/title) is supplied by the page itself. */
+export function useCampaignHud(
+  page: number,
+  kicker: string,
+  title: string,
+  options: { metrics?: boolean; budget?: boolean } = {},
+) {
+  const { state } = useSimulation();
+  const week = weekForPage(page);
+  const coverage = coverageAtWeek(state, week);
+
+  const metrics: MetricSpec[] = [
+    {
+      label: "Metro",
+      display: `${Math.round(coverage.metro)}%`,
+      fill: coverage.metro / 100,
+    },
+    {
+      label: "Zaria",
+      display: `${Math.round(coverage.zaria)}%`,
+      fill: coverage.zaria / 100,
+    },
+    {
+      label: "Ikara",
+      display: `${Math.round(coverage.ikara)}%`,
+      fill: coverage.ikara / 100,
+      warning: coverage.ikara < IKARA_TARGET,
+    },
+  ];
+
+  return {
+    kicker,
+    title,
+    stage: {
+      label: "Campaign week",
+      value: week === 0 ? "PLANNING" : `WK ${week} / ${CAMPAIGN_WEEKS}`,
+    },
+    budget:
+      options.budget === false
+        ? undefined
+        : {
+            label: "Budget remaining",
+            value: `₦${budgetRemainingAtWeek(week)}M`,
+          },
+    metrics: options.metrics === false ? undefined : metrics,
+    progress: { current: page, total: TOTAL_PAGES },
+    coverage,
+    week,
+    baseline: BASELINE,
+  };
+}
