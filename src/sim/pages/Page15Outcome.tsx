@@ -1,8 +1,11 @@
 /* PAGE 15 — CAMPAIGN OUTCOME. One route, three deterministic endings.
    The debrief is an overlay inside this page — there is no Page 16. */
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "../lib/navigate";
+import InfiniteMenu, { isWebGL2Available } from "../components/InfiniteMenu";
+import { archiveMenuItems, buildArchive } from "../content/archive";
+
 import { Flag } from "@phosphor-icons/react";
 import { NarrativePage } from "../components/NarrativePage";
 import { typeStyle } from "../design/type";
