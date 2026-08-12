@@ -64,11 +64,11 @@ New files
   `DecisionOption` and `TypewriterText` as in the brief, with icons from
   `lucide-react` (already installed) via the `iconMap`. Option stagger uses
   `animationDelay: index * 70 + 100ms`.
-- `src/sim/content/decisionPages.ts` — the data config (`decisionPages` array)
-  holding background image, decision number/title, stage, budget, progress,
-  metrics, report label/statement/question and the five options for Decision 01,
-  driven per-report from the existing `reports` and `barrierZones` content so
-  copy stays in one place.
+- `src/sim/content/decisionPages.ts` — the data config (`decisionPages` keyed by
+  decision id) holding background image, decision number/title, stage, budget,
+  progress, metrics, report label/statement/question and the options for all five
+  decisions, driven from the existing `reports`, `barrierZones`, `strategies` and
+  `defences` content so copy stays in one place.
 
 Changed files
 - `src/sim/pages/Page05Barriers.tsx` — keeps all state logic and scoring, drops
@@ -76,12 +76,24 @@ Changed files
   from `coverageAtWeek`/`BASELINE` (the same source the status rail uses), report
   statement from the current report, options from `barrierZones`, feedback and the
   report selector in the sheet footer, and the existing outcome panel overlaid.
-- `src/sim/Simulation.tsx` — pages may opt out of the fixed `Artboard`; the
-  barriers page renders full-viewport while every other page is unchanged.
+- `src/sim/pages/Page06Strategy.tsx` — four option cards, statement from the
+  scenario question, live "no strategy selected" readout in the footer; still opens
+  unselected with Continue disabled.
+- `src/sim/pages/Page08Budget.tsx` — sheet holds the four allocation sliders and the
+  remaining-budget readout as `children`; the total rule and profile logic untouched.
+- `src/sim/pages/Page12Adjustment.tsx` — adjustment options as cards, week-six
+  statement in the report slot.
+- `src/sim/pages/Page14Defence.tsx` — four defence cards, the challenge question in
+  the report slot typed on, the justification textarea plus live counter in the
+  sheet, feedback line and the existing 1.8s hand-off to the outcome page.
+- `src/sim/Simulation.tsx` — pages may opt out of the fixed `Artboard`; the five
+  decision pages render full-viewport while every other page is unchanged.
 - `src/sim/sim.css` — import the new stylesheet (import placed at the top of the
   file, before any rules).
 
 Verification: typecheck, production build, and a Playwright pass at 1672x941,
-1366x768 and 1180x720 to confirm the entrance sequence, selection states,
-disabled CTA and the responsive recomposition, plus one run under
-`prefers-reduced-motion` and one scoring run through all four reports.
+1366x768 and 1180x720 across all five decision screens to confirm the entrance
+sequence, selection states, disabled CTAs and the responsive recomposition, plus
+one reduced-motion run and one full playthrough that scores the barriers, keeps the
+budget at ₦180M and reaches the outcome page.
+
