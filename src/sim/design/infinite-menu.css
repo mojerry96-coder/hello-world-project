@@ -4,7 +4,7 @@
 .infinite-menu {
   position: relative;
   width: 100%;
-  height: clamp(320px, 46vh, 520px);
+  height: var(--infinite-menu-height, clamp(320px, 46vh, 520px));
   border-radius: var(--radius-sheet, 22px);
   border: 1px solid var(--border-subtle, rgba(255, 255, 255, 0.12));
   background:
@@ -117,4 +117,67 @@
   color: var(--ink, #121110);
   background: var(--cream, #efe8dd);
   border-color: var(--cream, #efe8dd);
+}
+
+
+/* ==================================================
+   ASIDE VARIANT — the archive lives in the outcome
+   page's right column, so it is shorter, its caption
+   spans the full width, and it fades in with the page.
+================================================== */
+
+.infinite-menu--aside {
+  --infinite-menu-height: clamp(240px, 34vh, 340px);
+  touch-action: none;
+  user-select: none;
+  opacity: 0;
+  animation: archiveEnter 720ms var(--ease-apple, cubic-bezier(0.22, 1, 0.36, 1)) forwards;
+}
+
+.infinite-menu--aside.is-static {
+  opacity: 1;
+  animation: none;
+}
+
+.infinite-menu--aside .infinite-menu-caption {
+  left: 14px;
+  right: 14px;
+  bottom: 14px;
+  max-width: none;
+  padding: 10px 13px;
+}
+
+.infinite-menu--aside .infinite-menu-title {
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  margin-bottom: 4px;
+}
+
+.infinite-menu--aside .infinite-menu-description {
+  font-size: 12.5px;
+  line-height: 1.4;
+}
+
+.infinite-menu--aside .infinite-menu-hint {
+  right: 12px;
+  top: 12px;
+  padding: 5px 10px;
+  font-size: 9px;
+}
+
+.archive-aside {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+@keyframes archiveEnter {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
