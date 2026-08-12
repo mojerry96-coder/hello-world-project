@@ -1,163 +1,79 @@
 /* PAGE 06 — SELECT COMMUNICATION STRATEGY.
-   Loads with nothing selected and a disabled Continue. Hover/focus previews but
-   never commits. No option is marked correct here — that belongs on Page 7. */
+   Opens with nothing selected and a disabled Continue. No option is marked
+   correct here — that belongs on Page 7. */
 
 import { useState } from "react";
+import {
+  Broadcast,
+  DeviceMobile,
+  Megaphone,
+  PuzzlePiece,
+  type Icon,
+} from "@phosphor-icons/react";
 import { useNavigate } from "../lib/navigate";
-import { MediaSlot } from "../components/MediaSlot";
-import { DecisionLabel, Shade } from "../components/Chrome";
-import { box } from "../design/layout";
-import { typeStyle } from "../design/type";
+import { DecisionPage } from "../components/DecisionPage";
+import { useDecisionHud } from "../content/decisionPages";
 import { strategies } from "../content/pages";
 import { useSimulation } from "../state/store";
 import type { Strategy } from "../state/types";
 
-const OPTION_FRAMES = [
-  { x: 70, w: 292 },
-  { x: 363, w: 368 },
-  { x: 732, w: 360 },
-  { x: 1093, w: 359 },
-];
-
-const LETTERS = ["A", "B", "C", "D"];
+const STRATEGY_ICONS: Record<Strategy, Icon> = {
+  "digital-first": DeviceMobile,
+  "community-trust": Broadcast,
+  "high-visibility": Megaphone,
+  "integrated-adaptive": PuzzlePiece,
+};
 
 export default function Page06Strategy() {
   const navigate = useNavigate();
-  const { state, update } = useSimulation();
+  const { update } = useSimulation();
+  const hud = useDecisionHud(6);
   // Never seeded from state on entry — the page must open unselected.
   const [selected, setSelected] = useState<Strategy | null>(null);
 
+  const chosen = strategies.find((s) => s.id === selected);
+
   return (
-    <div className="page-enter">
-      <MediaSlot
-        id="IMG-06"
-        src="p06-strategy-room.webp"
-        alt="Kaduna SPHCDA campaign planning session. Four public-health staff lean over a large printed state map, comparing field photographs, radio notes and smartphones."
-        frame={{ x: 0, y: 0, w: 1672, h: 941, z: 0 }}
-      />
-      <Shade
-        frame={{ x: 0, y: 0, w: 1672, h: 941, z: 2 }}
-        background="linear-gradient(180deg, rgba(10,10,8,.36), transparent 48%, rgba(10,10,8,.78) 78%)"
-      />
-
-      <DecisionLabel
-        decision="Decision 02"
-        title="Select Communication Strategy"
-      />
-
-      <p
-        style={box(
-          { x: 1390, y: 38, w: 242, h: 22, z: 20 },
-          typeStyle("bodySmall", {
-            fontSize: 16,
-            lineHeight: "20px",
-            textAlign: "right",
-          }),
-        )}
-        aria-live="polite"
-      >
-        {selected
-          ? strategies.find((s) => s.id === selected)?.plain
-          : "NO STRATEGY SELECTED"}
-      </p>
-
-      <p
-        style={box(
-          { x: 70, y: 690, w: 900, h: 60, z: 20 },
-          typeStyle("body", { fontSize: 19, lineHeight: 1.35 }),
-        )}
-      >
-        “We cannot use every communication channel equally. Based on the evidence,
-        what strategy should guide the next phase of the campaign?”
-      </p>
-
-      <Shade
-        frame={{ x: 0, y: 781, w: 1672, h: 160, z: 18 }}
-        background="rgba(13,13,11,.82)"
-      />
-
-      <div role="radiogroup" aria-label="Communication strategy">
-        {strategies.map((s, i) => (
-          <button
-            key={s.id}
-            type="button"
-            role="radio"
-            aria-checked={selected === s.id}
-            className="option focusable"
-            data-selected={selected === s.id}
-            onClick={() => setSelected(s.id)}
-            style={box(
-              { x: OPTION_FRAMES[i].x, y: 804, w: OPTION_FRAMES[i].w, h: 80, z: 20 },
-              { padding: "12px 16px" },
-            )}
+    <DecisionPage
+      {...hud}
+      statement="“We cannot use every communication channel equally. Based on the evidence, what strategy should guide the next phase of the campaign?”"
+      question="Choose the single strategy that will direct the campaign from here."
+      aside={
+        <div aria-live="polite">
+          <p className="report-label">Selected strategy</p>
+          <p
+            className="decision-footnote"
+            style={{
+              margin: 0,
+              color: chosen ? "var(--accent-soft)" : "var(--text-tertiary)",
+            }}
           >
-            <span
-              style={{
-                fontFamily: "Manrope, system-ui, Helvetica, Arial, sans-serif",
-                fontSize: 11,
-                lineHeight: "14px",
-                color: "var(--accent-active)",
-                display: "block",
-              }}
-            >
-              {LETTERS[i]}
-            </span>
-            <span
-              style={{
-                fontFamily: "Manrope, system-ui, Helvetica, Arial, sans-serif",
-                fontWeight: 300,
-                fontSize: 18,
-                lineHeight: "22px",
-                color: "var(--cream)",
-                display: "block",
-                marginTop: 2,
-              }}
-            >
-              {s.plain}
-            </span>
-            <span
-              style={{
-                fontFamily: "Manrope, system-ui, Helvetica, Arial, sans-serif",
-                fontSize: 11,
-                lineHeight: "15px",
-                color: "rgba(238,228,213,.58)",
-                display: "block",
-                marginTop: 4,
-              }}
-            >
-              {s.name} — {s.channels}
-            </span>
-          </button>
-        ))}
-      </div>
-
-      <button
-        type="button"
-        className="focusable"
-        disabled={selected === null}
-        aria-disabled={selected === null}
-        onClick={() => {
-          if (!selected) return;
-          update({ strategy: selected, currentPage: 7 });
-          navigate("/strategy-consequence");
-        }}
-        style={box(
-          { x: 1491, y: 866, w: 141, h: 43, z: 20 },
-          {
-            ...typeStyle("button"),
-            background: selected ? "rgba(12,12,10,.34)" : "rgba(24,26,24,.56)",
-            border: selected
-              ? "1px solid var(--cream)"
-              : "1px solid rgba(238,228,213,.16)",
-            color: selected ? "var(--white)" : "rgba(238,228,213,.40)",
-            cursor: selected ? "pointer" : "not-allowed",
-          },
-        )}
-      >
-        CONTINUE
-      </button>
-
-      <span hidden>{state.diagnosis}</span>
-    </div>
+            {chosen ? chosen.plain : "No strategy selected"}
+          </p>
+          {chosen && (
+            <p className="decision-footnote" style={{ margin: "8px 0 0" }}>
+              {chosen.name} — {chosen.channels}
+            </p>
+          )}
+        </div>
+      }
+      options={strategies.map((s) => ({
+        id: s.id,
+        icon: STRATEGY_ICONS[s.id],
+        title: s.plain,
+        subtitle: `${s.name} — ${s.channels}`,
+      }))}
+      columns={4}
+      optionsLabel="Communication strategy"
+      selected={selected}
+      onSelect={(id) => setSelected(id as Strategy)}
+      submitLabel="Continue"
+      submitDisabled={selected === null}
+      onSubmit={() => {
+        if (!selected) return;
+        update({ strategy: selected, currentPage: 7 });
+        navigate("/strategy-consequence");
+      }}
+    />
   );
 }
