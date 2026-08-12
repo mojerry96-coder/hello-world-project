@@ -154,6 +154,7 @@
 }
 
 .hud-label {
+  display: block;
   margin-bottom: 5px;
   font-family: var(--font-ui);
   font-size: 11px;
@@ -164,6 +165,7 @@
 }
 
 .hud-primary {
+  display: block;
   max-width: 230px;
   font-size: 15px;
   line-height: 1.25;
@@ -172,6 +174,7 @@
 }
 
 .hud-value {
+  display: block;
   font-family: var(--font-display);
   font-size: clamp(17px, 1.15vw, 21px);
   font-weight: 450;
