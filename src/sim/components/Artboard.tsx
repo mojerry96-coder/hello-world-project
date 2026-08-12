@@ -79,6 +79,7 @@ export function Artboard({ children }: { children: ReactNode }) {
   return (
     <div className="viewport">
       <div
+        ref={stageRef}
         className="artboard"
         style={{ ["--scene-scale" as string]: scale }}
         data-artboard
