@@ -13,6 +13,9 @@ import { useNavigate } from "./lib/navigate";
 import { ROUTES, furthestAllowed } from "./routes";
 import { useSimulation } from "./state/store";
 
+/** Pages built on the fluid DecisionPage template. */
+const FLUID_PAGES = new Set([5, 6, 8, 12, 14]);
+
 import Page01Opening from "./pages/Page01Opening";
 import Page02Mission from "./pages/Page02Mission";
 import Page03Baseline from "./pages/Page03Baseline";
@@ -83,6 +86,18 @@ export function Simulation({ page }: { page: string }) {
   }
 
   const Page = PAGES[route.page - 1];
+
+  // The decision screens render fluidly (their own HUD carries the campaign
+  // status), so they sit outside the fixed-scale artboard entirely.
+  if (FLUID_PAGES.has(route.page)) {
+    return (
+      <>
+        <Page />
+        <ActBreak page={route.page} wrap />
+      </>
+    );
+  }
+
   return (
     <Artboard>
       <Page />
@@ -96,14 +111,14 @@ export function Simulation({ page }: { page: string }) {
 }
 
 /** Shows an act card once per act, per run, before the page behind it. */
-function ActBreak({ page }: { page: number }) {
+function ActBreak({ page, wrap = false }: { page: number; wrap?: boolean }) {
   const { state, apply } = useSimulation();
   const act = actForPage(page);
   const [dismissed, setDismissed] = useState(false);
 
   if (!act || dismissed || state.actsSeen.includes(act.n)) return null;
 
-  return (
+  const card = (
     <ActCard
       act={act}
       onDone={() => {
@@ -116,4 +131,8 @@ function ActBreak({ page }: { page: number }) {
       }}
     />
   );
+
+  // Fluid pages have no surrounding artboard, but the act card is composed on
+  // the fixed stage — give it one of its own.
+  return wrap ? <Artboard>{card}</Artboard> : card;
 }

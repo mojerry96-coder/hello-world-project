@@ -1,15 +1,22 @@
 /* PAGE 05 — CLASSIFY COMMUNICATION BARRIERS.
 
-   The scoring rule that matters: only the FIRST placement of each report counts.
-   Corrections update currentBarrierPlacements and are encouraged for learning,
-   but they can never turn a 2/4 first diagnosis into a 4/4 score. */
+   Rendered through the fluid DecisionPage template. The scoring rule is
+   unchanged: only the FIRST placement of each report counts. Corrections update
+   currentBarrierPlacements and are encouraged for learning, but they can never
+   turn a 2/4 first diagnosis into a 4/4 score. */
 
 import { useEffect, useMemo, useState } from "react";
+import {
+  ChatCircleDots,
+  Question,
+  RadioButton,
+  UsersThree,
+  Prohibit,
+  type Icon,
+} from "@phosphor-icons/react";
 import { useNavigate } from "../lib/navigate";
-import { MediaSlot } from "../components/MediaSlot";
-import { DecisionLabel, Shade } from "../components/Chrome";
-import { box } from "../design/layout";
-import { typeStyle } from "../design/type";
+import { DecisionPage } from "../components/DecisionPage";
+import { useDecisionHud } from "../content/decisionPages";
 import {
   barrierZones,
   correctFeedback,
@@ -19,17 +26,24 @@ import {
 } from "../content/pages";
 import { countCorrect, diagnosisFromCorrect } from "../state/logic";
 import { useSimulation } from "../state/store";
-import { pulse, shake } from "../motion/useMotion";
 import { BARRIER_ANSWER_KEY, type Barrier } from "../state/types";
+
+const ZONE_ICONS: Record<Barrier, Icon> = {
+  "digital-communication": ChatCircleDots,
+  "misinformation-trust": Question,
+  "channel-access": RadioButton,
+  "trusted-messenger": UsersThree,
+  "not-primary": Prohibit,
+};
 
 export default function Page05Barriers() {
   const navigate = useNavigate();
   const { state, apply, update } = useSimulation();
+  const hud = useDecisionHud(5);
 
   const order = state.reportOrder;
   const [idx, setIdx] = useState(0);
   const [selected, setSelected] = useState<Barrier | null>(null);
-  const [dragOver, setDragOver] = useState<Barrier | null>(null);
   const [confirmed, setConfirmed] = useState(false);
 
   const current = order[idx];
@@ -56,13 +70,6 @@ export default function Page05Barriers() {
 
   function place(barrier: Barrier) {
     const report = current;
-
-    // Immediate physical feedback on the zone the learner committed to, before
-    // any state settles — right answers land, wrong ones rebuff.
-    const zoneEl = document.querySelector(`[data-zone="${barrier}"]`);
-    if (barrier === reports[report].correct) pulse(zoneEl);
-    else shake(zoneEl);
-
     apply((s) => ({
       firstBarrierAttempts: s.firstBarrierAttempts[report]
         ? s.firstBarrierAttempts
@@ -74,7 +81,6 @@ export default function Page05Barriers() {
     }));
     setSelected(barrier);
 
-    // Move to the next report that has not been attempted yet.
     const nextUnplaced = order.findIndex(
       (id) => id !== report && !state.firstBarrierAttempts[id],
     );
@@ -84,17 +90,8 @@ export default function Page05Barriers() {
   }
 
   function confirmDiagnosis() {
-    update({
-      diagnosisCorrect: correctCount,
-      diagnosis,
-      currentPage: 5,
-    });
+    update({ diagnosisCorrect: correctCount, diagnosis, currentPage: 5 });
     setConfirmed(true);
-  }
-
-  function proceed() {
-    update({ currentPage: 6 });
-    navigate("/strategy");
   }
 
   const feedback = placedThis
@@ -104,268 +101,135 @@ export default function Page05Barriers() {
     : "";
 
   return (
-    <div className="page-enter">
-      <MediaSlot
-        id={reports[current].image}
-        src={reports[current].src}
-        alt={reports[current].alt}
-        frame={{ x: 0, y: 0, w: 1672, h: 941, z: 0 }}
-      />
-      <Shade
-        frame={{ x: 0, y: 0, w: 1672, h: 941, z: 2 }}
-        background="linear-gradient(180deg, rgba(10,10,8,.34), transparent 44%, rgba(10,10,8,.78) 82%)"
-      />
-
-      <DecisionLabel decision="Decision 01" title="What is blocking uptake?" />
-
-      <p
-        style={box(
-          { x: 1510, y: 32, w: 128, h: 22, z: 20 },
-          typeStyle("bodySmall", {
-            fontSize: 16,
-            lineHeight: "20px",
-            textAlign: "right",
-          }),
-        )}
-      >
-        REPORT {idx + 1} / 4
-      </p>
-
-      {/* Report selector so corrections are reachable by mouse and keyboard. */}
-      <div style={box({ x: 1470, y: 60, w: 168, h: 32, z: 20 }, { display: "flex", gap: 6, justifyContent: "flex-end" })}>
-        {order.map((id, i) => (
-          <button
-            key={id}
-            type="button"
-            className="focusable"
-            onClick={() => setIdx(i)}
-            aria-label={`Go to report ${i + 1}${firstAttempts[id] ? ", placed" : ""}`}
-            aria-current={i === idx}
+    <DecisionPage
+      {...hud}
+      image={reports[current].src}
+      imageId={reports[current].image}
+      imageAlt={reports[current].alt}
+      statement={`“${reports[current].text}”`}
+      question={
+        allFirstAttemptsMade
+          ? "Every report is classified. Review any of them, then confirm your diagnosis."
+          : idx === 0
+            ? "Which of the five explanations below fits this report best? Pick one, then place the report."
+            : `Report ${idx + 1} of 4 — pick the explanation that fits, then place the report.`
+      }
+      aside={
+        <div>
+          <p className="report-label">Reports</p>
+          <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+            {order.map((id, i) => (
+              <button
+                key={id}
+                type="button"
+                className="decision-chip"
+                onClick={() => setIdx(i)}
+                aria-current={i === idx}
+                data-placed={Boolean(firstAttempts[id])}
+                aria-label={`Go to report ${i + 1}${firstAttempts[id] ? ", placed" : ""}`}
+              >
+                {i + 1}
+              </button>
+            ))}
+          </div>
+          <p
+            className="decision-footnote"
+            style={{ margin: "14px 0 0" }}
+            aria-live="polite"
+          >
+            {allFirstAttemptsMade
+              ? `${order.filter((id) => firstAttempts[id]).length} of 4 classified`
+              : `Report ${idx + 1} of 4`}
+          </p>
+        </div>
+      }
+      footnote={
+        feedback ? (
+          <span
+            role="status"
             style={{
-              width: 26,
-              height: 26,
-              cursor: "pointer",
-              background: i === idx ? "rgba(180,93,43,.28)" : "rgba(12,12,10,.42)",
-              border: `1px solid ${
-                firstAttempts[id] ? "var(--accent-active)" : "var(--line-dark)"
-              }`,
-              color: "var(--cream)",
-              fontSize: 12,
+              color:
+                placedThis === reports[current].correct
+                  ? "var(--white-soft)"
+                  : "var(--danger)",
             }}
           >
-            {i + 1}
-          </button>
-        ))}
-      </div>
-
-      {/* First report only: say plainly what the learner is being asked to do.
-          Page 5 previously opened straight into drag-and-drop with no
-          instruction at all — the hardest interaction, entirely unscaffolded. */}
-      {!allFirstAttemptsMade && !placedThis && (
-        <p
-          style={box(
-            { x: 70, y: 640, w: 900, h: 38, z: 20 },
-            {
-              ...typeStyle("bodySmall", {
-                fontSize: 17,
-                color: "var(--cream)",
-              }),
-              background:
-                "linear-gradient(90deg, rgba(10,10,8,.86) 0%, rgba(10,10,8,.6) 70%, transparent 100%)",
-              borderLeft: "2px solid var(--accent)",
-              padding: "8px 16px",
-            },
-          )}
-        >
-          {idx === 0
-            ? "Read the report below. Which of the five explanations underneath fits it best? Pick one, then Place Report."
-            : `Report ${idx + 1} of 4 — pick the explanation that fits, then Place Report.`}
-        </p>
-      )}
-
-      <p
-        style={box(
-          { x: 70, y: 696, w: 940, h: 32, z: 20 },
-          typeStyle("bodySmall", {
-            fontSize: 16,
-            color:
-              placedThis === undefined
-                ? "rgba(238,228,213,.78)"
-                : placedThis === reports[current].correct
-                  ? "var(--success)"
-                  : "var(--error)",
-          }),
-        )}
-        role="status"
-        aria-live="polite"
-      >
-        {feedback}
-      </p>
-
-      {/* The report sentence is the draggable object. */}
-      <p
-        draggable
-        onDragStart={(e) => e.dataTransfer.setData("text/plain", current)}
-        style={box(
-          { x: 70, y: 736, w: 990, h: 62, z: 20 },
-          {
-            ...typeStyle("body", { fontSize: 24, lineHeight: 1.3 }),
-            cursor: "grab",
-            background:
-              "linear-gradient(90deg, rgba(10,10,8,.88) 0%, rgba(10,10,8,.62) 72%, transparent 100%)",
-            padding: "10px 18px",
-          },
-        )}
-      >
-        “{reports[current].text}”
-      </p>
-
-      <Shade
-        frame={{ x: 0, y: 822, w: 1672, h: 82, z: 18 }}
-        background="rgba(13,13,11,.82)"
-      />
-
-      {barrierZones.map((zone) => {
-        const isSelected = selected === zone.id;
-        const isFirstAttemptHere = firstAttempts[current] === zone.id;
-        return (
-          <button
-            key={zone.id}
-            type="button"
-            className="option focusable"
-            data-selected={isSelected}
-            data-zone={zone.id}
-            aria-label={zone.full}
-            onClick={() => (placedThis ? place(zone.id) : setSelected(zone.id))}
-            onDragOver={(e) => {
-              e.preventDefault();
-              setDragOver(zone.id);
-            }}
-            onDragLeave={() => setDragOver(null)}
-            onDrop={(e) => {
-              e.preventDefault();
-              setDragOver(null);
-              place(zone.id);
-            }}
-            style={box(
-              { x: zone.x, y: 832, w: zone.w, h: 56, z: 20 },
-              {
-                ...typeStyle("bodySmall", {
-                  fontSize: 12,
-                  lineHeight: "14px",
-                  fontWeight: 400,
-                  color: "var(--cream)",
-                  textTransform: "uppercase",
-                }),
-                textAlign: "center",
-                borderColor:
-                  dragOver === zone.id
-                    ? "var(--focus)"
-                    : isFirstAttemptHere
-                      ? "var(--accent-active)"
-                      : undefined,
-              },
-            )}
+            {feedback}
+          </span>
+        ) : null
+      }
+      options={barrierZones.map((zone) => ({
+        id: zone.id,
+        icon: ZONE_ICONS[zone.id],
+        title: zone.short,
+        subtitle: zone.full,
+      }))}
+      columns={5}
+      optionsLabel="Communication barrier"
+      selected={selected}
+      onSelect={(id) =>
+        placedThis ? place(id as Barrier) : setSelected(id as Barrier)
+      }
+      submitLabel={allFirstAttemptsMade ? "Confirm diagnosis" : "Place report"}
+      submitDisabled={
+        allFirstAttemptsMade ? !resetSatisfied : selected === null
+      }
+      onSubmit={() => {
+        if (allFirstAttemptsMade) confirmDiagnosis();
+        else if (selected) place(selected);
+      }}
+      overlay={
+        confirmed ? (
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-label="Diagnosis outcome"
+            style={{ maxWidth: 860 }}
           >
-            <span style={{ display: "block" }}>{zone.short}</span>
-            <span
-              style={{
-                display: "block",
-                marginTop: 3,
-                fontSize: 9,
-                letterSpacing: "0.1em",
-                color: "rgba(238,228,213,.42)",
-                textTransform: "none",
-              }}
-            >
-              {zone.full}
-            </span>
-          </button>
-        );
-      })}
-
-      <button
-        type="button"
-        className="focusable"
-        disabled={
-          allFirstAttemptsMade ? !resetSatisfied : selected === null
-        }
-        onClick={() => {
-          if (allFirstAttemptsMade) confirmDiagnosis();
-          else if (selected) place(selected);
-        }}
-        style={box(
-          { x: 1446, y: 845, w: 192, h: 43, z: 20 },
-          {
-            ...typeStyle("button"),
-            background: "rgba(12,12,10,.34)",
-            border: "1px solid var(--cream)",
-            cursor: "pointer",
-          },
-        )}
-      >
-        {allFirstAttemptsMade ? "CONFIRM DIAGNOSIS" : "PLACE REPORT"}
-      </button>
-
-      {/* Outcome panel. Shows the learner's real first-attempt score. */}
-      {confirmed && (
-        <div
-          style={box(
-            { x: 0, y: 0, w: 1672, h: 941, z: 40 },
-            {
-              background: "rgba(10,10,8,.90)",
-              display: "grid",
-              placeItems: "center",
-              padding: 120,
-            },
-          )}
-          role="dialog"
-          aria-modal="true"
-          aria-label="Diagnosis outcome"
-        >
-          <div style={{ maxWidth: 860 }}>
-            <p style={typeStyle("label")}>
+            <p className="report-label">
               {diagnosis === "strong"
-                ? "Strong Diagnosis"
+                ? "Strong diagnosis"
                 : diagnosis === "partial"
-                  ? "Partial Diagnosis"
-                  : "Learning Reset"}
+                  ? "Partial diagnosis"
+                  : "Learning reset"}
             </p>
-            <p style={typeStyle("displayM", { margin: "16px 0 24px" })}>
+            <p
+              className="report-statement"
+              style={{ fontSize: 42, minHeight: 0, margin: "12px 0 20px" }}
+            >
               {correctCount} / 4 correctly classified
             </p>
-            <p style={typeStyle("body", { marginBottom: 40 })}>
-              {diagnosisOutcomeCopy[diagnosis === "unscored" ? "partial" : diagnosis]}
+            <p
+              className="decision-footnote"
+              style={{ margin: "0 0 32px", fontSize: 15, maxWidth: 720 }}
+            >
+              {diagnosisOutcomeCopy[
+                diagnosis === "unscored" ? "partial" : diagnosis
+              ]}
             </p>
             {diagnosis === "reset" && !allCurrentCorrect ? (
               <button
                 type="button"
-                className="focusable"
+                className="place-report"
                 onClick={() => setConfirmed(false)}
-                style={{
-                  ...typeStyle("button"),
-                  minHeight: 56,
-                  padding: "0 28px",
-                  background: "rgba(12,12,10,.44)",
-                  border: "1px solid var(--cream)",
-                  cursor: "pointer",
-                }}
               >
-                RE-EVALUATE THE REPORTS
+                Re-evaluate the reports
               </button>
             ) : (
               <button
                 type="button"
-                className="primary-cta focusable"
-                onClick={proceed}
-                style={typeStyle("button")}
+                className="place-report"
+                onClick={() => {
+                  update({ currentPage: 6 });
+                  navigate("/strategy");
+                }}
               >
-                CONTINUE
+                Continue
               </button>
             )}
           </div>
-        </div>
-      )}
-    </div>
+        ) : null
+      }
+    />
   );
 }
