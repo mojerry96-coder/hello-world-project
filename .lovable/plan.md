@@ -1,35 +1,47 @@
 # Reusable Decision Page template (fluid glass HUD + bottom sheet)
 
-Build the shared decision-screen design system exactly as specified, then convert
-Decision 01 (the barriers page) onto it. Other pages keep their current fixed-stage
-look until you ask for more.
+Build the shared decision-screen design system exactly as specified, then convert all
+five decision screens onto it: Decision 01 barriers, Decision 02 strategy,
+Decision 03 budget, Decision 04 adjustment and Decision 05 defence. Narrative and
+result pages keep their current fixed-stage look.
 
 ## What you'll see
 
-- Decision 01 fills the whole browser window instead of a letterboxed stage.
+- Every decision screen fills the whole browser window instead of a letterboxed stage.
 - A rounded glass HUD across the top: decision number + title, stage, budget, the
-  three LGA coverage metrics with thin bars, and a 01 / 04 progress pill.
-- A rounded glass panel across the bottom: report label, the report statement that
+  three LGA coverage metrics with thin bars, and a progress pill (01 / 05 style).
+- A rounded glass panel across the bottom: report label, the statement that
   types itself on in ~24 ms per character with a blinking cursor, the follow-up
-  question fading in when typing finishes, then five answer cards entering one
-  after another, and a warm PLACE REPORT button that stays disabled until a card
-  is selected.
+  question fading in when typing finishes, then the answer cards entering one
+  after another, and a warm CTA that stays disabled until a card is selected.
 - Hover lifts a card 2px and brightens it; selecting gives it a warm accent border
   plus a small check top-right; changing selection is free, with no modal.
 - Recomposes (not shrinks) at 1450px and 1180px: shorter HUD, tighter metric gaps,
   smaller cards, and HUD icon circles dropped before type gets smaller.
 - Reduced-motion users get the content immediately with no typing or stagger.
+- The five screens are visually identical in structure — only media, copy, options
+  and state differ.
 
 ## Scope
 
 - New shared template + tokens + CSS + data config.
-- Decision 01 (barriers) rendered through it.
-- All existing scoring rules for Decision 01 are preserved unchanged: only the
-  first placement of each report counts, corrections are still allowed, a 0/4
-  first diagnosis still forces every report to be corrected before continuing,
-  and the diagnosis outcome panel still appears on confirm.
-- Not in scope: the other 14 pages, drag-and-drop on the barrier zones (replaced
-  by the click-to-select card grid the spec describes), narrative pages.
+- Converted: Page 05 barriers, Page 06 strategy, Page 08 budget, Page 12 adjustment,
+  Page 14 defence.
+- All existing logic and scoring is preserved exactly: barriers still score only the
+  first placement per report with a forced correction pass on 0/4; strategy still
+  opens unselected with a disabled Continue and commits nothing on hover; budget
+  still enforces the ₦180M total with its sliders and profile classification;
+  adjustment still records the week-six change; defence still requires a
+  50-220 character justification and resolves the ending from the whole run.
+- Screens that need more than five cards keep the same card grid with the column
+  count adapted; budget and defence keep their extra controls (sliders, the
+  justification textarea, live counter) inside the glass sheet, styled with the
+  same tokens.
+- Not in scope: the narrative/result pages (opening, mission, baseline, field
+  evidence, consequence, forecast, campaign motion, week six, briefing, outcome),
+  and drag-and-drop on the barrier zones (replaced by the click-to-select card grid
+  the spec describes).
+
 
 ## Technical notes
 
