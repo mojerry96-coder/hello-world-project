@@ -254,7 +254,7 @@ export default function Page10CampaignMotion() {
             >
               <span
                 style={{
-                  fontFamily: "Inter, Arial, sans-serif",
+                  fontFamily: "Manrope, system-ui, Helvetica, Arial, sans-serif",
                   fontSize: 11,
                   lineHeight: "14px",
                   fontWeight: 600,

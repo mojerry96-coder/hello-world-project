@@ -60,7 +60,7 @@ export function PageMarker({ page }: { page: number }) {
   return (
     <p
       style={box(CHROME.pageMarker, {
-        fontFamily: "Inter, Arial, sans-serif",
+        fontFamily: "Manrope, system-ui, Helvetica, Arial, sans-serif",
         fontSize: 12,
         lineHeight: "14px",
         textAlign: "right",

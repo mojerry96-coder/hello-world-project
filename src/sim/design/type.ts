@@ -1,15 +1,20 @@
-/* Named type roles. Source: replication spec section 4.1.
-   A role carries family, weight, size, line height, tracking and default colour.
+/* Named type roles. Source: replication spec section 4.1, with the master
+   production prompt's typography.
 
-   Note: the master production prompt names Afacad/Manrope, but the exact-replication
-   spec hard-codes Inter across all nine roles and the approved renders match it.
-   The replication spec governs geometry and typography, so Inter it is. Swapping is
-   a one-line change to FAMILY below. */
+   DISPLAY is Afacad — narrow, high-contrast, and it holds up at the large sizes
+   the headings use. TEXT is Manrope, which has a taller x-height than Inter and
+   so stays readable at the small sizes this interface leans on.
+
+   Sizes were raised across the board: the artboard is 1672px wide but is
+   contain-scaled to whatever the screen allows, so a nominal 14px label was
+   rendering nearer 11px on a laptop. Nothing here is smaller than 13px, and the
+   body roles sit at 17-19px. */
 
 import type { CSSProperties } from "react";
 
-const FAMILY = "Inter";
-const FALLBACK = "Arial, sans-serif";
+const DISPLAY = "Afacad";
+const TEXT = "Manrope";
+const FALLBACK = "system-ui, Helvetica, Arial, sans-serif";
 
 export type TypeRole = {
   family: string;
@@ -24,89 +29,94 @@ export type TypeRole = {
 
 export const type = {
   displayXXL: {
-    family: FAMILY,
+    family: DISPLAY,
     fallback: FALLBACK,
-    weight: 300,
-    size: 72,
+    weight: 500,
+    size: 78,
     lineHeight: 1.02,
     tracking: "-0.025em",
     colour: "var(--cream)",
   },
   displayXL: {
-    family: FAMILY,
+    family: DISPLAY,
     fallback: FALLBACK,
-    weight: 300,
-    size: 64,
+    weight: 500,
+    size: 68,
     lineHeight: 1.04,
     tracking: "-0.02em",
     colour: "var(--cream)",
   },
   displayL: {
-    family: FAMILY,
+    family: DISPLAY,
     fallback: FALLBACK,
-    weight: 300,
-    size: 48,
+    weight: 500,
+    size: 52,
     lineHeight: 1.06,
     tracking: "-0.018em",
     colour: "var(--cream)",
   },
   displayM: {
-    family: FAMILY,
+    family: DISPLAY,
     fallback: FALLBACK,
-    weight: 300,
-    size: 34,
-    lineHeight: 1.08,
+    weight: 500,
+    size: 38,
+    lineHeight: 1.1,
     tracking: "-0.012em",
     colour: "var(--cream)",
   },
   metric: {
-    family: FAMILY,
+    family: DISPLAY,
     fallback: FALLBACK,
-    weight: 300,
-    size: 76,
+    weight: 500,
+    size: 80,
     lineHeight: 0.94,
     tracking: "-0.025em",
     colour: "var(--cream)",
   },
   kicker: {
-    family: FAMILY,
+    family: TEXT,
+    fallback: FALLBACK,
     weight: 600,
-    size: 14,
+    size: 13,
     lineHeight: 1.15,
     tracking: "0.14em",
     transform: "uppercase",
     colour: "var(--accent-active)",
   },
   body: {
-    family: FAMILY,
+    family: TEXT,
+    fallback: FALLBACK,
     weight: 400,
-    size: 18,
-    lineHeight: 1.4,
+    size: 19,
+    lineHeight: 1.45,
     tracking: "0",
     colour: "var(--cream)",
   },
   bodySmall: {
-    family: FAMILY,
+    family: TEXT,
+    fallback: FALLBACK,
     weight: 400,
-    size: 14,
-    lineHeight: 1.4,
+    size: 16,
+    lineHeight: 1.5,
     tracking: "0",
     colour: "rgba(238, 228, 213, 0.78)",
   },
   label: {
-    family: FAMILY,
+    family: TEXT,
+    fallback: FALLBACK,
     weight: 600,
-    size: 12,
+    size: 13,
     lineHeight: 1.2,
     tracking: "0.12em",
     transform: "uppercase",
     colour: "var(--accent-active)",
   },
   button: {
-    family: FAMILY,
+    family: TEXT,
+    fallback: FALLBACK,
     weight: 600,
     size: 15,
-    lineHeight: 1,
+    lineHeight: 1.0,
     tracking: "0.12em",
     transform: "uppercase",
     colour: "var(--white)",

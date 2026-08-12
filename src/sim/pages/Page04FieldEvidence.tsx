@@ -13,10 +13,15 @@ import { fieldEvidence } from "../content/pages";
 import { useSimulation } from "../state/store";
 import type { RegionId } from "../state/types";
 
+/* Measured against the generated map image, not the layout spec. The spec's
+   coordinates were written before the artwork existed, so the pins sat in empty
+   country while the printed city labels — which are part of the photograph and
+   not clickable — sat elsewhere. Learners clicked the labels and got nothing.
+   These centres land on the three pin heads in p04-evidence-map.webp. */
 const HOTSPOTS: { id: RegionId; frame: Box }[] = [
-  { id: "metro", frame: { x: 670, y: 420, w: 64, h: 64, z: 24 } },
-  { id: "zaria", frame: { x: 800, y: 220, w: 64, h: 64, z: 24 } },
-  { id: "ikara", frame: { x: 1028, y: 380, w: 64, h: 64, z: 24 } },
+  { id: "metro", frame: { x: 773, y: 343, w: 64, h: 64, z: 24 } },
+  { id: "zaria", frame: { x: 820, y: 216, w: 64, h: 64, z: 24 } },
+  { id: "ikara", frame: { x: 965, y: 408, w: 64, h: 64, z: 24 } },
 ];
 
 const SUMMARY_FRAMES: Record<RegionId, Box> = {
@@ -57,6 +62,20 @@ export default function Page04FieldEvidence() {
       />
 
       <PageLabel>Field Evidence</PageLabel>
+      <p
+        style={box(
+          { x: 44, y: 128, w: 700, h: 42, z: 22 },
+          {
+            ...typeStyle("bodySmall", { fontSize: 17, color: "var(--cream)" }),
+            background:
+              "linear-gradient(90deg, rgba(10,10,8,.86) 0%, rgba(10,10,8,.6) 72%, transparent 100%)",
+            borderLeft: "2px solid var(--accent)",
+            padding: "5px 14px",
+          },
+        )}
+      >
+        Select each of the three marked pins on the map to read its field report.
+      </p>
       <p
         style={box(
           { x: 1476, y: 43, w: 156, h: 22, z: 20 },

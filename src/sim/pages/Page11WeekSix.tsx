@@ -119,7 +119,7 @@ export default function Page11WeekSix() {
         >
           <p
             style={{
-              fontFamily: "Inter, Arial, sans-serif",
+              fontFamily: "Manrope, system-ui, Helvetica, Arial, sans-serif",
               fontSize: 10,
               lineHeight: "13px",
               color: "var(--cream)",
@@ -131,7 +131,7 @@ export default function Page11WeekSix() {
           </p>
           <p
             style={{
-              fontFamily: "Inter, Arial, sans-serif",
+              fontFamily: "Manrope, system-ui, Helvetica, Arial, sans-serif",
               fontWeight: 300,
               fontSize: 23,
               lineHeight: "27px",
@@ -143,7 +143,7 @@ export default function Page11WeekSix() {
           </p>
           <p
             style={{
-              fontFamily: "Inter, Arial, sans-serif",
+              fontFamily: "Manrope, system-ui, Helvetica, Arial, sans-serif",
               fontSize: 11,
               lineHeight: "15px",
               color: "rgba(238,228,213,.72)",

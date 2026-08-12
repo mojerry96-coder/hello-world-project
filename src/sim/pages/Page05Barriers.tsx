@@ -19,6 +19,7 @@ import {
 } from "../content/pages";
 import { countCorrect, diagnosisFromCorrect } from "../state/logic";
 import { useSimulation } from "../state/store";
+import { pulse, shake } from "../motion/useMotion";
 import { BARRIER_ANSWER_KEY, type Barrier } from "../state/types";
 
 export default function Page05Barriers() {
@@ -55,6 +56,13 @@ export default function Page05Barriers() {
 
   function place(barrier: Barrier) {
     const report = current;
+
+    // Immediate physical feedback on the zone the learner committed to, before
+    // any state settles — right answers land, wrong ones rebuff.
+    const zoneEl = document.querySelector(`[data-zone="${barrier}"]`);
+    if (barrier === reports[report].correct) pulse(zoneEl);
+    else shake(zoneEl);
+
     apply((s) => ({
       firstBarrierAttempts: s.firstBarrierAttempts[report]
         ? s.firstBarrierAttempts
@@ -150,10 +158,36 @@ export default function Page05Barriers() {
         ))}
       </div>
 
+      {/* First report only: say plainly what the learner is being asked to do.
+          Page 5 previously opened straight into drag-and-drop with no
+          instruction at all — the hardest interaction, entirely unscaffolded. */}
+      {!allFirstAttemptsMade && !placedThis && (
+        <p
+          style={box(
+            { x: 70, y: 640, w: 900, h: 38, z: 20 },
+            {
+              ...typeStyle("bodySmall", {
+                fontSize: 17,
+                color: "var(--cream)",
+              }),
+              background:
+                "linear-gradient(90deg, rgba(10,10,8,.86) 0%, rgba(10,10,8,.6) 70%, transparent 100%)",
+              borderLeft: "2px solid var(--accent)",
+              padding: "8px 16px",
+            },
+          )}
+        >
+          {idx === 0
+            ? "Read the report below. Which of the five explanations underneath fits it best? Pick one, then Place Report."
+            : `Report ${idx + 1} of 4 — pick the explanation that fits, then Place Report.`}
+        </p>
+      )}
+
       <p
         style={box(
-          { x: 70, y: 704, w: 920, h: 32, z: 20 },
+          { x: 70, y: 696, w: 940, h: 32, z: 20 },
           typeStyle("bodySmall", {
+            fontSize: 16,
             color:
               placedThis === undefined
                 ? "rgba(238,228,213,.78)"
@@ -173,10 +207,13 @@ export default function Page05Barriers() {
         draggable
         onDragStart={(e) => e.dataTransfer.setData("text/plain", current)}
         style={box(
-          { x: 70, y: 748, w: 930, h: 38, z: 20 },
+          { x: 70, y: 736, w: 990, h: 62, z: 20 },
           {
-            ...typeStyle("body", { fontSize: 19, lineHeight: 1.35 }),
+            ...typeStyle("body", { fontSize: 24, lineHeight: 1.3 }),
             cursor: "grab",
+            background:
+              "linear-gradient(90deg, rgba(10,10,8,.88) 0%, rgba(10,10,8,.62) 72%, transparent 100%)",
+            padding: "10px 18px",
           },
         )}
       >
@@ -197,6 +234,7 @@ export default function Page05Barriers() {
             type="button"
             className="option focusable"
             data-selected={isSelected}
+            data-zone={zone.id}
             aria-label={zone.full}
             onClick={() => (placedThis ? place(zone.id) : setSelected(zone.id))}
             onDragOver={(e) => {
@@ -210,11 +248,11 @@ export default function Page05Barriers() {
               place(zone.id);
             }}
             style={box(
-              { x: zone.x, y: 840, w: zone.w, h: 48, z: 20 },
+              { x: zone.x, y: 832, w: zone.w, h: 56, z: 20 },
               {
                 ...typeStyle("bodySmall", {
-                  fontSize: 14,
-                  lineHeight: "18px",
+                  fontSize: 12,
+                  lineHeight: "14px",
                   fontWeight: 400,
                   color: "var(--cream)",
                   textTransform: "uppercase",
@@ -229,7 +267,19 @@ export default function Page05Barriers() {
               },
             )}
           >
-            {zone.short}
+            <span style={{ display: "block" }}>{zone.short}</span>
+            <span
+              style={{
+                display: "block",
+                marginTop: 3,
+                fontSize: 9,
+                letterSpacing: "0.1em",
+                color: "rgba(238,228,213,.42)",
+                textTransform: "none",
+              }}
+            >
+              {zone.full}
+            </span>
           </button>
         );
       })}

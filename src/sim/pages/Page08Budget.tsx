@@ -51,6 +51,16 @@ const CHANNELS: {
   },
 ];
 
+/* A defensible opening position: inside the spec's "balanced" band on every
+   channel and totalling exactly ₦180M. Offered, never applied automatically —
+   the allocation has to remain the learner's decision. */
+const SUGGESTED: BudgetAllocation = {
+  community: 55,
+  radio: 45,
+  digital: 45,
+  tvOutdoor: 35,
+};
+
 export default function Page08Budget() {
   const navigate = useNavigate();
   const { state, update } = useSimulation();
@@ -118,6 +128,44 @@ export default function Page08Budget() {
         campaign budget remains fixed at ₦180 million.
       </p>
 
+      {/* Page 8 previously offered four sliders, a hidden per-channel cap and a
+          hard total, with no guidance at all. Say what the constraint is, and
+          offer a defensible opening position the learner can take apart. */}
+      <p
+        style={box(
+          { x: 36, y: 596, w: 1010, h: 40, z: 20 },
+          {
+            ...typeStyle("bodySmall", { fontSize: 17, color: "var(--cream)" }),
+            background:
+              "linear-gradient(90deg, rgba(10,10,8,.86) 0%, rgba(10,10,8,.6) 72%, transparent 100%)",
+            borderLeft: "2px solid var(--accent)",
+            padding: "5px 14px",
+          },
+        )}
+      >
+        Split ₦180M across all four channels. Every naira must be assigned, and
+        no single channel may exceed ₦100M.
+      </p>
+
+      <button
+        type="button"
+        className="focusable"
+        onClick={() => setBudget(SUGGESTED)}
+        style={box(
+          { x: 36, y: 648, w: 330, h: 38, z: 20 },
+          {
+            ...typeStyle("bodySmall", { fontSize: 15, color: "var(--cream)" }),
+            background: "rgba(12,12,10,.6)",
+            border: "1px solid var(--line-dark)",
+            cursor: "pointer",
+            textAlign: "left",
+            padding: "0 12px",
+          },
+        )}
+      >
+        Start from a balanced split, then adjust →
+      </button>
+
       <Shade
         frame={{ x: 0, y: 711, w: 1060, h: 230, z: 18 }}
         background="rgba(15,15,12,.88)"
@@ -136,7 +184,7 @@ export default function Page08Budget() {
             <span
               style={{
                 width: 240,
-                fontFamily: "Inter, Arial, sans-serif",
+                fontFamily: "Manrope, system-ui, Helvetica, Arial, sans-serif",
                 fontSize: 13,
                 lineHeight: "16px",
                 fontWeight: 600,
@@ -203,7 +251,7 @@ export default function Page08Budget() {
                 height: 38,
                 marginLeft: 20,
                 textAlign: "right",
-                fontFamily: "Inter, Arial, sans-serif",
+                fontFamily: "Manrope, system-ui, Helvetica, Arial, sans-serif",
                 fontSize: 16,
                 lineHeight: "18px",
                 color: "var(--cream)",
@@ -215,7 +263,7 @@ export default function Page08Budget() {
             />
             <span
               style={{
-                fontFamily: "Inter, Arial, sans-serif",
+                fontFamily: "Manrope, system-ui, Helvetica, Arial, sans-serif",
                 fontSize: 12,
                 lineHeight: "14px",
                 color: "var(--accent-active)",

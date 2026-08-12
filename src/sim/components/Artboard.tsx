@@ -2,9 +2,10 @@
    Below 1024px wide we still contain; a portrait screen gets a rotate notice
    rather than vertical scrolling. */
 
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { ARTBOARD } from "../design/layout";
 import { typeStyle } from "../design/type";
+import { ClickSpark, Grain, Vignette } from "../motion/Feedback";
 
 function useArtboardScale() {
   const [scale, setScale] = useState(1);
@@ -30,38 +31,8 @@ function useArtboardScale() {
   return { scale, portrait };
 }
 
-/* Pointer position, normalised to -1..1 across the stage, published as CSS
-   custom properties so any .parallax-media image can drift against the text. */
-function useParallax() {
-  const ref = useRef<HTMLDivElement | null>(null);
-
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    let frame = 0;
-    function onMove(e: PointerEvent) {
-      if (frame) return;
-      frame = window.requestAnimationFrame(() => {
-        frame = 0;
-        const mx = (e.clientX / window.innerWidth) * 2 - 1;
-        const my = (e.clientY / window.innerHeight) * 2 - 1;
-        el!.style.setProperty("--mx", mx.toFixed(3));
-        el!.style.setProperty("--my", my.toFixed(3));
-      });
-    }
-    window.addEventListener("pointermove", onMove);
-    return () => {
-      window.removeEventListener("pointermove", onMove);
-      if (frame) window.cancelAnimationFrame(frame);
-    };
-  }, []);
-
-  return ref;
-}
-
 export function Artboard({ children }: { children: ReactNode }) {
   const { scale, portrait } = useArtboardScale();
-  const stageRef = useParallax();
 
   if (portrait) {
     return (
@@ -79,12 +50,13 @@ export function Artboard({ children }: { children: ReactNode }) {
   return (
     <div className="viewport">
       <div
-        ref={stageRef}
         className="artboard"
         style={{ ["--scene-scale" as string]: scale }}
         data-artboard
       >
-        {children}
+        <ClickSpark>{children}</ClickSpark>
+        <Vignette />
+        <Grain />
       </div>
     </div>
   );

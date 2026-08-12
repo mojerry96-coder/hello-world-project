@@ -17,8 +17,6 @@ type Props = {
   frame: Box;
   /** focal point, e.g. "62% 48%" */
   objectPosition?: string;
-  /** pointer-parallax travel in px; 0 disables the drift */
-  depth?: number;
   style?: CSSProperties;
 };
 
@@ -51,15 +49,7 @@ function Placeholder({ id, alt }: { id: string; alt: string }) {
   );
 }
 
-export function MediaSlot({
-  id,
-  src,
-  alt,
-  frame,
-  objectPosition,
-  depth = 14,
-  style,
-}: Props) {
+export function MediaSlot({ id, src, alt, frame, objectPosition, style }: Props) {
   const [failed, setFailed] = useState(false);
 
   return (
@@ -71,14 +61,12 @@ export function MediaSlot({
           src={`${import.meta.env.BASE_URL}media/${src}`}
           alt={alt}
           onError={() => setFailed(true)}
-          className={depth > 0 ? "parallax-media" : undefined}
           style={{
             width: "100%",
             height: "100%",
             objectFit: "cover",
             objectPosition: objectPosition ?? "center",
             display: "block",
-            ["--depth" as string]: `${depth}px`,
           }}
         />
       )}
@@ -91,6 +79,13 @@ type VideoProps = Props & {
   muted?: boolean;
   autoPlay?: boolean;
   poster?: string;
+  /** Gives the caller the element, so a page can drive timing off playback. */
+  videoRef?: React.Ref<HTMLVideoElement>;
+  /** Rewind to 0 once metadata is ready — browsers otherwise resume a cached
+      media resource wherever it last stopped, which breaks a replay. */
+  restart?: boolean;
+  /** Fired when playback is blocked (e.g. unmuted autoplay policy). */
+  onBlocked?: () => void;
 };
 
 export function VideoSlot({
@@ -103,6 +98,9 @@ export function VideoSlot({
   autoPlay = true,
   poster,
   style,
+  videoRef,
+  restart = false,
+  onBlocked,
 }: VideoProps) {
   const [failed, setFailed] = useState(false);
   const [ended, setEnded] = useState(false);
@@ -120,11 +118,21 @@ export function VideoSlot({
   return (
     <div style={box(frame, { overflow: "hidden", ...style })}>
       <video
+        ref={videoRef}
         src={`${import.meta.env.BASE_URL}media/${src}`}
         poster={poster ? `${import.meta.env.BASE_URL}media/${poster}` : undefined}
         autoPlay={autoPlay}
         muted={muted}
         playsInline
+        onLoadedMetadata={(e) => {
+          const el = e.currentTarget;
+          if (restart && el.currentTime > 0) el.currentTime = 0;
+          if (autoPlay) {
+            // An unmuted autoplay can be refused; tell the page so it can offer
+            // a play control rather than sitting on a frozen poster.
+            void el.play().catch(() => onBlocked?.());
+          }
+        }}
         onEnded={() => {
           setEnded(true);
           onEnded?.();

@@ -129,7 +129,7 @@ export default function Page14Defence() {
             >
               <span
                 style={{
-                  fontFamily: "Inter, Arial, sans-serif",
+                  fontFamily: "Manrope, system-ui, Helvetica, Arial, sans-serif",
                   fontSize: 11,
                   lineHeight: "14px",
                   color: "var(--accent-active)",
@@ -140,7 +140,7 @@ export default function Page14Defence() {
               </span>
               <span
                 style={{
-                  fontFamily: "Inter, Arial, sans-serif",
+                  fontFamily: "Manrope, system-ui, Helvetica, Arial, sans-serif",
                   fontWeight: 300,
                   fontSize: 17,
                   lineHeight: "21px",
@@ -153,7 +153,7 @@ export default function Page14Defence() {
               </span>
               <span
                 style={{
-                  fontFamily: "Inter, Arial, sans-serif",
+                  fontFamily: "Manrope, system-ui, Helvetica, Arial, sans-serif",
                   fontSize: 12,
                   lineHeight: "17px",
                   color: "rgba(238,228,213,.78)",
@@ -214,7 +214,7 @@ export default function Page14Defence() {
             }`,
             borderRadius: 0,
             color: "var(--cream)",
-            fontFamily: "Inter, Arial, sans-serif",
+            fontFamily: "Manrope, system-ui, Helvetica, Arial, sans-serif",
             fontSize: 15,
             lineHeight: "22px",
             padding: 14,

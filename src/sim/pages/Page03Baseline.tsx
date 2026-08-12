@@ -10,13 +10,14 @@ import { VoiceOver } from "../components/VoiceOver";
 import { box, type Box } from "../design/layout";
 import { typeStyle } from "../design/type";
 import { useSimulation } from "../state/store";
+import { CountUp } from "../motion/CountUp";
 
 const REGIONS = [
   {
     id: "IMG-03A",
     src: "p03-kaduna-metro.webp",
     name: "KADUNA METRO",
-    coverage: "70%",
+    coverage: 70,
     frame: { x: 0, y: 0, w: 544, h: 941, z: 0 } as Box,
     labelFrame: { x: 67, y: 727, w: 260, h: 28, z: 10 } as Box,
     metricFrame: { x: 64, y: 770, w: 340, h: 112, z: 10 } as Box,
@@ -27,7 +28,7 @@ const REGIONS = [
     id: "IMG-03B",
     src: "p03-zaria.webp",
     name: "ZARIA",
-    coverage: "45%",
+    coverage: 45,
     frame: { x: 544, y: 0, w: 584, h: 941, z: 0 } as Box,
     labelFrame: { x: 581, y: 727, w: 260, h: 28, z: 10 } as Box,
     metricFrame: { x: 578, y: 770, w: 340, h: 112, z: 10 } as Box,
@@ -38,7 +39,7 @@ const REGIONS = [
     id: "IMG-03C",
     src: "p03-ikara.webp",
     name: "IKARA",
-    coverage: "38%",
+    coverage: 38,
     frame: { x: 1128, y: 0, w: 544, h: 941, z: 0 } as Box,
     labelFrame: { x: 1166, y: 727, w: 260, h: 28, z: 10 } as Box,
     metricFrame: { x: 1163, y: 770, w: 340, h: 112, z: 10 } as Box,
@@ -116,14 +117,16 @@ export default function Page03Baseline() {
             >
               {r.name}
             </p>
-            <p
+            <CountUp
+              to={r.coverage}
+              suffix="%"
+              enabled={shown}
+              duration={1.15}
               style={box(r.metricFrame, {
                 ...typeStyle("metric", { fontSize: 94, lineHeight: 0.96 }),
                 ...fade,
               })}
-            >
-              {r.coverage}
-            </p>
+            />
           </div>
         );
       })}
