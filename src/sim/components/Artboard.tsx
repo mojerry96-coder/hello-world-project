@@ -2,7 +2,7 @@
    Below 1024px wide we still contain; a portrait screen gets a rotate notice
    rather than vertical scrolling. */
 
-import { useEffect, useState, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { ARTBOARD } from "../design/layout";
 import { typeStyle } from "../design/type";
 
