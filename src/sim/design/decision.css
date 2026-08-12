@@ -196,6 +196,52 @@
    METRICS
 ================================================== */
 
+.metric-loop {
+  position: relative;
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  align-self: stretch;
+  /* Mask the strip so chips dissolve at both edges of the card. */
+  mask-image: linear-gradient(
+    to right,
+    transparent 0,
+    #000 clamp(16px, 3%, 52px),
+    #000 calc(100% - clamp(16px, 3%, 52px)),
+    transparent 100%
+  );
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0,
+    #000 clamp(16px, 3%, 52px),
+    #000 calc(100% - clamp(16px, 3%, 52px)),
+    transparent 100%
+  );
+}
+
+.metric-loop:not(.is-looping) {
+  flex: 0 0 auto;
+  mask-image: none;
+  -webkit-mask-image: none;
+}
+
+.metric-loop__track {
+  display: flex;
+  width: max-content;
+  will-change: transform;
+  user-select: none;
+}
+
+.metric-loop__seq {
+  flex: 0 0 auto;
+}
+
+.metric-loop.is-looping .metric-loop__seq {
+  padding-right: clamp(24px, 2.8vw, 50px);
+}
+
 .metric-group {
   display: flex;
   gap: clamp(24px, 2.8vw, 50px);
