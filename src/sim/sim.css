@@ -77,6 +77,28 @@ button {
   border-radius: 0;
 }
 
+.simulation-brand-mark {
+  position: fixed;
+  z-index: 60;
+  top: max(4px, env(safe-area-inset-top));
+  left: max(9px, env(safe-area-inset-left));
+  width: clamp(44px, 3.8vw, 56px);
+  height: auto;
+  opacity: 0.82;
+  object-fit: contain;
+  pointer-events: none;
+  user-select: none;
+  filter: drop-shadow(0 1px 5px rgba(0, 0, 0, 0.28));
+}
+
+@media (max-width: 600px) {
+  .simulation-brand-mark {
+    top: max(2px, env(safe-area-inset-top));
+    left: max(6px, env(safe-area-inset-left));
+    width: 36px;
+  }
+}
+
 /* ---- Artboard scaffolding (spec 4.2) ---- */
 
 .viewport {
