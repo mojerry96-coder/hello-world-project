@@ -154,6 +154,15 @@
   background: rgba(255, 255, 255, 0.018);
 }
 
+.hud-brand-mark {
+  width: 52px;
+  height: 50px;
+  flex-shrink: 0;
+  object-fit: contain;
+  object-position: left center;
+  filter: drop-shadow(0 1px 5px rgba(0, 0, 0, 0.28));
+}
+
 .hud-label {
   display: block;
   margin-bottom: 5px;
@@ -795,6 +804,11 @@
     height: 42px;
   }
 
+  .hud-brand-mark {
+    width: 44px;
+    height: 42px;
+  }
+
   .hud-identity {
     min-width: 240px;
   }
@@ -827,6 +841,12 @@
 @media (max-width: 1180px) {
   .hud-icon-circle {
     display: none;
+  }
+
+  .hud-brand-mark {
+    display: block;
+    width: 36px;
+    height: 36px;
   }
 
   .hud-meta,

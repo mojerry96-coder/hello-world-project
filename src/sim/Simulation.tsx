@@ -7,7 +7,6 @@
 import { useEffect, useState } from "react";
 import { Artboard } from "./components/Artboard";
 import { ActCard } from "./components/ActCard";
-import { BrandMark } from "./components/BrandMark";
 import { actForPage } from "./content/story";
 import { useNavigate } from "./lib/navigate";
 import { ROUTES, furthestAllowed } from "./routes";
@@ -72,12 +71,7 @@ export function Simulation({ page }: { page: string }) {
   }, [isIntro, blocked, route, state, navigate]);
 
   if (isIntro) {
-    return (
-      <>
-        <PageIntro />
-        <BrandMark />
-      </>
-    );
+    return <PageIntro />;
   }
 
   if (!route || blocked) {
@@ -95,7 +89,6 @@ export function Simulation({ page }: { page: string }) {
       <>
         <Page />
         <ActBreak page={route.page} wrap />
-        <BrandMark />
       </>
     );
   }
@@ -104,7 +97,6 @@ export function Simulation({ page }: { page: string }) {
     <Artboard>
       <Page />
       <ActBreak page={route.page} />
-      <BrandMark />
     </Artboard>
   );
 }

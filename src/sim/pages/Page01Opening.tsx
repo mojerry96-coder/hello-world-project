@@ -5,7 +5,7 @@
    state identity — there is no campaign to report on yet. */
 
 import { useNavigate } from "../lib/navigate";
-import { MapPin } from "@phosphor-icons/react";
+import mivaLogoAsset from "@/assets/miva-logo-white.png.asset.json";
 import { NarrativePage } from "../components/NarrativePage";
 import { useSimulation } from "../state/store";
 import { TOTAL_PAGES } from "../content/decisionPages";
@@ -24,7 +24,14 @@ export default function Page01Opening() {
         treatment: "hero",
       }}
       hud={{
-        icon: MapPin,
+        mark: (
+          <img
+            className="hud-brand-mark"
+            src={mivaLogoAsset.url}
+            alt="MIVA Open University"
+            draggable={false}
+          />
+        ),
         kicker: "Kaduna State, Nigeria",
         title: "Routine immunisation campaign",
         stage: { label: "Status", value: "BEFORE WEEK 1" },

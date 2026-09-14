@@ -62,22 +62,24 @@ export function PageScene({
 
 function HudBlock({
   icon: IconGlyph,
+  mark,
   label,
   primary,
   minWidth,
 }: {
   icon?: Icon;
+  mark?: ReactNode;
   label: string;
   primary: ReactNode;
   minWidth?: number;
 }) {
   return (
     <div className="hud-identity" style={minWidth ? { minWidth } : undefined}>
-      {IconGlyph && (
+      {mark ?? (IconGlyph && (
         <span className="hud-icon-circle">
           <IconGlyph size={20} weight="light" />
         </span>
-      )}
+      ))}
       <div>
         <div className="hud-label">{label}</div>
         <div className="hud-primary">{primary}</div>
@@ -102,6 +104,8 @@ function ProgressPill({ current, total }: { current: number; total: number }) {
 
 export type PageHudProps = {
   icon?: Icon;
+  /** Standalone identity artwork used instead of the circular icon. */
+  mark?: ReactNode;
   kicker: string;
   title: string;
   stage?: { label: string; value: string };
@@ -117,6 +121,7 @@ export type PageHudProps = {
 
 export function PageHud({
   icon,
+  mark,
   kicker,
   title,
   stage,
@@ -130,7 +135,7 @@ export function PageHud({
 }: PageHudProps) {
   return (
     <header className="decision-hud">
-      <HudBlock icon={icon} label={kicker} primary={title} />
+      <HudBlock icon={icon} mark={mark} label={kicker} primary={title} />
       {stage && (
         <>
           <span className="hud-divider" />
