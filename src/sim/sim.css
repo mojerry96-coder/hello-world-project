@@ -77,6 +77,20 @@ button {
   border-radius: 0;
 }
 
+.simulation-brand-mark {
+  position: fixed;
+  z-index: 60;
+  top: max(5px, env(safe-area-inset-top));
+  left: max(9px, env(safe-area-inset-left));
+  width: clamp(68px, 5.6vw, 94px);
+  height: auto;
+  opacity: 0.82;
+  object-fit: contain;
+  pointer-events: none;
+  user-select: none;
+  filter: drop-shadow(0 1px 5px rgba(0, 0, 0, 0.28));
+}
+
 /* ---- Artboard scaffolding (spec 4.2) ---- */
 
 .viewport {
