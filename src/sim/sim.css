@@ -91,6 +91,14 @@ button {
   filter: drop-shadow(0 1px 5px rgba(0, 0, 0, 0.28));
 }
 
+@media (max-width: 600px) {
+  .simulation-brand-mark {
+    top: max(2px, env(safe-area-inset-top));
+    left: max(6px, env(safe-area-inset-left));
+    width: 36px;
+  }
+}
+
 /* ---- Artboard scaffolding (spec 4.2) ---- */
 
 .viewport {
