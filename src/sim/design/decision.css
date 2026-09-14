@@ -839,9 +839,14 @@
 }
 
 @media (max-width: 1180px) {
-  .hud-icon-circle,
-  .hud-brand-mark {
+  .hud-icon-circle {
     display: none;
+  }
+
+  .hud-brand-mark {
+    display: block;
+    width: 36px;
+    height: 36px;
   }
 
   .hud-meta,
