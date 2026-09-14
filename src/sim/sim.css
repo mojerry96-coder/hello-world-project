@@ -80,9 +80,9 @@ button {
 .simulation-brand-mark {
   position: fixed;
   z-index: 60;
-  top: max(5px, env(safe-area-inset-top));
+  top: max(4px, env(safe-area-inset-top));
   left: max(9px, env(safe-area-inset-left));
-  width: clamp(48px, 4vw, 60px);
+  width: clamp(44px, 3.8vw, 56px);
   height: auto;
   opacity: 0.82;
   object-fit: contain;
